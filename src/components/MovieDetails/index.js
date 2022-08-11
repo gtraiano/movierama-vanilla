@@ -10,16 +10,20 @@ class MovieDetails extends HTMLElement {
         //this.classList.add('movie-details')
         this.innerHTML = this.generateTemplate(details, trailers, credits, reviews, similar)
         this.children[0].style.backgroundImage = `url(https://image.tmdb.org/t/p/original/${details.backdrop_path})`
-        console.log(similar)
         Array.from(this.querySelectorAll('.movies-similar-entry')).forEach((e,i) => {
-            e.addEventListener('click', () => { dispatchRequestMovieDetails(similar.results[i].id); })
+            e.addEventListener('click', this.requestMovieDetails(similar.results[i].id))
         })
-        /*this.getElementsByClassName('movies-similar-entry').array.forEach(element => {
-            element.addEventListener('click', () => { dispatchRequestMovieDetails(s.id); })
-        });*/
     }
 
+    requestMovieDetails = (id) => (e) => dispatchRequestMovieDetails(id)
+
     connectedCallback() {
+    }
+
+    disconnectedCallback() {
+        Array.from(this.querySelectorAll('.movies-similar-entry')).forEach((e,i) => {
+            e.removeEventListener('click', this.requestMovieDetails)
+        })
     }
 
     generateTrailer(videos) {

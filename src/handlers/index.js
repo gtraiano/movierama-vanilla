@@ -1,7 +1,6 @@
 import { dispatchInfiniteScroll } from "../events/InfiniteScroll";
 import { dispatchModeUpdate } from "../events/ModeUpdate";
 import { dispatchOpenOverlay } from '../events/Overlay/OpenOverlay'
-import { dispatchCloseOverlay } from "../events/Overlay/CloseOverlay";
 
 import movieDBAPI from "../controllers/MovieDB";
 import appModes from "../constants/AppModes";
