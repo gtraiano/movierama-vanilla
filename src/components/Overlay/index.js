@@ -2,7 +2,7 @@ import './style.css'
 import { dispatchCloseOverlay } from "../../events/Overlay/CloseOverlay"
 
 const template = `
-    <div tabindex="0" class="overlay">
+    <div class="overlay">
         <span class="close-button">&times</span>
     </div>
 `
