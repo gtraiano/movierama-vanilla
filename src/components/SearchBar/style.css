@@ -1,0 +1,28 @@
+.search-bar {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 1vh;
+    left: 0;
+    width: 100%;
+}
+
+.search-bar input {
+    width: 30%;
+    font-size: x-large;
+    padding-right: 1em;
+}
+
+.search-bar button {
+    font-size: medium;
+    cursor: pointer;
+}
+
+.clear {
+    display: inline-block;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-weight: 600;
+    transform: translateX(-1em);
+    cursor: pointer;
+}

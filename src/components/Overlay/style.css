@@ -1,0 +1,27 @@
+.overlay {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: gray;
+}
+
+.overlay > div {
+    margin: auto;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+.close-button {
+    position: absolute;
+    display: inline-block;
+    top: 1%;
+    right: 1%;
+    font-weight: 600;
+    font-size: xx-large;
+    cursor: pointer;
+    color: white;
+}
