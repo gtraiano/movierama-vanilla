@@ -7,7 +7,6 @@ class MovieDetails extends HTMLElement {
     }
 
     render = ({ details, credits, trailers, reviews, similar }) => {
-        //this.classList.add('movie-details')
         this.innerHTML = this.generateTemplate(details, trailers, credits, reviews, similar)
         this.children[0].style.backgroundImage = `url(https://image.tmdb.org/t/p/original/${details.backdrop_path})`
         Array.from(this.querySelectorAll('.movies-similar-entry')).forEach((e,i) => {
