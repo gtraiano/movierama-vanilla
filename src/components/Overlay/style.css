@@ -25,3 +25,7 @@
     cursor: pointer;
     color: white;
 }
+
+.close-button:hover {
+    filter: brightness(0) contrast(.5);
+}
