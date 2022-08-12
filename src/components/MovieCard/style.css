@@ -1,71 +1,72 @@
 .movie-item {
-    border: 1px solid white;
-    border-radius: 4px;
-    background-color: rgba(128, 128, 128, 0.375);
-    transition: height .5 ease-in-out .5s;
-    min-height: 100%;
-    max-height: fit-content;
-  }
-  
-  .movie-item div {
-    display: flex;
-    margin-top: 1%;
-    margin-bottom: 1%;
-    margin-left: 5%;
-    margin-right: 5%;
-    overflow-y: hidden;
-  }
-  
-  .movie-item label {
-    font-weight: 600;
-    width: 40%;
-    text-align: start;
-  }
-  
-  .movie-item span {
-    font-style: italic;
-    width: 60%;
-    text-align: start;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .movie-item img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .movie-item-line {
-    display: 'flex';
-    justify-content: 'space-between';
-  }
-  
-  .poster {
-    height: 70%;
-    cursor: pointer;
-  }
-  
-  /*
-  https://medium.com/@mjtweaver/build-an-accordion-without-javascript-e97d319ca371
-  */
-  
-  div.accordion {
-    display: inline-block;
-  }
-  .accordion label {
-    letter-spacing: .3rem;
-    cursor: pointer;
-  }
-  .accordion input {
-    display: none;
-  }
-  
-  .accordion span {
-    display: none;
-    text-align: justify;
-  }
-  
-  .accordion input:checked ~ span {
-    display: inline-block;
-    font-style: initial;
-  }
+  border: 1px solid white;
+  border-radius: 4px;
+  background-color: rgba(128, 128, 128, 0.375);
+  transition: height .5 ease-in-out .5s;
+  min-height: 100%;
+  max-height: fit-content;
+}
+
+.movie-item div {
+  display: flex;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 5%;
+  margin-right: 5%;
+  overflow-y: hidden;
+}
+
+.movie-item label {
+  font-weight: 600;
+  width: 40%;
+  text-align: start;
+}
+
+.movie-item span {
+  font-style: italic;
+  width: 60%;
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-item .poster img {
+  width: 100%;
+  height: auto;
+}
+
+.movie-item-line {
+  display: 'flex';
+  justify-content: 'space-between';
+}
+
+.poster {
+  height: 70%;
+  min-height: 56vh;
+  cursor: pointer;
+}
+
+/*
+https://medium.com/@mjtweaver/build-an-accordion-without-javascript-e97d319ca371
+*/
+
+div.accordion {
+  display: inline-block;
+}
+.accordion label {
+  letter-spacing: .3rem;
+  cursor: pointer;
+}
+.accordion input {
+  display: none;
+}
+
+.accordion span {
+  display: none;
+  text-align: justify;
+}
+
+.accordion input:checked ~ span {
+  display: inline-block;
+  font-style: initial;
+}

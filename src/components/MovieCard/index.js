@@ -73,7 +73,7 @@ class MovieCard extends HTMLElement {
                     <label>Vote average</label>
                     <span>${movie.vote_average}</span>
                 </div>
-                <div class="movie-item-line accordion">
+                <div class="movie-item-line accordion overview">
                     <label style="width: 100%, text-align: center" for=${movie.id}>Overview</label>
                     <input type="checkbox" id=${movie.id}></input>
                     <span style="width: 100%">${movie.overview}</span>
