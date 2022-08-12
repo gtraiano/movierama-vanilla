@@ -1,6 +1,7 @@
 import { dispatchInfiniteScroll } from "../events/InfiniteScroll";
 import { dispatchModeUpdate } from "../events/ModeUpdate";
 import { dispatchOpenOverlay } from '../events/Overlay/OpenOverlay'
+import { dispatchInitializedApp } from "../events/InitializedApp";
 
 import movieDBAPI from "../controllers/MovieDB";
 import appModes from "../constants/AppModes";
@@ -12,7 +13,7 @@ export const initializeApp = async () => {
     store.nowPlaying = await movieDBAPI.fetchNowPlaying({
         page: store.currentPage
     })
-    dispatchEvent(new Event('initializedApp'))
+    dispatchInitializedApp()
 }
 
 export const onInitializedApp = () => {

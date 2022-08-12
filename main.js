@@ -1,9 +1,6 @@
 // app styling
 import './style.css'
 
-// store
-import store from './src/store/index.js'
-
 // custom events
 import { eventName as SearchQuery } from './src/events/SearchQuery'
 import { eventName as RequestMovieDetails } from './src/events/RequestMovieDetails'
@@ -11,6 +8,7 @@ import { eventName as CloseOverlay } from './src/events/Overlay/CloseOverlay'
 import { eventName as OpenOverlay } from './src/events/Overlay/OpenOverlay'
 import { eventName as InfiniteScroll } from './src/events/InfiniteScroll'
 import { eventName as ModeUpdate } from './src/events/ModeUpdate'
+import { eventName as InitializedApp } from './src/events/InitializedApp'
 
 // event handlers
 import {
@@ -44,7 +42,7 @@ document.querySelector('#app').innerHTML = `
 window.addEventListener('load', initializeApp)
 
 // render now playing items in movie list after app initalization
-window.addEventListener('initializedApp', onInitializedApp)
+window.addEventListener(InitializedApp, onInitializedApp)
 
 // scroll
 window.addEventListener('scroll', scrolledToBottom)
@@ -65,3 +63,15 @@ window.addEventListener(SearchQuery, onSearchQuery)
 
 // movie details request
 window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
+
+window.addEventListener('beforeunload', () => {
+    window.addEventListener('load', initializeApp)
+    window.addEventListener(InitializedApp, onInitializedApp)
+    window.addEventListener('scroll', scrolledToBottom)
+    window.addEventListener(InfiniteScroll, onInfiniteScroll)
+    window.addEventListener(ModeUpdate, onModeUpdate)
+    window.addEventListener(CloseOverlay, onCloseOverlay)
+    window.addEventListener(OpenOverlay, onOpenOverlay)
+    window.addEventListener(SearchQuery, onSearchQuery)
+    window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
+})
