@@ -3,7 +3,8 @@
     border-radius: 4px;
     background-color: rgba(128, 128, 128, 0.375);
     transition: height .5 ease-in-out .5s;
-    height: max-content;
+    min-height: 100%;
+    max-height: fit-content;
   }
   
   .movie-item div {
