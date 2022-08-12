@@ -1,5 +1,6 @@
 import './style.css'
 import { dispatchCloseOverlay } from "../../events/Overlay/CloseOverlay"
+import { dispatchOpenOverlay } from '../../events/Overlay/OpenOverlay'
 
 const template = `
     <div class="overlay">
@@ -13,15 +14,23 @@ class Overlay extends HTMLElement {
     }
 
     clear = () => {
-        // remove all html elements
+        // remove all html elements except close button
         [...this.children[0].children].slice(1).forEach(element => {
             element.remove()
         });
     }
 
     closeOverlay = () => {
-        dispatchCloseOverlay()
+        if(!this.hasAttribute('show')) return;
         this.clear()
+        dispatchCloseOverlay()
+        this.style.display = 'none'
+    }
+
+    openOverlay = () => {
+        if(this.hasAttribute('show')) return;
+        dispatchOpenOverlay()
+        this.style.display = 'block'
     }
 
     closeOverlayOnKeyDown = (e) => {
@@ -53,10 +62,16 @@ class Overlay extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return [];
+        return ['show'];
     }
   
     attributeChangedCallback(name, oldValue, newValue) {
+        if(name === 'show') {
+            if(newValue === '')
+                this.openOverlay()
+            else if(newValue === null)
+                this.closeOverlay()
+        }
     }
 }
 

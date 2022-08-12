@@ -81,13 +81,13 @@ export const onModeUpdate = (e) => {
 
 export const onCloseOverlay = () => {
     // restore body overflow and hide overlay
-    document.querySelector('over-lay').style.display = 'none'
+    document.getElementsByTagName('over-lay')[0].removeAttribute('show')
     document.body.style.overflow = 'visible'
 }
 
 export const onOpenOverlay = () => {
     // hide body overflow and display overlay
-    document.querySelector('over-lay').style.display = 'block'
+    document.getElementsByTagName('over-lay')[0].setAttribute('show', '')
     document.body.style.overflow = 'hidden'
 }
 
@@ -119,5 +119,5 @@ export const onRequestMovieDetails = async e => {
     movieDetails.render(store.movieDetails)
     // display in overlay
     document.getElementsByTagName('over-lay')[0].updateContent(movieDetails)
-    dispatchOpenOverlay()
+    document.getElementsByTagName('over-lay')[0].openOverlay()
 }
