@@ -62,7 +62,7 @@ class MovieDetails extends HTMLElement {
                     <div class="row">
                         <div style="width: 25%;" class="column left"><strong>Director</strong></div>
                         <div style="width: 70%;" class="column left">
-                            ${credits?.crew.find(c => c.job.toLowerCase() === 'director')?.name}
+                            ${credits?.crew.find(c => c.job.toLowerCase() === 'director')?.name ?? ''}
                         </div>
                     </div>
                     <div class="row">
