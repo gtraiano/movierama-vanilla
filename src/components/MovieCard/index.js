@@ -67,7 +67,7 @@ class MovieCard extends HTMLElement {
                 </div>
                 <div class="movie-item-line">
                     <label>Genres</label>
-                    <span>${movie.genre_ids.map(id => this.findGenre(id)).join(' ')}</span>
+                    <span>${movie.genre_ids.map(id => this.findGenre(id)).join(', ')}</span>
                 </div>
                 <div class="movie-item-line">
                     <label>Vote average</label>
