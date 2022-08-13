@@ -2,7 +2,12 @@ import appModes from "../constants/AppModes"
 
 export const store = {
     configuration: {},              // MovieDB API configuration (currently not used)
-    genres: [],                     // genres lookup table
+    genres: {
+        table: [],                  // genres lookup table
+        lookup: function(id) {      // genres lookup function
+            return this.table.find(g => g.id === id)?.name
+        }
+    },                     
     nowPlaying: {},                 // now playing data
     query: '',                      // search query text
     search: {},                     // search results data

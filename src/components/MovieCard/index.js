@@ -23,7 +23,7 @@ class MovieCard extends HTMLElement {
     }
 
     findGenre(id) {
-        return store.genres.find(g => g.id === id).name
+        return store.genres.lookup(id)
     }
 
     requestMovieDetails = () => {

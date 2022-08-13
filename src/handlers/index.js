@@ -9,7 +9,7 @@ import store from "../store";
 
 export const initializeApp = async () => {
     store.configuration = await movieDBAPI.fetchConfiguration()
-    store.genres = await movieDBAPI.fetchGenres()
+    store.genres.table = await movieDBAPI.fetchGenres()
     store.nowPlaying = await movieDBAPI.fetchNowPlaying({
         page: store.currentPage
     })
