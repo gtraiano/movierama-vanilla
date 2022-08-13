@@ -22,9 +22,7 @@ class MovieCard extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
     }
 
-    findGenre(id) {
-        return store.genres.lookup(id)
-    }
+    generateGenres = (ids, separator = ', ') => ids.map(id => store.genres.lookup(id)).join(separator)
 
     requestMovieDetails = () => {
         // use arrow function to have function bound to class!
@@ -67,7 +65,7 @@ class MovieCard extends HTMLElement {
                 </div>
                 <div class="movie-item-line">
                     <label>Genres</label>
-                    <span>${movie.genre_ids.map(id => this.findGenre(id)).join(', ')}</span>
+                    <span>${this.generateGenres(movie.genre_ids)}</span>
                 </div>
                 <div class="movie-item-line">
                     <label>Vote average</label>
