@@ -1,11 +1,11 @@
 # MovieRama Vanilla
 My following attempt at implementing the **MovieRama** application with vanilla JS.
 
-Live demo [here](https://movierama-vanilla.herokuapp.com/)
+Live demo [here](https://movierama-vanilla.herokuapp.com)
 
 It covers all required typical user flows.
 
-Developed using [vite](https://vitejs.dev/])
+Developed using [vite](https://vitejs.dev)
 
 ## Scripts
 
