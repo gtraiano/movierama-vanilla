@@ -25,7 +25,7 @@ class MovieCard extends HTMLElement {
     generateGenres = (ids, separator = ', ') => ids.map(id => store.genres.lookup(id)).join(separator)
 
     requestMovieDetails = () => {
-        // use arrow function to have function bound to class!
+        // use arrow function to have it bound to the class!
         dispatchRequestMovieDetails(this.attributes.getNamedItem('movie-id').value)
     }
 
@@ -61,7 +61,7 @@ class MovieCard extends HTMLElement {
                 </div>
                 <div class="movie-item-line">
                     <label>Released</label>
-                    <span>${movie.release_date}</span>
+                    <span>${movie.release_date ?? ''}</span>
                 </div>
                 <div class="movie-item-line">
                     <label>Genres</label>
