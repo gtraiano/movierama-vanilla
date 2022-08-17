@@ -71,6 +71,7 @@ The application uses an object to store all data required in the different user 
 |`infinitescroll`|signals an infinite scroll event|fetch next page of movie data and render it as `movie-cards` in the `movie-list`|
 |`modeupdate`|signals application has switched user mode flow|<ul style="padding-left:4%; list-style-type:decimal"><li>determine which movie dataset (_in theaters_ or _search_) to render in `movie-list`</li><li>determine which movie dataset to update on `infinitescroll` event</li></ul>|
 |`searchquery`|signals a search query has been initiated|receive query text and perform necessary *MDB API* requests for _"search for movie"_ user flow|
+|`endsearchquery`|signals a search query has ended/must end|switch app mode to _"in theaters"_|
 |`requestmoviedetails`|signals a request for movie details|<ul style="padding-left:4%; list-style-type:decimal"><li>receive movie id and perform necessary *MDB API* requests for _"view movie details"_ user flow</li><li>render a `movie-details` element and present it inside the `over-lay` element</li></ul>|
 |`openoverlay`|signals a request to show the `over-lay`|hide overflow of document body and call method to open `over-lay`|
 |`closeoverlay`|signals a request to hide the `over-lay`|restore overflow of doument body and call method to close `over-lay`|
