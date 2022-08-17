@@ -9,6 +9,7 @@ import { eventName as OpenOverlay } from './src/events/Overlay/OpenOverlay'
 import { eventName as InfiniteScroll } from './src/events/InfiniteScroll'
 import { eventName as ModeUpdate } from './src/events/ModeUpdate'
 import { eventName as InitializedApp } from './src/events/InitializedApp'
+import { eventName as EndSearchQuery } from './src/events/EndSearchQuery'
 
 // event handlers
 import {
@@ -20,7 +21,8 @@ import {
     onOpenOverlay,
     onCloseOverlay,
     onSearchQuery,
-    onRequestMovieDetails
+    onRequestMovieDetails,
+    onEndSearchQuery
 } from './src/handlers'
 
 // custom elements
@@ -63,6 +65,8 @@ window.addEventListener(SearchQuery, onSearchQuery)
 
 // movie details request
 window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
+
+window.addEventListener(EndSearchQuery, onEndSearchQuery)
 
 window.addEventListener('beforeunload', () => {
     window.addEventListener('load', initializeApp)

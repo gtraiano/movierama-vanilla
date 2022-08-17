@@ -1,6 +1,5 @@
 import { dispatchInfiniteScroll } from "../events/InfiniteScroll";
 import { dispatchModeUpdate } from "../events/ModeUpdate";
-import { dispatchOpenOverlay } from '../events/Overlay/OpenOverlay'
 import { dispatchInitializedApp } from "../events/InitializedApp";
 
 import movieDBAPI from "../controllers/MovieDB";
@@ -120,4 +119,13 @@ export const onRequestMovieDetails = async e => {
     // display in overlay
     document.getElementsByTagName('over-lay')[0].updateContent(movieDetails)
     document.getElementsByTagName('over-lay')[0].openOverlay()
+}
+
+export const onEndSearchQuery = () => {
+    // end search query when displaying in theaters should do nothing
+    if(store.mode === appModes.NOW_PLAYING) return;
+    // clear stored query text
+    store.query = ''
+    // update app mode
+    dispatchModeUpdate(appModes.NOW_PLAYING)
 }

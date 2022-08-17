@@ -1,6 +1,7 @@
 import './style.css'
 import { dispatchSearchQuery } from '../../events/SearchQuery/index.js'
 import { dispatchModeUpdate } from '../../events/ModeUpdate/index.js'
+import { dispatchEndSearchQuery } from '../../events/EndSearchQuery'
 import appModes from '../../constants/AppModes.js'
 
 const template = `
@@ -39,10 +40,8 @@ class SearchBar extends HTMLElement {
     }
 
     hideResults = (e) => {
-        // no need to hide results for empty query
-        if(!this.input.value.length) return
-        dispatchModeUpdate(appModes.NOW_PLAYING)
         this.input.value = ''
+        dispatchEndSearchQuery();
     }
 
     // connect component
