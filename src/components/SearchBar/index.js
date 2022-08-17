@@ -1,8 +1,6 @@
 import './style.css'
-import { dispatchSearchQuery } from '../../events/SearchQuery/index.js'
-import { dispatchModeUpdate } from '../../events/ModeUpdate/index.js'
-import { dispatchEndSearchQuery } from '../../events/EndSearchQuery'
-import appModes from '../../constants/AppModes.js'
+import { dispatchSearchQuery } from '../../events/Search/SearchQuery/index.js'
+import { dispatchEndSearchQuery } from '../../events/Search/EndSearchQuery'
 
 const template = `
     <div class="search-bar">
@@ -39,7 +37,7 @@ class SearchBar extends HTMLElement {
         }, this.delay)
     }
 
-    hideResults = (e) => {
+    hideResults = () => {
         this.input.value = ''
         dispatchEndSearchQuery();
     }

@@ -2,14 +2,14 @@
 import './style.css'
 
 // custom events
-import { eventName as SearchQuery } from './src/events/SearchQuery'
+import { eventName as SearchQuery } from './src/events/Search/SearchQuery'
 import { eventName as RequestMovieDetails } from './src/events/RequestMovieDetails'
 import { eventName as CloseOverlay } from './src/events/Overlay/CloseOverlay'
 import { eventName as OpenOverlay } from './src/events/Overlay/OpenOverlay'
 import { eventName as InfiniteScroll } from './src/events/InfiniteScroll'
 import { eventName as ModeUpdate } from './src/events/ModeUpdate'
 import { eventName as InitializedApp } from './src/events/InitializedApp'
-import { eventName as EndSearchQuery } from './src/events/EndSearchQuery'
+import { eventName as EndSearchQuery } from './src/events/Search/EndSearchQuery'
 
 // event handlers
 import {
