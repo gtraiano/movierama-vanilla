@@ -124,8 +124,9 @@ export const onRequestMovieDetails = async e => {
 export const onEndSearchQuery = () => {
     // end search query when displaying in theaters should do nothing
     if(store.mode === appModes.NOW_PLAYING) return;
-    // clear stored query text
+    // clear stored query text and search results
     store.query = ''
+    store.search = {}
     // update app mode
     dispatchModeUpdate(appModes.NOW_PLAYING)
 }
