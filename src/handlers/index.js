@@ -33,9 +33,15 @@ export const scrolledToBottom = () => {
 }
 
 export const onInfiniteScroll = async () => {
+    // prevent requests if we have fetched all pages
+    if(
+        store[store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search']?.page === 
+        store[store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search']?.total_pages
+    ) return
+    
     let nextPage
     // update respective store based on app mode
-    if(store.mode === appModes.NOW_PLAYING) {
+    if(store.mode === appModes.NOW_PLAYING) {    
         nextPage = await movieDBAPI.fetchNowPlaying({
             page: (store.nowPlaying?.page ?? 0) + 1
         })
