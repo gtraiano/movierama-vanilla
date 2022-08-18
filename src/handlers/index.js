@@ -33,37 +33,25 @@ export const scrolledToBottom = () => {
 }
 
 export const onInfiniteScroll = async () => {
-    // prevent requests if we have fetched all pages
-    if(
-        store[store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search']?.page === 
-        store[store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search']?.total_pages
-    ) return
-    
-    let nextPage
-    // update respective store based on app mode
-    if(store.mode === appModes.NOW_PLAYING) {    
-        nextPage = await movieDBAPI.fetchNowPlaying({
-            page: (store.nowPlaying?.page ?? 0) + 1
-        })
-        store.nowPlaying = {
-            ...store.nowPlaying,
-            ...nextPage,
-            results: [...store.nowPlaying.results, ...nextPage.results]
-        }
-    }
-    
-    else if(store.mode === appModes.SEARCH) {
-        nextPage = await movieDBAPI.fetchMovie({
-            query: store.query,
-            page: (store.search.page ?? 0) + 1
-        })
+    // part of store to use
+    const mode = store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search'
+    // movieDBAPI fetcher to use
+    const fetcher = store.mode === appModes.NOW_PLAYING ? movieDBAPI.fetchNowPlaying : movieDBAPI.fetchMovie
 
-        store.search = {
-            ...store.search,
-            ...nextPage,
-            results: [...store.search.results, ...nextPage.results]
-        }
+    // prevent requests if we have fetched all pages
+    if(store[mode]?.page === store[mode]?.total_pages) return
+
+    const nextPage = await fetcher({
+        page: (store[mode]?.page ?? 0) + 1,
+        ...(store.mode === appModes.SEARCH && { query: store.query}) // query only necessary for search
+    })
+
+    store[mode] = {
+        ...store[mode],
+        ...nextPage,
+        results: [...store[mode]?.results, ...nextPage.results]
     }
+
     // append new page items to movie list
     document.getElementsByTagName('movie-list')[0].appendMovieCards(nextPage)
 }
