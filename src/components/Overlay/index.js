@@ -31,6 +31,8 @@ class Overlay extends HTMLElement {
         if(this.hasAttribute('show')) return;
         dispatchOpenOverlay()
         this.style.display = 'block'
+        // focus on container div so that keydown events can be listened to instantly
+        this.children[0].focus()
     }
 
     closeOverlayOnKeyDown = (e) => {
