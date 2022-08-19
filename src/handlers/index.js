@@ -10,7 +10,7 @@ export const initializeApp = async () => {
     store.configuration = await movieDBAPI.fetchConfiguration()
     store.genres.table = await movieDBAPI.fetchGenres()
     store.nowPlaying = await movieDBAPI.fetchNowPlaying({
-        page: store.currentPage
+        page: 1
     })
     dispatchInitializedApp()
 }
@@ -43,7 +43,7 @@ export const onInfiniteScroll = async () => {
 
     const nextPage = await fetcher({
         page: (store[mode]?.page ?? 0) + 1,
-        ...(store.mode === appModes.SEARCH && { query: store.query}) // query only necessary for search
+        ...(store.mode === appModes.SEARCH && { query: store.query }) // query only necessary for search
     })
 
     store[mode] = {

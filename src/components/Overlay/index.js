@@ -3,7 +3,7 @@ import { dispatchCloseOverlay } from "../../events/Overlay/CloseOverlay"
 import { dispatchOpenOverlay } from '../../events/Overlay/OpenOverlay'
 
 const template = `
-    <div class="overlay">
+    <div tabindex="1" class="overlay">
         <span class="close-button">&times</span>
     </div>
 `
