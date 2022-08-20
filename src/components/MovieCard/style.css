@@ -2,9 +2,12 @@
   border: 1px solid white;
   border-radius: 4px;
   background-color: rgba(128, 128, 128, 0.375);
-  transition: height .5 ease-in-out .5s;
+  transition: height .5s ease-in-out .5s;
   min-height: 100%;
   max-height: fit-content;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  box-shadow: 4px 2px 2px 2px rgba(127,127,127,0.8);
 }
 
 .movie-item div {
@@ -36,8 +39,8 @@
 }
 
 .movie-item-line {
-  display: 'flex';
-  justify-content: 'space-between';
+  display: flex;
+  justify-content: space-between;
 }
 
 .poster {
