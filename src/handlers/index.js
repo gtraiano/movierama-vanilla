@@ -7,7 +7,7 @@ import appModes from "../constants/AppModes";
 import store from "../store";
 
 export const initializeApp = async () => {
-    store.configuration = await movieDBAPI.fetchConfiguration()
+    Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
     store.genres.table = await movieDBAPI.fetchGenres()
     store.nowPlaying = await movieDBAPI.fetchNowPlaying({
         page: 1

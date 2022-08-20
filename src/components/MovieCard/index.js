@@ -41,15 +41,7 @@ class MovieCard extends HTMLElement {
             <div class="movie-item">
                 <div class="movie-item-line poster">
                     <img
-                        srcSet="
-                            https://image.tmdb.org/t/p/w342/${movie.poster_path} 342w,
-                            https://image.tmdb.org/t/p/w92/${movie.poster_path} 92w,
-                            https://image.tmdb.org/t/p/w154/${movie.poster_path} 154w,
-                            https://image.tmdb.org/t/p/w185/${movie.poster_path} 185w,
-                            https://image.tmdb.org/t/p/w342/${movie.poster_path} 342w,
-                            https://image.tmdb.org/t/p/w500/${movie.poster_path} 500w,
-                            https://image.tmdb.org/t/p/w780/${movie.poster_path} 780w
-                        "
+                        srcset="${store.configuration.helpers.images.generatePosterUrls(movie.poster_path)?.join(',') ?? ''}"
                         alt="${movie.title} poster"
                         loading="lazy"
                         title="Click for movie details"
