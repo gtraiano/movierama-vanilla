@@ -8,6 +8,7 @@ export const store = {
                     // poster img srcset urls generator
                     // @fname               poster file name
                     // @includeOriginal     whether to include original size in list
+                    if(!fname) return [];
                     return store.configuration.images.poster_sizes.flatMap(
                         (sz, i, szs) => /^w\d+$/.test(sz)
                             ? `${store.configuration.images.secure_base_url}${sz}${fname} ${sz.substring(1)}w`
