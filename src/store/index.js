@@ -1,7 +1,7 @@
 import appModes from "../constants/AppModes"
 
 export const store = {
-    configuration: {                // MovieDB API configuration (currently not used)
+    configuration: {                // MovieDB API configuration
         helpers: {
             images: {
                 generatePosterUrls: function(fname, includeOriginal = false) {

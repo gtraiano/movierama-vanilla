@@ -29,7 +29,7 @@ class MovieDetails extends HTMLElement {
         return (
             `
             <section>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/${videos?.results[0]?.key}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/${videos.results.filter(v => v.type === 'Trailer' && v.site === 'YouTube')[0]?.key}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>
             </section>
             `
         )
