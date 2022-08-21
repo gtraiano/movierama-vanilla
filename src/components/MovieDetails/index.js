@@ -1,4 +1,5 @@
 import { dispatchRequestMovieDetails } from '../../events/RequestMovieDetails'
+import store from '../../store'
 import './style.css'
 
 class MovieDetails extends HTMLElement {
@@ -8,7 +9,8 @@ class MovieDetails extends HTMLElement {
 
     render = ({ details, credits, trailers, reviews, similar }) => {
         this.innerHTML = this.generateTemplate(details, trailers, credits, reviews, similar)
-        this.children[0].style.backgroundImage = `url(https://image.tmdb.org/t/p/original/${details.backdrop_path})`
+        //this.children[0].style.backgroundImage = `url(https://image.tmdb.org/t/p/original/${details.backdrop_path})`
+        this.children[0].style.backgroundImage = `image-set(${store.configuration.helpers.images.generateBackdropUrls(details.backdrop_path).join(',')})`
         Array.from(this.querySelectorAll('.movies-similar-entry')).forEach((e,i) => {
             e.addEventListener('click', this.requestMovieDetails(similar.results[i].id))
         })

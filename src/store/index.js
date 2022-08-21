@@ -17,7 +17,25 @@ export const store = {
                         (sz, i, szs) => /^w\d+$/.test(sz)
                             ? `${store.configuration.images.secure_base_url}${sz}${fname} ${mode === 'x'? (Number.parseInt(sz.substring(1)) / baseSize).toFixed(2) : sz.substring(1)}${mode}`
                             : includeOriginal
-                                ? `${store.configuration.images.secure_base_url}${sz}${fname} ${mode === 'x' ? 3 * Number.parseInt(szs[i-1].substring(1)) / baseSize : 3 * Number.parseInt(szs[i-1].substring(1))}${mode}` // 3*720
+                                ? `${store.configuration.images.secure_base_url}${sz}${fname} ${mode === 'x' ? (3 * Number.parseInt(szs[i-1].substring(1)) / baseSize).toFixed(2) : (3 * Number.parseInt(szs[i-1].substring(1)).toFixed(2))}${mode}` // 3*720
+                                : []
+                    )
+                },
+
+                backdropBaseSize: 780,  // backdrop target size in pixels
+                generateBackdropUrls: function(fname, mode = 'x', includeOriginal = true) {
+                    // backdrop background-image image-set urls generator
+                    // @fname               backdrop file name
+                    // @mode                ratio to backdropBaseSize ('x', e.g. 1.5x) or image width ('w', e.g. 720w) mode
+                    // @includeOriginal     whether to include original size in list
+                    if(!fname) return [];
+                    const baseSize = store.configuration.helpers.images.backdropBaseSize
+                    mode = mode.toLowerCase()
+                    return store.configuration.images.backdrop_sizes.flatMap(
+                        (sz, i, szs) => /^w\d+$/.test(sz)
+                            ? `url("${store.configuration.images.secure_base_url}${sz}/${fname}") ${mode === 'x'? (Number.parseInt(sz.substring(1)) / baseSize).toFixed(2) : sz.substring(1)}${mode}`
+                            : includeOriginal
+                                ? `url("${store.configuration.images.secure_base_url}${sz}${fname}") ${mode === 'x' ? (3 * Number.parseInt(szs[i-1].substring(1)) / baseSize).toFixed(2) : (3 * Number.parseInt(szs[i-1].substring(1)).toFixed(2))}${mode}` // 3*720
                                 : []
                     )
                 }
