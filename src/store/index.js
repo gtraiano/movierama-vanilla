@@ -33,7 +33,7 @@ export const store = {
                     mode = mode.toLowerCase()
                     return store.configuration.images.backdrop_sizes.flatMap(
                         (sz, i, szs) => /^w\d+$/.test(sz)
-                            ? `url("${store.configuration.images.secure_base_url}${sz}/${fname}") ${mode === 'x'? (Number.parseInt(sz.substring(1)) / baseSize).toFixed(2) : sz.substring(1)}${mode}`
+                            ? `url("${store.configuration.images.secure_base_url}${sz}${fname}") ${mode === 'x'? (Number.parseInt(sz.substring(1)) / baseSize).toFixed(2) : sz.substring(1)}${mode}`
                             : includeOriginal
                                 ? `url("${store.configuration.images.secure_base_url}${sz}${fname}") ${mode === 'x' ? (3 * Number.parseInt(szs[i-1].substring(1)) / baseSize).toFixed(2) : (3 * Number.parseInt(szs[i-1].substring(1)).toFixed(2))}${mode}` // 3*720
                                 : []
