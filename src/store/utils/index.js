@@ -10,8 +10,7 @@ export const generateImageUrls = (baseUrl, baseSize, sizes, fname, mode = 'x', i
                                 'w' => append image width suffix ('w', e.g. 720w)
         @includeOriginal        whether to include original size in list
     */
-    
-    fname = fname.trim()
+    fname = fname?.trim()
     if(!fname || !fname.length) return []
     
     mode = mode.toLowerCase()
