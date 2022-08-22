@@ -20,7 +20,7 @@ This section contains brief descriptions of the various components of the applic
 
 The main flow was to either have the template HTML code stored as a string for simple/static templates, or have functions generating the template string when external data dependecy was involved.
 
-Element reactivity was achieved by merely manipulating custom elements' tree and replacing stale elements and with fresh ones generated from updated data.
+Element reactivity was achieved by merely manipulating custom elements' tree and replacing/adding to stale elements fresh ones generated from updated data.
 
 ### Components
 ### **`<search-bar>`**
