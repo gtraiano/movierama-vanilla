@@ -1,13 +1,18 @@
 .in-theaters {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /*grid-template-rows: repeat(auto-fill, 120px);*/
     grid-template-rows: auto;
     row-gap: 2em;
     column-gap: 2em;
     width: 75vw;
-    height: 90vh;
+    height: auto;
+    /*max-height: 90vh;*/
     margin-left: auto;
     margin-right: auto;
     margin-top: 2vh;
+}
+
+/* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
+.in-theaters > movie-card:nth-last-child(-n + 4) div {
+    margin-bottom: 8px;
 }
