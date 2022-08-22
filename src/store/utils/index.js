@@ -1,4 +1,4 @@
-export const generateImageUrls = (baseUrl, baseSize, sizes, fname, mode = 'x', includeOriginal = true) => {
+export const generateImageUrls = (baseUrl, baseWidth, sizes, fname, mode = 'x', includeOriginal = true) => {
     /*
         generate url for use in srcset or image-set
         @baseUrl                url base
@@ -13,14 +13,14 @@ export const generateImageUrls = (baseUrl, baseSize, sizes, fname, mode = 'x', i
     fname = fname?.trim()
     if(!fname || !fname.length) return []
     
-    mode = mode.toLowerCase()
+    mode = mode?.toLowerCase()
     if(!['x', 'w'].includes(mode)) return []
     
     return sizes.flatMap(
         (sz, i, szs) => /^w\d+$/.test(sz)
-            ? `${baseUrl}${sz}${fname} ${mode === 'x'? (Number.parseInt(sz.substring(1)) / baseSize).toFixed(2) : sz.substring(1)}${mode}`
+            ? `${baseUrl}${sz}${fname} ${mode === 'x'? (Number.parseInt(sz.substring(1)) / baseWidth).toFixed(2) : sz.substring(1)}${mode}`
             : includeOriginal
-                ? `${baseUrl}${sz}${fname} ${mode === 'x' ? (3 * Number.parseInt(szs[i-1].substring(1)) / baseSize).toFixed(2) : (3 * Number.parseInt(szs[i-1].substring(1)).toFixed(2))}${mode}` // 3*720
+                ? `${baseUrl}${sz}${fname} ${mode === 'x' ? (3 * Number.parseInt(szs[i-1].substring(1)) / baseWidth).toFixed(2) : (3 * Number.parseInt(szs[i-1].substring(1)).toFixed(2))}${mode}` // 3*720
                 : []
     )
 }
