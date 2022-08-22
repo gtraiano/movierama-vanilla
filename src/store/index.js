@@ -5,7 +5,7 @@ export const store = {
     configuration: {                // MovieDB API configuration
         helpers: {
             images: {
-                posterBaseSize: 342,    // poster target size in pixels
+                posterBaseWidth: window.screen.width / 8,    // poster target width in pixels
                 generatePosterUrls: function(fname, mode = 'x', includeOriginal = true) {
                     // poster img srcset urls generator
                     // @fname               poster file name
@@ -13,7 +13,7 @@ export const store = {
                     // @includeOriginal     whether to include original size in list
                     return generateImageUrls(
                         store.configuration.images.secure_base_url,
-                        store.configuration.helpers.images.posterBaseSize,
+                        store.configuration.helpers.images.posterBaseWidth,
                         store.configuration.images.poster_sizes,
                         fname,
                         mode,
@@ -21,7 +21,7 @@ export const store = {
                     )
                 },
 
-                backdropBaseSize: 780,  // backdrop target size in pixels
+                backdropBaseWidth: window.screen.width / 2,  // backdrop target width in pixels
                 generateBackdropUrls: function(fname, mode = 'x', includeOriginal = true) {
                     // backdrop background-image image-set urls generator
                     // @fname               backdrop file name
@@ -29,7 +29,7 @@ export const store = {
                     // @includeOriginal     whether to include original size in list
                     return generateImageUrls(
                         store.configuration.images.secure_base_url,
-                        store.configuration.helpers.images.backdropBaseSize,
+                        store.configuration.helpers.images.backdropBaseWidth,
                         store.configuration.images.backdrop_sizes,
                         fname,
                         mode,

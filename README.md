@@ -71,9 +71,9 @@ The following table presents the store schema
 |**`configuration`**||||MDB API [configuration](https://developers.themoviedb.org/3/configuration/get-api-configuration)|
 ||`helpers`|||helper functions|
 |||`images`|||
-||||`posterBaseSize`|poster base size (in pixels) used in calculating ratios|
+||||`posterBasewidth`|poster base width (in pixels) used in calculating ratios|
 ||||`generatePosterUrls(fname, mode, includeOriginal)`|generates `<img>` srcset urls for given `fname`<br>`mode` = 'x' \| 'w' determines whether urls will contain image width to `posterBaseSize` ratio (e.g. 1.5x) or image width (e.g. 720w) suffix|
-||||`backdropBaseSize`|backdrop base size (in pixels) used in calculating ratios|
+||||`backdropBasewidth`|backdrop base width (in pixels) used in calculating ratios|
 ||||`generateBackdropUrls(fname, mode, includeOriginal)`|generates `image-set` urls for given `fname`<br>`mode` = 'x' \| 'w' determines whether urls will contain image width to `backdropBaseSize` ratio (e.g. 1.5x) or image width (e.g. 720w) suffix|
 |**`genres`**||||movie genres|
 ||`table`|||movie genres lookup [table](https://developers.themoviedb.org/3/genres/get-movie-list)|
