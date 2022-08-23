@@ -92,7 +92,7 @@ class MovieDetails extends HTMLElement {
                                 class="movies-similar-entry"
                             >
                                     ${s.title}
-                            </span> (${s.release_date.slice(0,4)})
+                            </span> ${s.release_date ? `(${s.release_date.slice(0,4)})` : ''}
                         </li>`
                     )).join('\n')
                 }
