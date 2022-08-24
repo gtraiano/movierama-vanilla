@@ -3,8 +3,6 @@
   border-radius: 4px;
   background-color: rgba(128, 128, 128, 0.375);
   transition: height .5s ease-in-out .5s;
-  min-height: 100%;
-  max-height: fit-content;
   padding-top: 2%;
   padding-bottom: 2%;
   box-shadow: 4px 2px 2px 2px rgba(127,127,127,0.8);
@@ -16,7 +14,6 @@
   margin-bottom: 1%;
   margin-left: 5%;
   margin-right: 5%;
-  overflow-y: hidden;
 }
 
 .movie-item label {
@@ -27,10 +24,11 @@
 
 .movie-item span {
   font-style: italic;
-  width: 60%;
   text-align: start;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 25ch;
+  white-space: nowrap;
 }
 
 .movie-item .poster img {
@@ -41,11 +39,11 @@
 .movie-item-line {
   display: flex;
   justify-content: space-between;
+  height: 1.5em;
 }
 
 .poster {
   height: 70%;
-  min-height: 56vh;
   cursor: pointer;
 }
 
@@ -67,6 +65,7 @@ div.accordion {
 .accordion span {
   display: none;
   text-align: justify;
+  white-space: normal;
 }
 
 .accordion input:checked ~ span {
