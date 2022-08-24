@@ -39,16 +39,21 @@ export const store = {
             }
         }
     },
+    
     genres: {
         table: [],                  // genres lookup table
         lookup: function(id) {      // genres lookup function
             return this.table.find(g => g.id === id)?.name
         }
     },                     
+    
     nowPlaying: {},                 // now playing data
+    
     query: '',                      // search query text
     search: {},                     // search results data
+    
     movieDetails: {},               // movie details data
+    
     mode: appModes.NOW_PLAYING      // app mode
 }
 

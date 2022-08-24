@@ -83,21 +83,21 @@ class MovieDetails extends HTMLElement {
     generateSimilar(similar) {
         return `
             <section class="movies-similar">
-            <h2>Similar movies</h2>
-            <ul>
-                ${
-                    similar?.results.map((s, i) => (
-                        `<li>
-                            <span
-                                class="movies-similar-entry"
-                            >
+                <h2>Similar movies</h2>
+                <ul>
+                    ${
+                        similar?.results.map((s, i) => (
+                            `<li>
+                                <span
+                                    class="movies-similar-entry"
+                                >
                                     ${s.title}
-                            </span> ${s.release_date ? `(${s.release_date.slice(0,4)})` : ''}
-                        </li>`
-                    )).join('\n')
-                }
-            </ul>
-        </section>
+                                </span> ${s.release_date ? `(${s.release_date.slice(0,4)})` : ''}
+                            </li>`
+                        )).join('\n')
+                    }
+                </ul>
+            </section>
         `
     }
 

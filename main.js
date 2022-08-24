@@ -57,16 +57,15 @@ window.addEventListener(ModeUpdate, onModeUpdate)
 
 // overlay events
 window.addEventListener(CloseOverlay, onCloseOverlay)
-
 window.addEventListener(OpenOverlay, onOpenOverlay)
 
 // search query received
 window.addEventListener(SearchQuery, onSearchQuery)
+// search query ended
+window.addEventListener(EndSearchQuery, onEndSearchQuery)
 
 // movie details request
 window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
-
-window.addEventListener(EndSearchQuery, onEndSearchQuery)
 
 window.addEventListener('beforeunload', () => {
     window.addEventListener('load', initializeApp)
