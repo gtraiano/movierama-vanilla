@@ -1,6 +1,7 @@
 import './style.css'
 import { dispatchCloseOverlay } from "../../events/Overlay/CloseOverlay"
 import { dispatchOpenOverlay } from '../../events/Overlay/OpenOverlay'
+import "../Spinner/index"
 
 const template = `
     <div tabindex="1" class="overlay">
@@ -64,7 +65,7 @@ class Overlay extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['show'];
+        return ['show', 'loading'];
     }
   
     attributeChangedCallback(name, oldValue, newValue) {
@@ -73,6 +74,26 @@ class Overlay extends HTMLElement {
                 this.openOverlay()
             else if(newValue === null)
                 this.closeOverlay()
+        }
+
+        if(name === 'loading') {
+            if(Boolean(newValue) || newValue === '') {
+                const div = document.createElement('div')
+                div.classList.add('loading')
+                this.appendChild(div)
+                
+                const { flexDirection } = getComputedStyle(div);
+                const spinner = document.createElement('loading-spinner')
+                div.appendChild(spinner)
+                spinner.style.width = '5%'
+                spinner.setAttribute('direction', flexDirection)
+                spinner.setAttribute('message', 'Loading...')
+            }
+            else if(!Boolean(newValue) || newValue === null) {
+                this.getElementsByClassName('loading')[0].remove()
+                this.removeAttribute('loading')
+                this.children[0].focus()
+            }
         }
     }
 }
