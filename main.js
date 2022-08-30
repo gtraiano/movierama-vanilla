@@ -26,18 +26,26 @@ import {
 } from './src/handlers'
 
 // custom elements
-import {} from './src/components/SearchBar/'
-import {} from './src/components/Overlay'
-import {} from './src/components/MovieList'
-import {} from './src/components/MovieCard'
-import {} from './src/components/MovieDetails'
+import './src/components/SearchBar/'
+import './src/components/Overlay'
+import './src/components/MovieList'
+import './src/components/MovieCard'
+import './src/components/MovieDetails'
+import './src/components/AlertBox'
+import './src/components/TopBar'
 
 // app html template
 document.querySelector('#app').innerHTML = `
+    <top-bar>
+        <div>
+            <div style="min-width: 50%;"><search-bar></search-bar></div>
+            <!--div><button>&#9965;&#129171;</button></div-->
+        </div>
+    </top-bar>
     <h1>In Theaters</h1>
-    <search-bar></search-bar>
     <movie-list></movie-list>
-    <over-lay><over-lay>
+    <over-lay></over-lay>
+    <alert-box></alert-box>
 `
 
 // initalize application

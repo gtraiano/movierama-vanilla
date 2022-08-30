@@ -6,6 +6,7 @@ import movieDBAPI from "../controllers/MovieDB";
 import appModes from "../constants/AppModes";
 import store from "../store";
 
+
 export const initializeApp = async () => {
     Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
     store.genres.table = await movieDBAPI.fetchGenres()
@@ -39,7 +40,14 @@ export const onInfiniteScroll = async () => {
     const fetcher = store.mode === appModes.NOW_PLAYING ? movieDBAPI.fetchNowPlaying : movieDBAPI.fetchMovie
 
     // prevent requests if we have fetched all pages
-    if(store[mode]?.page === store[mode]?.total_pages) return
+    if(Object.keys(store[mode]).length && store[mode]?.page === store[mode]?.total_pages) {
+        document.getElementsByTagName('alert-box')[0].show(true, 'Last page')
+        setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 750)
+        return
+    }
+
+    // show fetching alert
+    document.getElementsByTagName('alert-box')[0].loading(true)
 
     const nextPage = await fetcher({
         page: (store[mode]?.page ?? 0) + 1,
@@ -54,6 +62,9 @@ export const onInfiniteScroll = async () => {
 
     // append new page items to movie list
     document.getElementsByTagName('movie-list')[0].appendMovieCards(nextPage)
+
+    // hide fetching alert
+    document.getElementsByTagName('alert-box')[0].loading(false)
 }
 
 export const onModeUpdate = (e) => {
@@ -73,15 +84,18 @@ export const onModeUpdate = (e) => {
 }
 
 export const onCloseOverlay = () => {
+    // hide alert
+    document.getElementsByTagName('alert-box')[0].show(false)
     // restore body overflow and hide overlay
-    document.getElementsByTagName('over-lay')[0].removeAttribute('show')
     document.body.style.overflow = 'visible'
+    document.getElementsByTagName('over-lay')[0].removeAttribute('show')
 }
 
 export const onOpenOverlay = () => {
     // hide body overflow and display overlay
-    document.getElementsByTagName('over-lay')[0].setAttribute('show', '')
     document.body.style.overflow = 'hidden'
+    document.getElementsByTagName('over-lay')[0].setAttribute('show', '')
+    
 }
 
 export const onSearchQuery = async e => {
@@ -90,16 +104,28 @@ export const onSearchQuery = async e => {
     dispatchModeUpdate(appModes.SEARCH)
     // update store
     store.query = e.detail
+
+    // show alert box while search runs
+    document.getElementsByTagName('alert-box')[0].show(true, 'Searching')
+
     store.search = await movieDBAPI.fetchMovie({
         query: store.query
     })
+    
     // render search results in movie list
     document.getElementsByTagName('movie-list')[0].clear()
     document.getElementsByTagName('movie-list')[0].appendMovieCards(store.search)
     window.scrollTo(0,0)
+
+    // hide alert box after cards have been rendered
+    document.getElementsByTagName('alert-box')[0].show(false)
 }
 
 export const onRequestMovieDetails = async e => {
+    // show overlay with loading screen
+    document.getElementsByTagName('over-lay')[0].openOverlay()
+    document.getElementsByTagName('over-lay')[0].setAttribute('loading', 'true')
+    
     // fetch all movie details and update store
     store.movieDetails.details = await movieDBAPI.fetchMovieDetails({ movieId: e.detail })
     store.movieDetails.credits = await movieDBAPI.fetchMovieCredits({ movieId: e.detail })
@@ -110,9 +136,11 @@ export const onRequestMovieDetails = async e => {
     // create movie details element
     const movieDetails = document.createElement('movie-details')
     movieDetails.render(store.movieDetails)
+    
     // display in overlay
     document.getElementsByTagName('over-lay')[0].updateContent(movieDetails)
-    document.getElementsByTagName('over-lay')[0].openOverlay()
+    // stop overlay loading screen
+    document.getElementsByTagName('over-lay')[0].removeAttribute('loading')
 }
 
 export const onEndSearchQuery = () => {
