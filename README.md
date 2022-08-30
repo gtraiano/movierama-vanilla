@@ -7,6 +7,13 @@ It covers all required typical user flows.
 
 Developed using [vite](https://vitejs.dev)
 
+All data provided by [The Movie DB API](https://developers.themoviedb.org/3/getting-started)
+
+## Configuration
+Requests to The Movie DB API require an API key. Should you run the application locally, you need to [issue](https://developers.themoviedb.org/3/getting-started/authentication) an API key.
+Permanent storage of the API key is inside the .env file in the root folder.
+Therein, set variable `VITE_API_KEY` equal to the value of the API key.
+
 ## Scripts
 
 `npm install` to install dependencies
@@ -14,6 +21,14 @@ Developed using [vite](https://vitejs.dev)
 `npm run dev` to start the development server
 
 `npm run build` to build (bundle) the source code
+
+## User Flows
+1. _**In theaters**_
+   - Show a list of movies now playing in theaters. Basic information about each movie is provided as well. The list is initially populated, and expanded with infinite scrolling afterwards.
+2. _**Search for movies**_
+   - Type a movie title in a search box and show the results. List behaviour is identical to the previous flow.
+3. _**View movie details**_
+   - Show extended information about a movie when the user clicks on it in the movies list.
 
 ## Implementation
 This section contains brief descriptions of the various components of the application. I utilized custom elements with the intent to separate the HTML and actions of each element from the main application code. This was my initiation to the concept and thus I have only applied the elementary features of custom elements.
@@ -52,6 +67,24 @@ This component covers the _"view movie details"_ user flow and presents movie
 details. The component is provided with data for movie reviews, similar movies list and movie trailer urls and uses HTML template generator functions.
 
 The similar movies list entries are clickable and display the selected movie details when clicked.
+
+### **`<alert-box>`**
+This component implements an alert box. It serves the purpose of notifying the user with a message via the UI.
+
+Control of component display can be achieved with the following attributes:
+1. `show` set to a boolean value
+2. `loading` set to a boolean value to display text with a flashing animation
+
+Complimentary to the above, the attribute `message` is used to set the text to be displayed within the alert box.
+
+### **`<loading-spinner>`**
+This component implement a loading spinner with a text label appended.
+The following attributes are observed:
+1. `message` sets the text label
+2. `direction` set either to "row" (label appened next to spinner) or "column" (label appended below spinner) controls the flow of the component
+
+### **`<top-bar>`**
+This component implements a top header bar, which can contain other content (in our case the `search-bar`).
 
 ### **`main.js`**
 This is the main application component (entry point) that handles all user flows. The component stores _"in theaters"_ and _"search for movie"_ results locally, along with _"view movie details"_ data. All user flow actions are initiated by custom events which the app listens to.
