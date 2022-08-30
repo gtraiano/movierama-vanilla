@@ -1,18 +1,85 @@
+movie-list {
+    /*max-width: fit-content;
+    min-width: 75vw;*/
+    width: fit-content;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .in-theaters {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    /*grid-template-columns: repeat(4, 1fr);*/
+    grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
     row-gap: 2em;
     column-gap: 2em;
-    width: 75vw;
+    /*max-width: 75vw;*/
+    /*min-width: fit-content;*/
     height: auto;
     /*max-height: 90vh;*/
     margin-left: auto;
     margin-right: auto;
     margin-top: 2vh;
+    transition-property: all;
+    transition-duration: 250ms;
+    transition-delay: 100ms;
+    transition-timing-function: ease-in-out;
 }
 
-/* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
-.in-theaters > movie-card:nth-last-child(-n + 4) div {
-    margin-bottom: 8px;
+
+
+@media only screen and (max-width: 599px) {
+    .in-theaters {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    /* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
+    .in-theaters > movie-card:nth-last-child(-n + 1) div {
+        margin-bottom: 8px;
+    }
+}
+
+@media only screen and (min-width: 600px) { 
+    .in-theaters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
+    .in-theaters > movie-card:nth-last-child(-n + 2) div {
+        margin-bottom: 8px;
+    }
+ }
+
+@media only screen and (min-width: 900px) {
+    .in-theaters {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
+    .in-theaters > movie-card:nth-last-child(-n + 3) div {
+        margin-bottom: 8px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .in-theaters {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
+    .in-theaters > movie-card:nth-last-child(-n + 4) div {
+        margin-bottom: 8px;
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    .in-theaters {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    /* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
+    .in-theaters > movie-card:nth-last-child(-n + 5) div {
+        margin-bottom: 8px;
+    }
 }

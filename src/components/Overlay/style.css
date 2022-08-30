@@ -1,9 +1,15 @@
-.overlay {
-    display: flex;
-    align-items: center;
+over-lay {
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.overlay {
+    position: relative;
+    display: flex;
+    align-items: center;
     height: 100%;
     width: 100%;
     background-color: gray;
@@ -24,8 +30,57 @@
     font-size: xx-large;
     cursor: pointer;
     color: white;
+    z-index: 10;
 }
 
 .close-button:hover {
     filter: brightness(0) contrast(.5);
 }
+
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: antiquewhite;
+    color: black;
+    opacity: 0.8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/*
+https://www.w3docs.com/snippets/css/how-to-create-loading-spinner-with-css.html
+*/
+/*
+@keyframes spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
+.spin::before {
+    animation: 1.5s linear infinite spinner;
+    animation-play-state: inherit;
+    border: solid 10px #cfd0d1;
+    border-bottom-color: #1c87c9;
+    border-radius: 50%;
+    content: "";
+    width: 5%;
+    aspect-ratio: 1;
+    will-change: transform;
+    opacity: 1;
+}
+
+.spin::after {
+    font-weight: 600;
+    margin-top: 2%;
+}
+*/
