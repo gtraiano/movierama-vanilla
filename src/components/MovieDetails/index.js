@@ -111,6 +111,11 @@ class MovieDetails extends HTMLElement {
     }
 
     generateReviews(reviews) {
+        const sanitize = (input) => {
+            const e = document.createElement('div')
+            e.innerText = input
+            return e.innerHTML
+        }
         return `
             <section class="movie-reviews-container">
                 <h2>Reviews</h2>
@@ -121,7 +126,7 @@ class MovieDetails extends HTMLElement {
                             ?.slice(0, 2)
                             .map((r, i) => (
                                 `<blockquote class="movie-review">
-                                    ${r.content}
+                                    ${sanitize(r.content)}
                                 </blockquote>
                                 <span>by <em>${r.author}</em></span>`
                             )).join('\n')
