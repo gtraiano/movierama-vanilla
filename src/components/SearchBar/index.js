@@ -23,7 +23,7 @@ class SearchBar extends HTMLElement {
         this.input = this.children[0].children[0]
         this.closeButton = this.children[0].children[1]
         // listeners
-        this.input.addEventListener('keyup', this.sendQuery)
+        this.input.addEventListener('input', this.sendQuery)
         this.closeButton.addEventListener('click', this.hideResults)
     }
 
