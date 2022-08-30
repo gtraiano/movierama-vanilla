@@ -34,7 +34,7 @@ export const store = {
                         fname,
                         mode,
                         includeOriginal
-                    ).map(u => u.replace(/^(\S+)/, 'url("$1")')) // wrap url("...") around generated image url (excluding size/ratio), e.g. url("http://..../file.jpg") 1.5x
+                    ).map(u => u.replace(/^(\S+)/, 'url(\"$1\")')) // wrap url("...") around generated image url (excluding size/ratio), e.g. url("http://..../file.jpg") 1.5x
                 }
             }
         }
