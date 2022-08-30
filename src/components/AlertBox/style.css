@@ -1,0 +1,74 @@
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+alert-box {
+    display: none;
+    height: 5%;
+    width: 25%;
+    position: fixed;
+    bottom: 2%;
+    left: calc(50% - 25%/2);
+    border: 1px solid white;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+alert-box[show="0"], alert-box[show="false"], alert-box {
+    display: none;
+    animation: fade-in 250ms 250ms ease-out reverse;
+}
+
+alert-box[show="1"], alert-box[show="true"], alert-box[show]  {
+    display: block;
+    animation: fade-in 250ms ease-in;
+}
+
+alert-box[show="1"] > div.alert-box,
+alert-box[show="true"] > div.alert-box,
+alert-box[show] > div.alert-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+alert-box[show="1"] > div.alert-box::after,
+alert-box[show="true"] > div.alert-box::after,
+alert-box[show] > div.alert-box::after {
+    content: attr(message);
+}
+
+alert-box[loading="1"] > div.alert-box::after,
+alert-box[loading="true"] > div.alert-box::after,
+alert-box[loading] > div.alert-box::after {
+    /*content: "Fetching";*/
+    content: attr(message);
+    margin: auto;
+    animation: alternating 750ms ease-in-out infinite;
+    letter-spacing: 1ch;
+    font-weight: 700;
+}
+
+@keyframes alternating {
+    0% {
+        opacity: 1;
+    }
+    25% {
+        opacity: 0.9;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 0.2;
+    }
+}
