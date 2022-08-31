@@ -20,15 +20,13 @@ movie-list {
     transition-timing-function: ease-in-out;
 }
 
-
-
 @media only screen and (max-width: 599px) {
     .in-theaters {
         grid-template-columns: repeat(1, 1fr);
     }
 
     /* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
-    .in-theaters > movie-card:nth-last-child(-n + 1) div {
+    .in-theaters > movie-card:nth-child(n):nth-last-child(-n+2) ~ movie-card {
         margin-bottom: 8px;
     }
 }
