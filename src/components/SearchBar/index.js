@@ -28,6 +28,10 @@ class SearchBar extends HTMLElement {
         this.closeButton.addEventListener('click', this.hideResults)
     }
 
+    setDelay = (delay) => {
+        this.delay = delay
+    }
+
     sendQuery = () => {
         // do not send empty query
         if(!this.input.value.length) return

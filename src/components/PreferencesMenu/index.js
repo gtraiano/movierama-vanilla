@@ -16,7 +16,7 @@ const template = `
             </div>
             <div>
                 <label for="typing_done_ms">Search query debounce</label>
-                <input id="typing_done_ms" placeholder="in ms" value="${store.preferences.searchQueryDebounce}" style="width:30%;"></input>
+                <input id="typing_done_ms" placeholder="in ms" type="number" style="width:30%;"></input>
             </div>
         </div>
     </drop-down>
@@ -33,16 +33,19 @@ class PreferencesMenu extends HTMLElement {
         this.getElementsByTagName('button')[0].addEventListener('click', this.#openDropDown)
         this.querySelector('#incl_adult').addEventListener('change', this.#setPreference('includeAdultSearch'))
         this.querySelector('#prev_adult_poster').addEventListener('change', this.#setPreference('previewAdultPoster'))
+        this.querySelector('#typing_done_ms').addEventListener('change', this.#setPreference('searchQueryDebounce'))
     }
 
     #setPreference = name => e => {
-        store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
+        e.target.type === 'checkbox' && store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
+        e.target.type === 'number' && store.preferences.helpers.setPreference(name, Number(e.target.value))
     }
 
     loadPreferences = pref => {
         console.info('Loading preferences in <preferences-menu>')
         this.querySelector('#incl_adult').checked = pref.includeAdultSearch
         this.querySelector('#prev_adult_poster').checked = pref.previewAdultPoster
+        this.querySelector('#typing_done_ms').value = pref.searchQueryDebounce
     }
 
     #openDropDown = () => {
