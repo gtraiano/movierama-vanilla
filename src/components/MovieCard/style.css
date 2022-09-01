@@ -49,12 +49,12 @@
   aspect-ratio: 1 / 1.5;
 }
 
-.adult {
+movie-card.adult .movie-item-line.poster img.adult {
   filter: blur(12px) brightness(0.2);
   transition: all 100ms ease-in-out;
 }
 
-.adult:hover {
+movie-card.adult .movie-item-line.poster img.adult:hover {
   filter: none;
 }
 
