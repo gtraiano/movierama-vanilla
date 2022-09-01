@@ -1,6 +1,7 @@
 import './style.css'
 import { dispatchSearchQuery } from '../../events/Search/SearchQuery/index.js'
 import { dispatchEndSearchQuery } from '../../events/Search/EndSearchQuery'
+import store from '../../store'
 
 const template = `
     <div class="search-bar">
@@ -10,7 +11,7 @@ const template = `
 `
 
 class SearchBar extends HTMLElement {
-    delay = 1250
+    delay = store.preferences.searchQueryDebounce
     timer = undefined
     
     constructor() {

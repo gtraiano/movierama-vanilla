@@ -2,6 +2,7 @@
 export const preferences = {
     includeAdultSearch: false,      // inlcude adult content in the results
     previewAdultPoster: false,      // hide adult content posters in movie list
+    searchQueryDebounce: 1250,
     helpers: {                      // helper functions
         // set preference by name and values
         setPreference: function(name, value) {

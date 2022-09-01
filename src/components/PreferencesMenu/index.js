@@ -14,6 +14,10 @@ const template = `
                 <label for="prev_adult_poster">Hide adult poster previews</label>
                 <input id="prev_adult_poster" type="checkbox"></input>
             </div>
+            <div>
+                <label for="typing_done_ms">Search query debounce</label>
+                <input id="typing_done_ms" placeholder="in ms" value="${store.preferences.searchQueryDebounce}" style="width:30%;"></input>
+            </div>
         </div>
     </drop-down>
 </div>
