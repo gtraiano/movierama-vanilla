@@ -8,6 +8,7 @@ import store from "../store";
 
 
 export const initializeApp = async () => {
+    store.preferences.helpers.loadPreferences()
     Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
     store.genres.table = await movieDBAPI.fetchGenres()
     store.nowPlaying = await movieDBAPI.fetchNowPlaying({
@@ -17,6 +18,9 @@ export const initializeApp = async () => {
 }
 
 export const onInitializedApp = () => {
+    // load preferences to menu
+    document.getElementsByTagName('preferences-menu')[0].loadPreferences(store.preferences)
+    // render now playing first page
     document.getElementsByTagName('movie-list')[0].appendMovieCards(store.nowPlaying)
 }
 
