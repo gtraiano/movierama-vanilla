@@ -8,7 +8,7 @@
 }
 
 alert-box {
-    display: none;
+    display: block;
     height: 5%;
     width: 25%;
     position: fixed;
@@ -21,12 +21,14 @@ alert-box {
 }
 
 alert-box[show="0"], alert-box[show="false"], alert-box {
-    display: none;
+    z-index: -1;
+    opacity: 0;
     animation: fade-in 250ms 250ms ease-out reverse;
 }
 
 alert-box[show="1"], alert-box[show="true"], alert-box[show]  {
-    display: block;
+    z-index: 1;
+    opacity: 1;
     animation: fade-in 250ms ease-in;
 }
 
