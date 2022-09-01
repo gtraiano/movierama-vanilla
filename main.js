@@ -1,6 +1,8 @@
 // app styling
 import './style.css'
 
+import store from './src/store'
+
 // custom events
 import { eventName as SearchQuery } from './src/events/Search/SearchQuery'
 import { eventName as RequestMovieDetails } from './src/events/RequestMovieDetails'
@@ -33,13 +35,14 @@ import './src/components/MovieCard'
 import './src/components/MovieDetails'
 import './src/components/AlertBox'
 import './src/components/TopBar'
+import './src/components/PreferencesMenu'
 
 // app html template
 document.querySelector('#app').innerHTML = `
     <top-bar>
         <div>
             <div style="min-width: 50%;"><search-bar></search-bar></div>
-            <!--div><button>&#9965;&#129171;</button></div-->
+            <preferences-menu></preferences-menu>
         </div>
     </top-bar>
     <h1>In Theaters</h1>
