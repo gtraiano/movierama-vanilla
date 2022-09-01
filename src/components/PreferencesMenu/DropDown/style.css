@@ -1,0 +1,80 @@
+/* position menu below button */
+drop-down {
+    position: absolute;
+    transform: translateY(2.5rem);
+    width: fit-content;
+    z-index: 100;
+    transition: opacity 350ms ease-in-out;
+}
+
+drop-down > div {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-content: center;
+    background-color: black;
+    border-radius: 6px;
+    /*padding: 10px;*/
+}
+
+drop-down > div > * {
+    display: inline-flex;
+    justify-content: space-between;
+    white-space: nowrap;
+    text-align: start;
+}
+
+/* give text white color */
+drop-down > div > * > *:not([type="checkbox"]) {
+    color: white;
+}
+
+/* for each row, add margin before each element except the last element */
+drop-down > div > * > *:last-child {
+    margin-left: 15px;
+}
+
+/* add margin under each row except the last */
+drop-down > div > *:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+/* dropdown is not visible */
+drop-down {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* dropdown is visible */
+drop-down[visible] {
+    opacity: 1;
+    width: fit-content;
+    height: fit-content;
+}
+
+/* dropdown container div when not visible */
+drop-down > div {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    padding: 0;
+}
+
+/* dropdown container div when visible */
+drop-down[visible] > div {
+    opacity: 1;
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+}
+
+/* dropdown container div row items when not visible */
+drop-down > div > * {
+    display: none;
+}
+
+/* dropdown container div row items when visible */
+drop-down[visible] > div > * {
+    display: inline-flex;
+}
