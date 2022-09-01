@@ -49,6 +49,15 @@
   aspect-ratio: 1 / 1.5;
 }
 
+.adult {
+  filter: blur(12px);
+  transition: all 100ms ease-in-out;
+}
+
+.adult:hover {
+  filter: none;
+}
+
 /*
 https://medium.com/@mjtweaver/build-an-accordion-without-javascript-e97d319ca371
 */

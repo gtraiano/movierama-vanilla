@@ -9,6 +9,10 @@ top-bar {
     transition: height .5s ease-in-out;
 }
 
+top-bar.above {
+    z-index: 1;
+}
+
 top-bar > div {
     display: flex;
     flex-direction: row;

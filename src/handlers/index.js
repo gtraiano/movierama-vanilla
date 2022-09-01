@@ -93,10 +93,12 @@ export const onCloseOverlay = () => {
     // restore body overflow and hide overlay
     document.body.style.overflow = 'visible'
     document.getElementsByTagName('over-lay')[0].removeAttribute('show')
+    document.getElementsByTagName('top-bar')[0].classList.add('above')
 }
 
 export const onOpenOverlay = () => {
     // hide body overflow and display overlay
+    document.getElementsByTagName('top-bar')[0].classList.remove('above')
     document.body.style.overflow = 'hidden'
     document.getElementsByTagName('over-lay')[0].setAttribute('show', '')
     

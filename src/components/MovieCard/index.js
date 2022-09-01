@@ -33,6 +33,7 @@ class MovieCard extends HTMLElement {
         this.innerHTML = this.generateTemplate(movie)
         this.setAttribute('movie-id', movie.id)
         this.querySelector('div.poster').addEventListener('click', this.requestMovieDetails)
+        console.log('movie adult', movie.adult)
     }
 
     generateTemplate(movie) {
@@ -41,6 +42,7 @@ class MovieCard extends HTMLElement {
             <div class="movie-item">
                 <div class="movie-item-line poster">
                     <img
+                        ${(movie.adult && store.preferences.previewAdultPoster) ? 'class="adult"' : ''}
                         srcset="${store.configuration.helpers.images.generatePosterUrls(movie.poster_path)?.join(',') ?? ''}"
                         alt="${movie.title} poster"
                         loading="lazy"

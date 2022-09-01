@@ -12,7 +12,7 @@ class TopBar extends HTMLElement {
                 <slot></slot>
             </div>
         `
-
+        this.classList.add('above')
     }
 }
 
