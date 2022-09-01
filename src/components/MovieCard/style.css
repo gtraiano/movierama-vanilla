@@ -50,7 +50,7 @@
 }
 
 .adult {
-  filter: blur(12px);
+  filter: blur(12px) brightness(0.2);
   transition: all 100ms ease-in-out;
 }
 
