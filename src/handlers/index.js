@@ -98,8 +98,8 @@ export const onCloseOverlay = () => {
 
 export const onOpenOverlay = () => {
     // hide body overflow and display overlay
-    document.getElementsByTagName('top-bar')[0].classList.remove('above')
     document.body.style.overflow = 'hidden'
+    document.getElementsByTagName('top-bar')[0].classList.remove('above')
     document.getElementsByTagName('over-lay')[0].setAttribute('show', '')
     
 }
@@ -157,4 +157,30 @@ export const onEndSearchQuery = () => {
     store.search = {}
     // update app mode
     dispatchModeUpdate(appModes.NOW_PLAYING)
+}
+
+export const onUpdatePreference = (e) => {
+    // update search bar query debounce delay
+    if(e.detail === 'searchQueryDebounce') {
+        document.getElementsByTagName('search-bar')[0].setDelay(store.preferences.searchQueryDebounce)
+    }
+    // apply filter to adult posters
+    else if(e.detail === 'previewAdultPoster') {
+        document.querySelectorAll('.adult .poster > img').forEach(img => {
+            img.classList.toggle('adult')
+        })
+    }
+    // filter adult results
+    else if(e.detail === 'includeAdultSearch') {
+        if(!store.preferences.includeAdultSearch) {
+            document.querySelectorAll('movie-card.adult').forEach(c => {
+                c.remove()
+            })
+        }
+        else {
+            // redraw movie list with all results
+            document.getElementsByTagName('movie-list')[0].clear()
+            document.getElementsByTagName('movie-list')[0].appendMovieCards(store.search)
+        }
+    }
 }

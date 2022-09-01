@@ -16,6 +16,10 @@ export const preferences = {
                 ...(localStorage.getItem('preferences') && JSON.parse(localStorage.getItem('preferences'))),
                 [name]: value
             }))
+
+            dispatchEvent(new CustomEvent('updatepreference', {
+                detail: name
+            }))
         },
         // load preferences from local storage
         loadPreferences: function() {

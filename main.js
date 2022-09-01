@@ -24,7 +24,8 @@ import {
     onCloseOverlay,
     onSearchQuery,
     onRequestMovieDetails,
-    onEndSearchQuery
+    onEndSearchQuery,
+    onUpdatePreference
 } from './src/handlers'
 
 // custom elements
@@ -89,3 +90,6 @@ window.addEventListener('beforeunload', () => {
     window.addEventListener(SearchQuery, onSearchQuery)
     window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
 })
+
+// updated preference
+window.addEventListener('updatepreference', onUpdatePreference)
