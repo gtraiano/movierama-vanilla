@@ -1,3 +1,5 @@
+import store from "../../store"
+
 const movieDB = {
     apiBaseURL: 'https://api.themoviedb.org',
     apiVersion: '/3'
@@ -17,6 +19,8 @@ const generateURL = (config) => {
             url.searchParams.append(key, value)
         })
     }
+
+    url.searchParams.append('include_adult', store.preferences.includeAdultSearch)
 
     return url.toString()
 }
