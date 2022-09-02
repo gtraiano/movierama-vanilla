@@ -2,11 +2,15 @@ top-bar {
     position: fixed;
     top: 1%;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: fit-content;
     background-color: inherit;
     transition: opacity .1s ease-in-out;
     transition: height .5s ease-in-out;
+}
+
+:root[theme="light"] top-bar {
+    filter: invert(1)
 }
 
 top-bar.above {

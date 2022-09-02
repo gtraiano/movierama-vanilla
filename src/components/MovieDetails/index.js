@@ -140,7 +140,7 @@ class MovieDetails extends HTMLElement {
     generateTemplate(movie, videos, credits, reviews, similar) {
         return `
         <div class="movie-details">
-            <h1>${movie.title}</h1>
+            <h1 class="main-title">${movie.title}</h1>
             ${this.generateTrailer(videos)}
             ${this.generateCredits(movie, credits)}
             ${this.generateOverview(movie)}

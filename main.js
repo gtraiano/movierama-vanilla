@@ -46,7 +46,7 @@ document.querySelector('#app').innerHTML = `
             <preferences-menu></preferences-menu>
         </div>
     </top-bar>
-    <h1>In Theaters</h1>
+    <h1 class="main-title">In Theaters</h1>
     <movie-list></movie-list>
     <over-lay></over-lay>
     <alert-box></alert-box>

@@ -20,14 +20,18 @@
   text-align: center;
 }
 
-#app {
-  height: auto;
+:root[theme="dark"] {
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
 }
 
-#root {
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root[theme="light"] {
+  color: #242424;
+  background-color: floralwhite;
+}
+
+#app {
+  height: auto;
 }
 
 a {
@@ -46,9 +50,12 @@ body {
   place-items: center;
 }
 
-h1 {
+h1.main-title {
   font-size: 3.2em;
-  line-height: 1.1;
+}
+#app > h1.main-title {
+  /* compensate for <top-header> height */
+  margin-top: 4.5%
 }
 
 @media (prefers-color-scheme: light) {
