@@ -1,0 +1,32 @@
+.separator {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.separator.label {
+    text-transform: uppercase;
+    letter-spacing: 0.25ch;
+}
+
+.separator.label::before {
+    width: 50%;
+    border: 1px white solid;
+    content: "";
+    height: 0px;
+    margin-right: 2%;
+}
+
+.separator.label::after {
+    width: 50%;
+    border: 1px white solid;
+    content: "";
+    height: 0px;
+    margin-left: 2%;
+}
+
+.separator.line {
+    content: "";
+    border: 1px white solid;
+}

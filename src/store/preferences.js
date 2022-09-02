@@ -2,7 +2,10 @@
 export const preferences = {
     includeAdultSearch: false,      // inlcude adult content in the results
     previewAdultPoster: false,      // hide adult content posters in movie list
-    searchQueryDebounce: 1250,
+    searchQueryDebounce: 1250,      // delay before sending search query
+    theme:                          // application color theme
+        window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+    
     helpers: {                      // helper functions
         // set preference by name and values
         setPreference: function(name, value) {
@@ -31,7 +34,6 @@ export const preferences = {
                     preferences[k] = prefs[k]
                 }
             }
-            //dispatchEvent(new Event('preferencesloaded', { bubbles: true }))
         }
     }
 }

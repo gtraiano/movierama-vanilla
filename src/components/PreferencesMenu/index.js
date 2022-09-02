@@ -1,11 +1,13 @@
 import './DropDown'
 import store from '../../store'
+import './style.css'
 
 const template = `
 <div>
     <button style="height:fit-content; font-size:x-large;">&#9965;</button>
     <drop-down>
         <div>
+            <div class="separator label">search</div>
             <div>
                 <label for="incl_adult">Include adult results in search</label>
                 <input id="incl_adult" type="checkbox"></input>
@@ -18,6 +20,15 @@ const template = `
                 <label for="typing_done_ms">Search query debounce</label>
                 <input id="typing_done_ms" placeholder="in ms" type="number" style="width:30%;"></input>
             </div>
+            <div class="separator label">theme</div>
+            <div>
+                <label for="theme_color">Theme style</label>
+                <select id="theme_color">
+                    <option value="dark">dark</option>
+                    <option value="light">light</option>
+                </select>
+            </div>
+            
         </div>
     </drop-down>
 </div>
@@ -34,11 +45,13 @@ class PreferencesMenu extends HTMLElement {
         this.querySelector('#incl_adult').addEventListener('change', this.#setPreference('includeAdultSearch'))
         this.querySelector('#prev_adult_poster').addEventListener('change', this.#setPreference('previewAdultPoster'))
         this.querySelector('#typing_done_ms').addEventListener('change', this.#setPreference('searchQueryDebounce'))
+        this.querySelector('#theme_color').addEventListener('change', this.#setPreference('theme'))
     }
 
     #setPreference = name => e => {
-        e.target.type === 'checkbox' && store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
-        e.target.type === 'number' && store.preferences.helpers.setPreference(name, Number(e.target.value))
+        if(e.target.type === 'checkbox') store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
+        else if(e.target.type === 'number') store.preferences.helpers.setPreference(name, Number(e.target.value))
+        else store.preferences.helpers.setPreference(name, e.target.value)
     }
 
     loadPreferences = pref => {
@@ -46,6 +59,7 @@ class PreferencesMenu extends HTMLElement {
         this.querySelector('#incl_adult').checked = pref.includeAdultSearch
         this.querySelector('#prev_adult_poster').checked = pref.previewAdultPoster
         this.querySelector('#typing_done_ms').value = pref.searchQueryDebounce
+        this.querySelector('#theme_color').value = pref.theme ?? 'black'
     }
 
     #openDropDown = () => {

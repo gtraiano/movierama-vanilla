@@ -8,9 +8,15 @@ import store from "../store";
 
 
 export const initializeApp = async () => {
+    // load preferences from localStorage
     store.preferences.helpers.loadPreferences()
+    // set application theme
+    document.documentElement.setAttribute('theme', store.preferences.theme)
+    // fetch moviedb api configuration
     Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
+    // fetch movie genres
     store.genres.table = await movieDBAPI.fetchGenres()
+    // fetch 1st page of in theaters
     store.nowPlaying = await movieDBAPI.fetchNowPlaying({
         page: 1
     })
@@ -178,9 +184,16 @@ export const onUpdatePreference = (e) => {
             })
         }
         else {
+            // nothing to do when no search results
+            if(!store.search?.results?.length) return
             // redraw movie list with all results
             document.getElementsByTagName('movie-list')[0].clear()
             document.getElementsByTagName('movie-list')[0].appendMovieCards(store.search)
         }
+    }
+
+    else if(e.detail === 'theme') {
+        console.log('change theme')
+        document.documentElement.setAttribute('theme', store.preferences.theme)
     }
 }
