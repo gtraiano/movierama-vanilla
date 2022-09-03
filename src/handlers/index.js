@@ -178,22 +178,12 @@ export const onUpdatePreference = (e) => {
     }
     // filter adult results
     else if(e.detail === 'includeAdultSearch') {
-        if(!store.preferences.includeAdultSearch) {
-            document.querySelectorAll('movie-card.adult').forEach(c => {
-                c.remove()
-            })
-        }
-        else {
-            // nothing to do when no search results
-            if(!store.search?.results?.length) return
-            // redraw movie list with all results
-            document.getElementsByTagName('movie-list')[0].clear()
-            document.getElementsByTagName('movie-list')[0].appendMovieCards(store.search)
-        }
+        document.querySelectorAll('movie-card.adult').forEach(c => {
+            c.style.display = store.preferences.includeAdultSearch ? '' : 'none'
+        })
     }
-
+    // theme color
     else if(e.detail === 'theme') {
-        console.log('change theme')
         document.documentElement.setAttribute('theme', store.preferences.theme)
     }
 }
