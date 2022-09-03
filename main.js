@@ -1,8 +1,6 @@
 // app styling
 import './style.css'
 
-import store from './src/store'
-
 // custom events
 import { eventName as SearchQuery } from './src/events/Search/SearchQuery'
 import { eventName as RequestMovieDetails } from './src/events/RequestMovieDetails'
@@ -12,6 +10,7 @@ import { eventName as InfiniteScroll } from './src/events/InfiniteScroll'
 import { eventName as ModeUpdate } from './src/events/ModeUpdate'
 import { eventName as InitializedApp } from './src/events/InitializedApp'
 import { eventName as EndSearchQuery } from './src/events/Search/EndSearchQuery'
+import { eventName as UpdatePreference } from './src/events/UpdatePreference'
 
 // event handlers
 import {
@@ -92,4 +91,4 @@ window.addEventListener('beforeunload', () => {
 })
 
 // updated preference
-window.addEventListener('updatepreference', onUpdatePreference)
+window.addEventListener(UpdatePreference, onUpdatePreference)

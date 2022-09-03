@@ -128,3 +128,4 @@ The following table presents the store schema
 |`requestmoviedetails`|signals a request for movie details|<ul style="padding-left:4%; list-style-type:decimal"><li>receive movie id and perform necessary *MDB API* requests for _"view movie details"_ user flow</li><li>render a `movie-details` element and present it inside the `over-lay` element</li></ul>|
 |`openoverlay`|signals a request to show the `over-lay`|hide overflow of document body and call method to open `over-lay`|
 |`closeoverlay`|signals a request to hide the `over-lay`|restore overflow of doument body and call method to close `over-lay`|
+|`updatepreference`|signals that a preference value has changed|dispatched by the method `store.preferences.helpers.setPreference`, which in turn is called by change event listeners in `preferences-menu`|

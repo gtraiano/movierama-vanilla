@@ -1,3 +1,5 @@
+import { dispatchUpdatePreference } from "../events/UpdatePreference"
+
 // applications preferences
 export const preferences = {
     includeAdultSearch: false,      // inlcude adult content in the results
@@ -20,9 +22,7 @@ export const preferences = {
                 [name]: value
             }))
 
-            dispatchEvent(new CustomEvent('updatepreference', {
-                detail: name
-            }))
+            dispatchUpdatePreference(name)
         },
         // load preferences from local storage
         loadPreferences: function() {
