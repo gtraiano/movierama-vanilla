@@ -7,6 +7,10 @@
     }
 }
 
+html[theme="light"] alert-box {
+    filter: invert(1);
+}
+
 alert-box {
     display: block;
     height: 5%;
