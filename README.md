@@ -10,9 +10,15 @@ Developed using [vite](https://vitejs.dev)
 All data provided by [The Movie DB API](https://developers.themoviedb.org/3/getting-started)
 
 ## Configuration
-Requests to The Movie DB API require an API key. Should you run the application locally, you need to [issue](https://developers.themoviedb.org/3/getting-started/authentication) an API key.
-Permanent storage of the API key is inside the .env file in the root folder.
-Therein, set variable `VITE_API_KEY` equal to the value of the API key.
+Requests to The Movie DB API require authentication. Should you run the application locally, you need to [issue](https://developers.themoviedb.org/3/getting-started/authentication) an API key.
+
+Two authentication methods are supported
+1. via an API key: set variable `VITE_API_KEY` equal to the value of your API key
+2. via a bearer token: set variable `VITE_API_READ_ACCESS_TOKEN` equal to the value of your Read Access Token
+
+The two methods are exclusive. If both variables are defined, method 2. is preferred.
+
+Permanent storage of your credentials must be inside the `.env` file in the root folder.
 
 ## Scripts
 
