@@ -48,6 +48,14 @@ class PreferencesMenu extends HTMLElement {
         this.querySelector('#theme_color').addEventListener('change', this.#setPreference('theme'))
     }
 
+    disconnectedCallback() {
+        this.getElementsByTagName('button')[0].removeEventListener('click', this.#openDropDown)
+        this.querySelector('#incl_adult').removeEventListener('change', this.#setPreference('includeAdultSearch'))
+        this.querySelector('#prev_adult_poster').removeEventListener('change', this.#setPreference('previewAdultPoster'))
+        this.querySelector('#typing_done_ms').removeEventListener('change', this.#setPreference('searchQueryDebounce'))
+        this.querySelector('#theme_color').removeEventListener('change', this.#setPreference('theme'))
+    }
+
     #setPreference = name => e => {
         if(e.target.type === 'checkbox') store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
         else if(e.target.type === 'number') store.preferences.helpers.setPreference(name, Number(e.target.value))
@@ -62,11 +70,25 @@ class PreferencesMenu extends HTMLElement {
         this.querySelector('#theme_color').value = pref.theme ?? 'black'
     }
 
-    #openDropDown = () => {
+    #detectClickOutside = e => {
+        // check if event target is not a descendant of the component (i.e. "outside" the menu)
+        if(!this.contains(e.target)) {
+            this.getElementsByTagName('drop-down')[0].removeAttribute('visible')
+            window.removeEventListener('click', this.#detectClickOutside)
+            window.removeEventListener('keydown', this.#detectClickOutside)
+        }
+    }
+
+    #openDropDown = (e) => {
         const dd = this.getElementsByTagName('drop-down')[0]
         const isVisible = dd.getAttribute('visible')
-        if(isVisible === null) dd.setAttribute('visible', '')
-        else dd.removeAttribute('visible')
+        if(isVisible === null) {
+            dd.setAttribute('visible', '')
+            window.addEventListener('click', this.#detectClickOutside)
+        }
+        else {
+            dd.removeAttribute('visible')
+        }
     }
 }
 
