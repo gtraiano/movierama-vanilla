@@ -31,6 +31,7 @@ const generateURL = (config) => {
         })
     }
 
+    // include adult in search
     url.searchParams.append('include_adult', store.preferences.includeAdultSearch)
 
     return url.toString()
