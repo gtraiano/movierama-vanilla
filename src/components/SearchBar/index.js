@@ -32,14 +32,14 @@ class SearchBar extends HTMLElement {
         this.delay = delay
     }
 
-    sendQuery = () => {
+    sendQuery = (delay = this.delay) => {
         // do not send empty query
         if(!this.input.value.length) return
         // debounce sending query
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
             dispatchSearchQuery(this.input.value.trim())
-        }, this.delay)
+        }, delay)
     }
 
     hideResults = () => {
