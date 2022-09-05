@@ -56,6 +56,25 @@ class PreferencesMenu extends HTMLElement {
         this.querySelector('#theme_color').removeEventListener('change', this.#setPreference('theme'))
     }
 
+    static get observedAttributes() {
+        return ['open']
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if(name === 'open') {
+            if(newValue === '') {
+                this.getElementsByTagName('drop-down')[0].setAttribute('visible', '')
+                window.addEventListener('click', this.#detectClickOutside)
+                this.addEventListener('keydown', this.#detectClickOutside)
+            }
+            else if(newValue === null) {
+                this.getElementsByTagName('drop-down')[0].removeAttribute('visible', '')
+                window.removeEventListener('click', this.#detectClickOutside)
+                this.removeEventListener('keydown', this.#detectClickOutside)
+            }
+        }
+    }
+
     #setPreference = name => e => {
         if(e.target.type === 'checkbox') store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
         else if(e.target.type === 'number') store.preferences.helpers.setPreference(name, Number(e.target.value))
@@ -71,23 +90,29 @@ class PreferencesMenu extends HTMLElement {
     }
 
     #detectClickOutside = e => {
-        // check if event target is not a descendant of the component (i.e. "outside" the menu)
-        if(!this.contains(e.target)) {
-            this.getElementsByTagName('drop-down')[0].removeAttribute('visible')
-            window.removeEventListener('click', this.#detectClickOutside)
-            window.removeEventListener('keydown', this.#detectClickOutside)
+        // tabbing outside
+        if(e.type === 'keydown' && e.key === 'Tab') {
+            // reached last child, nowhere else to tab to
+            if(this.querySelector('drop-down > div').lastElementChild.contains(e.target)) {
+                this.removeAttribute('open')
+            }
+        }
+        // clicking outside menu
+        else if(e.type === 'click') {
+            // check if event target is not a descendant of the component (i.e. "outside" the menu)
+            if(!this.contains(e.target)) {
+                this.removeAttribute('open')
+            }
         }
     }
 
-    #openDropDown = (e) => {
-        const dd = this.getElementsByTagName('drop-down')[0]
-        const isVisible = dd.getAttribute('visible')
-        if(isVisible === null) {
-            dd.setAttribute('visible', '')
-            window.addEventListener('click', this.#detectClickOutside)
+    #openDropDown = () => {
+        const isOpen = this.getAttribute('open')
+        if(isOpen === null) {
+            this.setAttribute('open', '')
         }
         else {
-            dd.removeAttribute('visible')
+            this.removeAttribute('open')
         }
     }
 }
