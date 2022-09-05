@@ -8,11 +8,12 @@ const movieDB = {
         ...(import.meta.env.VITE_API_KEY && { apiKey: import.meta.env.VITE_API_KEY }),
         // api read access token
         ...(import.meta.env.VITE_API_READ_ACCESS_TOKEN && {
-            headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_API_READ_ACCESS_TOKEN}`,
-            'Content-Type': 'application/json;charset=utf-8'
+                headers: {
+                    'Authorization': `Bearer ${import.meta.env.VITE_API_READ_ACCESS_TOKEN}`,
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
             }
-        })
+        )
     }
 }
 
@@ -37,11 +38,12 @@ const generateURL = (config) => {
     return url.toString()
 }
 
-const fetcher = async (url) => {
+const fetcher = async (url, signal = undefined) => {
     const response = await fetch(url, {
         headers: {
             ...movieDB.auth.headers
-        }
+        },
+        signal: signal
     })
     if(!response.ok) throw new Error(`Request ${response.url} failed with "${response.statusText} [${response.status}]"`)
     return await response.json()
@@ -79,7 +81,7 @@ const fetchMovie = async (config) => {
             page: config.page ?? 1
         }
     })
-    return await fetcher(url)
+    return await fetcher(url, config.signal)
 }
 
 const fetchMovieDetails = async (config) => {
