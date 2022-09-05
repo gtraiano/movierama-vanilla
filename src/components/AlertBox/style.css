@@ -12,7 +12,7 @@ html[theme="light"] alert-box {
 }
 
 alert-box {
-    display: block;
+    display: none;
     height: 5%;
     width: 25%;
     position: fixed;
@@ -31,6 +31,7 @@ alert-box[show="0"], alert-box[show="false"], alert-box {
 }
 
 alert-box[show="1"], alert-box[show="true"], alert-box[show]  {
+    display: block;
     z-index: 1;
     opacity: 1;
     animation: fade-in 250ms ease-in;
