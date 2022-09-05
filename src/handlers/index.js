@@ -6,21 +6,31 @@ import movieDBAPI from "../controllers/MovieDB";
 import appModes from "../constants/AppModes";
 import store from "../store";
 
+let searchController
 
 export const initializeApp = async () => {
-    // load preferences from localStorage
-    store.preferences.helpers.loadPreferences()
-    // set application theme
-    document.documentElement.setAttribute('theme', store.preferences.theme)
-    // fetch moviedb api configuration
-    Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
-    // fetch movie genres
-    store.genres.table = await movieDBAPI.fetchGenres()
-    // fetch 1st page of in theaters
-    store.nowPlaying = await movieDBAPI.fetchNowPlaying({
-        page: 1
-    })
-    dispatchInitializedApp()
+    try {
+        // load preferences from localStorage
+        store.preferences.helpers.loadPreferences()
+        // set application theme
+        document.documentElement.setAttribute('theme', store.preferences.theme)
+        // fetch moviedb api configuration
+        Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
+        // fetch movie genres
+        store.genres.table = await movieDBAPI.fetchGenres()
+   
+        // fetch 1st page of in theaters
+        document.getElementsByTagName('alert-box')[0].loading(true)
+        store.nowPlaying = await movieDBAPI.fetchNowPlaying({
+            page: 1
+        })
+        document.getElementsByTagName('alert-box')[0].loading(false)
+        dispatchInitializedApp()
+    }
+    catch(error) {
+        document.getElementsByTagName('alert-box')[0].show(true, error.message)
+        setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 3000)   
+    }
 }
 
 export const onInitializedApp = () => {
@@ -67,7 +77,7 @@ export const onInfiniteScroll = async () => {
     store[mode] = {
         ...store[mode],
         ...nextPage,
-        results: [...store[mode]?.results, ...nextPage.results]
+        results: [...(store[mode]?.results ?? []), ...nextPage.results]
     }
 
     // append new page items to movie list
@@ -111,26 +121,36 @@ export const onOpenOverlay = () => {
 }
 
 export const onSearchQuery = async e => {
-    // signal app mode change
-    store.mode = appModes.SEARCH
-    dispatchModeUpdate(appModes.SEARCH)
-    // update store
-    store.query = e.detail
+    try {
+        // signal app mode change
+        store.mode = appModes.SEARCH
+        dispatchModeUpdate(appModes.SEARCH)
+        // update store
+        store.query = e.detail
 
-    // show alert box while search runs
-    document.getElementsByTagName('alert-box')[0].show(true, 'Searching')
-
-    store.search = await movieDBAPI.fetchMovie({
-        query: store.query
-    })
-    
-    // render search results in movie list
-    document.getElementsByTagName('movie-list')[0].clear()
-    document.getElementsByTagName('movie-list')[0].appendMovieCards(store.search)
-    window.scrollTo(0,0)
-
-    // hide alert box after cards have been rendered
-    document.getElementsByTagName('alert-box')[0].show(false)
+        // show alert box while search runs
+        document.getElementsByTagName('alert-box')[0].show(true, 'Searching')
+        if(searchController) {
+            searchController.abort()
+        }
+        searchController = new AbortController()
+        store.search = await movieDBAPI.fetchMovie({
+            query: store.query,
+            signal: searchController.signal
+        })
+        // render search results in movie list
+        document.getElementsByTagName('movie-list')[0].clear()
+        document.getElementsByTagName('movie-list')[0].appendMovieCards(store.search)
+        window.scrollTo(0,0)
+        // hide alert box after cards have been rendered
+        document.getElementsByTagName('alert-box')[0].show(false)
+    }
+    catch(error) {
+        if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
+            document.getElementsByTagName('alert-box')[0].show(true, error.message)
+            setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 3000)
+        }
+    }
 }
 
 export const onRequestMovieDetails = async e => {
