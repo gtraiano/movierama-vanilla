@@ -6,10 +6,19 @@ import movieDBAPI from "../controllers/MovieDB";
 import appModes from "../constants/AppModes";
 import store from "../store";
 
-let searchController
+const searchController = {
+    isFetching: false,
+    abortController: null
+}
+const infiniteScrollController = {
+    isFetching: false,
+    abortController: null
+}
 
 export const initializeApp = async () => {
     try {
+        // check if api connection is ok
+        await movieDBAPI.ping()
         // load preferences from localStorage
         store.preferences.helpers.loadPreferences()
         // set application theme
@@ -54,37 +63,55 @@ export const scrolledToBottom = () => {
 }
 
 export const onInfiniteScroll = async () => {
-    // part of store to use
-    const mode = store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search'
-    // movieDBAPI fetcher to use
-    const fetcher = store.mode === appModes.NOW_PLAYING ? movieDBAPI.fetchNowPlaying : movieDBAPI.fetchMovie
+    try {
+        // part of store to use
+        const mode = store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search'
+        // movieDBAPI fetcher to use
+        const fetcher = store.mode === appModes.NOW_PLAYING ? movieDBAPI.fetchNowPlaying : movieDBAPI.fetchMovie
+    
+        // prevent requests if we have fetched all pages
+        if(Object.keys(store[mode]).length && store[mode]?.page === store[mode]?.total_pages) {
+            document.getElementsByTagName('alert-box')[0].show(true, 'Last page')
+            setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 750)
+            return
+        }
 
-    // prevent requests if we have fetched all pages
-    if(Object.keys(store[mode]).length && store[mode]?.page === store[mode]?.total_pages) {
-        document.getElementsByTagName('alert-box')[0].show(true, 'Last page')
-        setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 750)
-        return
+        // check if fetcher is already busy
+        if(infiniteScrollController.abortController) {
+            infiniteScrollController.abortController.abort('onInfiniteScroll is already fetching next page')
+        }
+        infiniteScrollController.abortController = new AbortController()
+        infiniteScrollController.isFetching = true
+
+        // show fetching alert
+        document.getElementsByTagName('alert-box')[0].loading(true)
+        const nextPage = await fetcher({
+            page: (store[mode]?.page ?? 0) + 1,
+            ...(store.mode === appModes.SEARCH && { query: store.query }), // query only necessary for search
+            signal: infiniteScrollController.abortController.signal
+        })
+        // update results
+        if(!infiniteScrollController.abortController.signal.aborted) {
+            store[mode] = {
+                ...store[mode],
+                ...nextPage,
+                results: [...(store[mode]?.results ?? []), ...nextPage.results]
+            }
+        
+            // append new page items to movie list
+            document.getElementsByTagName('movie-list')[0].appendMovieCards(nextPage)
+        }
+        document.getElementsByTagName('alert-box')[0].loading(false)
     }
-
-    // show fetching alert
-    document.getElementsByTagName('alert-box')[0].loading(true)
-
-    const nextPage = await fetcher({
-        page: (store[mode]?.page ?? 0) + 1,
-        ...(store.mode === appModes.SEARCH && { query: store.query }) // query only necessary for search
-    })
-
-    store[mode] = {
-        ...store[mode],
-        ...nextPage,
-        results: [...(store[mode]?.results ?? []), ...nextPage.results]
+    catch(error) {
+        if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
+            document.getElementsByTagName('alert-box')[0].show(true, error.message)
+            setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 3000)
+        }
     }
-
-    // append new page items to movie list
-    document.getElementsByTagName('movie-list')[0].appendMovieCards(nextPage)
-
-    // hide fetching alert
-    document.getElementsByTagName('alert-box')[0].loading(false)
+    finally {
+        infiniteScrollController.isFetching = false
+    }
 }
 
 export const onModeUpdate = (e) => {
@@ -130,13 +157,13 @@ export const onSearchQuery = async e => {
 
         // show alert box while search runs
         document.getElementsByTagName('alert-box')[0].show(true, 'Searching')
-        if(searchController) {
-            searchController.abort()
+        if(searchController.abortController) {
+            searchController.abortController.abort()
         }
-        searchController = new AbortController()
+        searchController.abortController = new AbortController()
         store.search = await movieDBAPI.fetchMovie({
             query: store.query,
-            signal: searchController.signal
+            signal: searchController.abortController.signal
         })
         // render search results in movie list
         document.getElementsByTagName('movie-list')[0].clear()
