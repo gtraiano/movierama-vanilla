@@ -18,22 +18,24 @@ const movieDB = {
 }
 
 const generateURL = (config) => {
-    const url  = new URL(movieDB.apiVersion + config.path ?? '', movieDB.apiBaseURL)
+    const url  = new URL(movieDB.apiVersion + config?.path ?? '', movieDB.apiBaseURL)
 
     // include api key if api read access token is not defined
     !movieDB.auth?.headers && url.searchParams.append('api_key', movieDB.auth.apiKey)
     // default to english language
-    url.searchParams.append('language', 'en-US')
+    url.searchParams.append('language', config?.language ?? 'en-US')
 
-    // add other query parameters
-    if('searchParams' in config) {
-        Object.entries(config.searchParams).forEach(([key, value]) => {
-            url.searchParams.append(key, value)
-        })
+    if(config) {
+        // add other query parameters
+        if('searchParams' in config) {
+            Object.entries(config.searchParams).forEach(([key, value]) => {
+                url.searchParams.append(key, value)
+            })
+        }
     }
-
+    
     // include adult in search
-    url.searchParams.append('include_adult', store.preferences.includeAdultSearch)
+    !url.searchParams.has('include_adult') && url.searchParams.append('include_adult', store.preferences.includeAdultSearch)
 
     return url.toString()
 }
@@ -47,6 +49,23 @@ const fetcher = async (url, signal = undefined) => {
     })
     if(!response.ok) throw new Error(`Request ${response.url} failed with "${response.statusText} [${response.status}]"`)
     return await response.json()
+}
+
+const ping = async () => {
+    try {
+        const response = await fetch(generateURL(), {
+            headers: {
+                ...movieDB.auth.headers
+            }
+        })
+        return response.ok
+    }
+    catch(error) {
+        if(error instanceof TypeError) {
+            console.error('Coud not reach MovieDB')
+            throw new Error('Could not reach MovieDB')
+        }
+    }
 }
 
 const fetchConfiguration = async () => {
@@ -63,7 +82,7 @@ const fetchNowPlaying = async (config) => {
             page: config.page ?? 1
         }
     })
-    return await fetcher(url)
+    return await fetcher(url, config.signal)
 }
 
 const fetchGenres = async () => {
@@ -128,5 +147,6 @@ export default {
     fetchMovieReviews,
     fetchMovieSimilar,
     fetchMovieCredits,
-    fetchConfiguration
+    fetchConfiguration,
+    ping
 };
