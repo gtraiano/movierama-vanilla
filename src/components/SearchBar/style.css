@@ -11,6 +11,7 @@ search-bar {
     top: 1vh;
     left: 0;*/
     width: 100%;
+    min-height: 100%;
 }
 
 .search-bar input {
@@ -29,7 +30,8 @@ search-bar {
     display: inline-block;
     margin-top: auto;
     margin-bottom: auto;
-    font-weight: 600;
-    transform: translateX(-1em);
+    font-weight: 700;
+    font-size: x-large;
+    transform: translateX(-0.85em);
     cursor: pointer;
 }
