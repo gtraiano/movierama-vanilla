@@ -37,8 +37,7 @@ export const initializeApp = async () => {
         dispatchInitializedApp()
     }
     catch(error) {
-        document.getElementsByTagName('alert-box')[0].show(true, error.message)
-        setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 3000)   
+        document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
     }
 }
 
@@ -71,8 +70,7 @@ export const onInfiniteScroll = async () => {
     
         // prevent requests if we have fetched all pages
         if(Object.keys(store[mode]).length && store[mode]?.page === store[mode]?.total_pages) {
-            document.getElementsByTagName('alert-box')[0].show(true, 'Last page')
-            setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 750)
+            document.getElementsByTagName('alert-box')[0].showFor('Last page', 750)
             return
         }
 
@@ -105,8 +103,7 @@ export const onInfiniteScroll = async () => {
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
-            document.getElementsByTagName('alert-box')[0].show(true, error.message)
-            setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 3000)
+            document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
         }
     }
     finally {
@@ -161,6 +158,7 @@ export const onSearchQuery = async e => {
             searchController.abortController.abort()
         }
         searchController.abortController = new AbortController()
+        searchController.isFetching = true
         store.search = await movieDBAPI.fetchMovie({
             query: store.query,
             signal: searchController.abortController.signal
@@ -174,32 +172,57 @@ export const onSearchQuery = async e => {
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
-            document.getElementsByTagName('alert-box')[0].show(true, error.message)
-            setTimeout(() => document.getElementsByTagName('alert-box')[0].show(false), 3000)
+            document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
         }
+    }
+    finally {
+        searchController.isFetching = false
     }
 }
 
 export const onRequestMovieDetails = async e => {
-    // show overlay with loading screen
-    document.getElementsByTagName('over-lay')[0].openOverlay()
-    document.getElementsByTagName('over-lay')[0].setAttribute('loading', 'true')
-    
-    // fetch all movie details and update store
-    store.movieDetails.details = await movieDBAPI.fetchMovieDetails({ movieId: e.detail })
-    store.movieDetails.credits = await movieDBAPI.fetchMovieCredits({ movieId: e.detail })
-    store.movieDetails.trailers = await movieDBAPI.fetchMovieVideos({ movieId: e.detail })
-    store.movieDetails.reviews = await movieDBAPI.fetchMovieReviews({ movieId: e.detail })
-    store.movieDetails.similar = await movieDBAPI.fetchMovieSimilar({ movieId: e.detail })
+    try {
+        // show overlay with loading screen
+        document.getElementsByTagName('over-lay')[0].openOverlay()
+        document.getElementsByTagName('over-lay')[0].setAttribute('loading', 'true')
+        
+        // fetch all movie details and update store
+        store.movieDetails.details = await movieDBAPI.fetchMovieDetails({ movieId: e.detail })
+        store.movieDetails.credits = await movieDBAPI.fetchMovieCredits({ movieId: e.detail })
+        store.movieDetails.trailers = await movieDBAPI.fetchMovieVideos({ movieId: e.detail })
+        store.movieDetails.reviews = await movieDBAPI.fetchMovieReviews({ movieId: e.detail })
+        store.movieDetails.similar = await movieDBAPI.fetchMovieSimilar({ movieId: e.detail })
 
-    // create movie details element
-    const movieDetails = document.createElement('movie-details')
-    movieDetails.render(store.movieDetails)
-    
-    // display in overlay
-    document.getElementsByTagName('over-lay')[0].updateContent(movieDetails)
-    // stop overlay loading screen
-    document.getElementsByTagName('over-lay')[0].removeAttribute('loading')
+        /*
+        // alternative way, tracks errors for each request
+        const actions = [
+            { name: 'details', callback: async () => await movieDBAPI.fetchMovieDetails({ movieId: e.detail }) },
+            { name: 'credits', callback: async () => await movieDBAPI.fetchMovieCredits({ movieId: e.detail }) },
+            { name: 'trailers', callback: async () => await movieDBAPI.fetchMovieVideos({ movieId: e.detail }) },
+            { name: 'reviews', callback: async () => await movieDBAPI.fetchMovieReviews({ movieId: e.detail }) },
+            { name: 'similar', callback: async () => await movieDBAPI.fetchMovieSimilar({ movieId: e.detail }) }
+        ]
+        const promises = await Promise.allSettled(actions.map(async ({ callback }) => await callback()))
+        // log if errors happened
+        console.info(`Fetched movie details with${promises.some(({ status }) => status === 'rejected')? '' : 'out'} errors`)
+        // log each error
+        promises.filter(({ status }, index) => status === 'rejected').forEach(({ reason }) => {
+            console.error(`Error in ${actions[index].name}`, reason.message)
+        })
+        */
+
+        // create movie details element
+        const movieDetails = document.createElement('movie-details')
+        movieDetails.render(store.movieDetails)
+        
+        // display in overlay
+        document.getElementsByTagName('over-lay')[0].updateContent(movieDetails)
+        // stop overlay loading screen
+        document.getElementsByTagName('over-lay')[0].removeAttribute('loading')
+    }
+    catch(error) {
+        document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
+    }
 }
 
 export const onEndSearchQuery = () => {

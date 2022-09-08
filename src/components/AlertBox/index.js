@@ -46,6 +46,15 @@ class AlertBox extends HTMLElement {
             this.children[0].removeAttribute('message')
         }
     }
+
+    showFor = (message, duration) => {
+        this.setAttribute('show', 'true')
+        message && this.children[0].setAttribute('message', message)
+        setTimeout(() => {
+            this.removeAttribute('show')
+            this.children[0].removeAttribute('message')
+        }, duration)
+    }
 }
 
 customElements.define('alert-box', AlertBox)
