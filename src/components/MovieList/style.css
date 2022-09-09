@@ -3,6 +3,7 @@ movie-list {
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
+    display: block;
 }
 
 .in-theaters {
