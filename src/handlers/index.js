@@ -130,17 +130,15 @@ export const onModeUpdate = (e) => {
 export const onCloseOverlay = () => {
     // hide alert
     document.getElementsByTagName('alert-box')[0].show(false)
-    // restore body overflow and hide overlay
-    document.body.style.overflow = 'visible'
-    document.getElementsByTagName('over-lay')[0].removeAttribute('show')
+    // hide overlay and show top bar
+    document.getElementsByTagName('over-lay')[0].closeOverlay()
     document.getElementsByTagName('top-bar')[0].classList.add('above')
 }
 
 export const onOpenOverlay = () => {
-    // hide body overflow and display overlay
-    document.body.style.overflow = 'hidden'
+    // hide top bar show overlay
     document.getElementsByTagName('top-bar')[0].classList.remove('above')
-    document.getElementsByTagName('over-lay')[0].setAttribute('show', '')
+    document.getElementsByTagName('over-lay')[0].openOverlay()
     
 }
 

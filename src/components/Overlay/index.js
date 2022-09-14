@@ -10,6 +10,12 @@ const template = `
 `
 
 class Overlay extends HTMLElement {
+    static OBSERVED_ATTRIBUTES = Object.freeze({
+        SHOW: 'show',
+        LOADING: 'loading',
+        HIDE_DOC_BODY_SCROLL: 'hide-body-scroll'
+    })
+
     constructor() {
         super()
     }
@@ -24,14 +30,16 @@ class Overlay extends HTMLElement {
     closeOverlay = () => {
         if(!this.hasAttribute('show')) return;
         this.clear()
+        this.removeAttribute(Overlay.OBSERVED_ATTRIBUTES.HIDE_DOC_BODY_SCROLL)
+        this.removeAttribute(Overlay.OBSERVED_ATTRIBUTES.SHOW)
         dispatchCloseOverlay()
-        this.style.display = 'none'
     }
 
     openOverlay = () => {
-        if(this.hasAttribute('show')) return;
+        if(this.hasAttribute(Overlay.OBSERVED_ATTRIBUTES.SHOW)) return;
+        this.setAttribute(Overlay.OBSERVED_ATTRIBUTES.HIDE_DOC_BODY_SCROLL, '')
+        this.setAttribute(Overlay.OBSERVED_ATTRIBUTES.SHOW, '')
         dispatchOpenOverlay()
-        this.style.display = 'block'
         // focus on container div so that keydown events can be listened to instantly
         this.children[0].focus()
     }
@@ -51,8 +59,6 @@ class Overlay extends HTMLElement {
         this.children[0].children[0].addEventListener('click', this.closeOverlay)
         // close on ESC key press
         this.children[0].addEventListener('keydown', this.closeOverlayOnKeyDown)
-        // do not display yet
-        this.style.display = 'none'
     }
 
     connectedCallback() {
@@ -65,21 +71,21 @@ class Overlay extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['show', 'loading'];
+        return Object.values(Overlay.OBSERVED_ATTRIBUTES)
     }
   
     attributeChangedCallback(name, oldValue, newValue) {
-        if(name === 'show') {
+        if(name === Overlay.OBSERVED_ATTRIBUTES.SHOW) {
             if(newValue === '')
                 this.openOverlay()
             else if(newValue === null)
                 this.closeOverlay()
         }
 
-        if(name === 'loading') {
+        else if(name === Overlay.OBSERVED_ATTRIBUTES.LOADING) {
             if(Boolean(newValue) || newValue === '') {
                 const div = document.createElement('div')
-                div.classList.add('loading')
+                div.classList.add(Overlay.OBSERVED_ATTRIBUTES.LOADING)
                 this.appendChild(div)
                 
                 const { flexDirection } = getComputedStyle(div);
@@ -90,10 +96,15 @@ class Overlay extends HTMLElement {
                 spinner.setAttribute('message', 'Loading...')
             }
             else if(!Boolean(newValue) || newValue === null) {
-                this.getElementsByClassName('loading')[0].remove()
-                this.removeAttribute('loading')
+                this.getElementsByClassName(Overlay.OBSERVED_ATTRIBUTES.LOADING)[0].remove()
+                this.removeAttribute(Overlay.OBSERVED_ATTRIBUTES.LOADING)
                 this.children[0].focus()
             }
+        }
+
+        else if(name === Overlay.OBSERVED_ATTRIBUTES.HIDE_DOC_BODY_SCROLL) {
+            if(Boolean(newValue) || newValue === '') document.body.style.overflow = 'hidden'
+            else if(!Boolean(newValue) || newValue === null) document.body.style.overflow = 'unset'
         }
     }
 }
