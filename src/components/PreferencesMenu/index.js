@@ -1,5 +1,6 @@
 import './DropDown'
 import store from '../../store'
+import { PREFERENCES } from '../../store/preferences'
 import './style.css'
 
 const template = `
@@ -42,18 +43,18 @@ class PreferencesMenu extends HTMLElement {
     connectedCallback() {
         this.innerHTML = template
         this.getElementsByTagName('button')[0].addEventListener('click', this.#openDropDown)
-        this.querySelector('#incl_adult').addEventListener('change', this.#setPreference('includeAdultSearch'))
-        this.querySelector('#prev_adult_poster').addEventListener('change', this.#setPreference('previewAdultPoster'))
-        this.querySelector('#typing_done_ms').addEventListener('change', this.#setPreference('searchQueryDebounce'))
-        this.querySelector('#theme_color').addEventListener('change', this.#setPreference('theme'))
+        this.querySelector('#incl_adult').addEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
+        this.querySelector('#prev_adult_poster').addEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))
+        this.querySelector('#typing_done_ms').addEventListener('change', this.#setPreference(PREFERENCES.SEARCH_QUERY_DEBOUNCE))
+        this.querySelector('#theme_color').addEventListener('change', this.#setPreference(PREFERENCES.THEME))
     }
 
     disconnectedCallback() {
         this.getElementsByTagName('button')[0].removeEventListener('click', this.#openDropDown)
-        this.querySelector('#incl_adult').removeEventListener('change', this.#setPreference('includeAdultSearch'))
-        this.querySelector('#prev_adult_poster').removeEventListener('change', this.#setPreference('previewAdultPoster'))
-        this.querySelector('#typing_done_ms').removeEventListener('change', this.#setPreference('searchQueryDebounce'))
-        this.querySelector('#theme_color').removeEventListener('change', this.#setPreference('theme'))
+        this.querySelector('#incl_adult').removeEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
+        this.querySelector('#prev_adult_poster').removeEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))
+        this.querySelector('#typing_done_ms').removeEventListener('change', this.#setPreference(PREFERENCES.SEARCH_QUERY_DEBOUNCE))
+        this.querySelector('#theme_color').removeEventListener('change', this.#setPreference(PREFERENCES.THEME))
     }
 
     static get observedAttributes() {

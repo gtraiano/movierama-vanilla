@@ -1,11 +1,20 @@
 import { dispatchUpdatePreference } from "../events/UpdatePreference"
 
+export const PREFERENCES = Object.freeze({
+    INCLUDE_ADULT_SEARCH: 'includeAdultSearch',
+    PREVIEW_ADULT_POSTER: 'previewAdultPoster',
+    SEARCH_QUERY_DEBOUNCE: 'searchQueryDebounce',
+    THEME: 'theme'
+})
+
+const PREFERENCES_LOCAL_STORAGE_KEY = 'preferences'
+
 // applications preferences
-export const preferences = {
-    includeAdultSearch: false,      // inlcude adult content in the results
-    previewAdultPoster: false,      // hide adult content posters in movie list
-    searchQueryDebounce: 1250,      // delay before sending search query
-    theme:                          // application color theme
+export const preferences = Object.seal({
+    [PREFERENCES.INCLUDE_ADULT_SEARCH]: false,      // inlcude adult content in the results
+    [PREFERENCES.PREVIEW_ADULT_POSTER]: false,      // hide adult content posters in movie list
+    [PREFERENCES.SEARCH_QUERY_DEBOUNCE]: 1250,      // delay before sending search query
+    [PREFERENCES.THEME]:                            // application color theme
         window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
     
     helpers: {                      // helper functions
@@ -17,8 +26,8 @@ export const preferences = {
             }
             preferences[name] = value
             // save preferences in local storage
-            localStorage.setItem('preferences', JSON.stringify({
-                ...(localStorage.getItem('preferences') && JSON.parse(localStorage.getItem('preferences'))),
+            localStorage.setItem(PREFERENCES_LOCAL_STORAGE_KEY, JSON.stringify({
+                ...(localStorage.getItem(PREFERENCES_LOCAL_STORAGE_KEY) && JSON.parse(localStorage.getItem(PREFERENCES_LOCAL_STORAGE_KEY))),
                 [name]: value
             }))
 
@@ -26,7 +35,7 @@ export const preferences = {
         },
         // load preferences from local storage
         loadPreferences: function() {
-            let prefs = localStorage.getItem('preferences')
+            let prefs = localStorage.getItem(PREFERENCES_LOCAL_STORAGE_KEY)
             if(!prefs) return
             prefs = JSON.parse(prefs)
             for(const k in prefs) {
@@ -36,4 +45,4 @@ export const preferences = {
             }
         }
     }
-}
+})

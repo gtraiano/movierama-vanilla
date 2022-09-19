@@ -5,6 +5,7 @@ import { dispatchInitializedApp } from "../events/InitializedApp";
 import movieDBAPI from "../controllers/MovieDB";
 import appModes from "../constants/AppModes";
 import store from "../store";
+import { PREFERENCES } from "../store/preferences";
 
 const searchController = {
     isFetching: false,
@@ -239,23 +240,23 @@ export const onEndSearchQuery = () => {
 
 export const onUpdatePreference = (e) => {
     // update search bar query debounce delay
-    if(e.detail === 'searchQueryDebounce') {
+    if(e.detail === PREFERENCES.SEARCH_QUERY_DEBOUNCE) {
         document.getElementsByTagName('search-bar')[0].setDelay(store.preferences.searchQueryDebounce)
     }
     // apply filter to adult posters
-    else if(e.detail === 'previewAdultPoster') {
+    else if(e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
         document.querySelectorAll('.adult .poster > img').forEach(img => {
             img.classList.toggle('adult')
         })
     }
     // filter adult results
-    else if(e.detail === 'includeAdultSearch') {
+    else if(e.detail === PREFERENCES.INCLUDE_ADULT_SEARCH) {
         document.querySelectorAll('movie-card.adult').forEach(c => {
             c.style.display = store.preferences.includeAdultSearch ? '' : 'none'
         })
     }
     // theme color
-    else if(e.detail === 'theme') {
+    else if(e.detail === PREFERENCES.THEME) {
         document.documentElement.setAttribute('theme', store.preferences.theme)
     }
 }
