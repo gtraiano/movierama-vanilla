@@ -226,6 +226,10 @@ export const onRequestMovieDetails = async e => {
 export const onEndSearchQuery = () => {
     // end search query when displaying in theaters should do nothing
     if(store.mode === appModes.NOW_PLAYING) return;
+    // stop search query in progress
+    if(searchController.abortController) {
+        searchController.abortController.abort()
+    }
     // clear stored query text and search results
     store.query = ''
     store.search = {}
