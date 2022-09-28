@@ -7,13 +7,20 @@ import appModes from "../constants/AppModes";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
 
+// api request controllers
 const searchController = {
     isFetching: false,
     abortController: null
 }
+
 const infiniteScrollController = {
     isFetching: false,
     abortController: null
+}
+
+const movieDetailsController = {
+    isFetching: false,
+    abortController: new AbortController()
 }
 
 export const initializeApp = async () => {
@@ -129,6 +136,9 @@ export const onModeUpdate = (e) => {
 }
 
 export const onCloseOverlay = () => {
+    // abort api calls and recreate abort controller
+    movieDetailsController.abortController.abort()
+    movieDetailsController.abortController = new AbortController()
     // hide alert
     document.getElementsByTagName('alert-box')[0].show(false)
     // hide overlay and show top bar
@@ -184,13 +194,15 @@ export const onRequestMovieDetails = async e => {
         // show overlay with loading screen
         document.getElementsByTagName('over-lay')[0].openOverlay()
         document.getElementsByTagName('over-lay')[0].setAttribute('loading', 'true')
+
+        movieDetailsController.isFetching = true
         
         // fetch all movie details and update store
-        store.movieDetails.details = await movieDBAPI.fetchMovieDetails({ movieId: e.detail })
-        store.movieDetails.credits = await movieDBAPI.fetchMovieCredits({ movieId: e.detail })
-        store.movieDetails.trailers = await movieDBAPI.fetchMovieVideos({ movieId: e.detail })
-        store.movieDetails.reviews = await movieDBAPI.fetchMovieReviews({ movieId: e.detail })
-        store.movieDetails.similar = await movieDBAPI.fetchMovieSimilar({ movieId: e.detail })
+        store.movieDetails.details = await movieDBAPI.fetchMovieDetails({ movieId: e.detail, signal: movieDetailsController.abortController.signal })
+        store.movieDetails.credits = await movieDBAPI.fetchMovieCredits({ movieId: e.detail, signal: movieDetailsController.abortController.signal })
+        store.movieDetails.trailers = await movieDBAPI.fetchMovieVideos({ movieId: e.detail, signal: movieDetailsController.abortController.signal })
+        store.movieDetails.reviews = await movieDBAPI.fetchMovieReviews({ movieId: e.detail, signal: movieDetailsController.abortController.signal })
+        store.movieDetails.similar = await movieDBAPI.fetchMovieSimilar({ movieId: e.detail, signal: movieDetailsController.abortController.signal })
 
         /*
         // alternative way, tracks errors for each request
@@ -216,11 +228,17 @@ export const onRequestMovieDetails = async e => {
         
         // display in overlay
         document.getElementsByTagName('over-lay')[0].updateContent(movieDetails)
-        // stop overlay loading screen
-        document.getElementsByTagName('over-lay')[0].removeAttribute('loading')
     }
     catch(error) {
-        document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
+        // display NON abort errors in alert-box
+        if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
+            document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
+        }
+    }
+    finally {
+        movieDetailsController.isFetching = false
+        // stop overlay loading screen
+        document.getElementsByTagName('over-lay')[0].removeAttribute('loading')
     }
 }
 

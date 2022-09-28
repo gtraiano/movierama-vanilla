@@ -107,35 +107,35 @@ const fetchMovieDetails = async (config) => {
     const url = generateURL({
         path: `/movie/${config.movieId}`,
     })
-    return await fetcher(url)
+    return await fetcher(url, config.signal)
 }
 
 const fetchMovieVideos = async (config) => {
     const url = generateURL({
         path: `/movie/${config.movieId}/videos`,
     })
-    return await fetcher(url)
+    return await fetcher(url, config.signal)
 }
 
 const fetchMovieReviews = async (config) => {
     const url = generateURL({
         path: `/movie/${config.movieId}/reviews`,
     })
-    return await fetcher(url)
+    return await fetcher(url, config.signal)
 }
 
 const fetchMovieSimilar = async (config) => {
     const url = generateURL({
         path: `/movie/${config.movieId}/similar`,
     })
-    return await fetcher(url)
+    return await fetcher(url, config.signal)
 }
 
 const fetchMovieCredits = async (config) => {
     const url = generateURL({
         path: `/movie/${config.movieId}/credits`,
     })
-    return await fetcher(url)
+    return await fetcher(url, config.signal)
 }
 
 export default {
