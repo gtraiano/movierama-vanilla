@@ -2,6 +2,7 @@ import appModes from "../constants/AppModes"
 import { preferences } from "./preferences";
 import { configuration } from "./configuration";
 import { genres } from "./genres";
+import { filterTags } from "./filter"
 
 export const store = Object.seal({
     configuration,                  // moviedb api configuration
@@ -17,7 +18,8 @@ export const store = Object.seal({
         reviews: null,
         similar: null
     },               
-    mode: appModes.NOW_PLAYING      // app mode
+    mode: appModes.NOW_PLAYING,     // app mode
+    filterTags
 })
 
 export default store

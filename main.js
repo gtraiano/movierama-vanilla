@@ -11,6 +11,7 @@ import { eventName as ModeUpdate } from './src/events/ModeUpdate'
 import { eventName as InitializedApp } from './src/events/InitializedApp'
 import { eventName as EndSearchQuery } from './src/events/Search/EndSearchQuery'
 import { eventName as UpdatePreference } from './src/events/UpdatePreference'
+import { eventName as FilterTag } from './src/events/FilterTag'
 
 // event handlers
 import {
@@ -24,7 +25,8 @@ import {
     onSearchQuery,
     onRequestMovieDetails,
     onEndSearchQuery,
-    onUpdatePreference
+    onUpdatePreference,
+    onFilterTag
 } from './src/handlers'
 
 // custom elements
@@ -36,6 +38,7 @@ import './src/components/MovieDetails'
 import './src/components/AlertBox'
 import './src/components/TopBar'
 import './src/components/PreferencesMenu'
+import './src/components/Filter'
 
 // app html template
 document.querySelector('#app').innerHTML = `
@@ -45,6 +48,7 @@ document.querySelector('#app').innerHTML = `
             <preferences-menu></preferences-menu>
         </div>
     </top-bar>
+    <filter-tab></filter-tab>
     <h1 class="main-title">In Theaters</h1>
     <movie-list></movie-list>
     <over-lay></over-lay>
@@ -92,3 +96,5 @@ window.addEventListener('beforeunload', () => {
 
 // updated preference
 window.addEventListener(UpdatePreference, onUpdatePreference)
+
+window.addEventListener(FilterTag, onFilterTag);

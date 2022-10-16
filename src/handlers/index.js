@@ -54,6 +54,9 @@ export const onInitializedApp = () => {
     document.getElementsByTagName('preferences-menu')[0].loadPreferences(store.preferences)
     // render now playing first page
     document.getElementsByTagName('movie-list')[0].appendMovieCards(store.nowPlaying)
+    // add genre tags to store filter tags and update filter-tab checkboxes
+    store.filterTags.helpers.getTag('genre').updateLabels(store.nowPlaying.results)
+    document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
 }
 
 export const scrolledToBottom = () => {
@@ -108,6 +111,10 @@ export const onInfiniteScroll = async () => {
             document.getElementsByTagName('movie-list')[0].appendMovieCards(nextPage)
         }
         document.getElementsByTagName('alert-box')[0].loading(false)
+        
+        // add new genre tags to store filter tags and update filter-tab checkboxes
+        store.filterTags.helpers.getTag('genre').updateLabels(store[mode].results)
+        //document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
@@ -133,6 +140,10 @@ export const onModeUpdate = (e) => {
     // update page header
     document.querySelector('#app h1').textContent = store.mode === appModes.NOW_PLAYING ? 'In Theaters' : 'Search'
     window.scrollTo(0, 0)
+
+    // clear filter-tab tags
+    store.filterTags.helpers.getTag('genre').boxes = []
+    store.filterTags.helpers.getTag('title').value = ''
 }
 
 export const onCloseOverlay = () => {
@@ -178,6 +189,15 @@ export const onSearchQuery = async e => {
         window.scrollTo(0,0)
         // hide alert box after cards have been rendered
         document.getElementsByTagName('alert-box')[0].show(false)
+
+        // init fresh tags
+        //store.filterTags.helpers.getTag('genre').boxes = []
+        store.filterTags.helpers.getTag('genre').updateLabels(store.search.results)
+
+        document.getElementsByTagName('filter-tab')[0].clearTag('genre')
+        store.filterTags.helpers.getTag('genre').boxes.forEach(b => {
+            document.getElementsByTagName('filter-tab')[0].appendToTag('genre', b.label)    
+        })
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
@@ -277,4 +297,19 @@ export const onUpdatePreference = (e) => {
     else if(e.detail === PREFERENCES.THEME) {
         document.documentElement.setAttribute('theme', store.preferences.theme)
     }
+}
+
+export const onFilterTag = e => {
+    console.log(e.detail)
+    //if(e.name === undefined) return
+    if(e.detail.name === 'title') {
+        //if(e.detail.value === '') return
+        store.filterTags.helpers.setTag(e.detail)
+        store.filterTags.helpers.getTag('title').applyFilter()
+    }
+    else if(e.detail.name === 'genre') {
+        store.filterTags.helpers.setTag(e.detail)
+        store.filterTags.helpers.getTag('genre').applyFilter()
+    }
+    
 }
