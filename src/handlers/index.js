@@ -141,9 +141,20 @@ export const onModeUpdate = (e) => {
     document.querySelector('#app h1').textContent = store.mode === appModes.NOW_PLAYING ? 'In Theaters' : 'Search'
     window.scrollTo(0, 0)
 
-    // clear filter-tab tags
+    // clear filter-tab tags and title
     store.filterTags.helpers.getTag('genre').boxes = []
     store.filterTags.helpers.getTag('title').value = ''
+    document.getElementsByTagName('filter-tab')[0].clearTag('title')
+    
+    // restore now playing tags
+    if(store.mode === appModes.NOW_PLAYING) {
+        store.filterTags.helpers.getTag('genre').updateLabels(store.nowPlaying.results)
+
+        document.getElementsByTagName('filter-tab')[0].clearTag('genre')
+        store.filterTags.helpers.getTag('genre').boxes.forEach(b => {
+            document.getElementsByTagName('filter-tab')[0].appendToTag('genre', b.label)    
+        })
+    }
 }
 
 export const onCloseOverlay = () => {
@@ -190,6 +201,8 @@ export const onSearchQuery = async e => {
         // hide alert box after cards have been rendered
         document.getElementsByTagName('alert-box')[0].show(false)
 
+        // clear filter title
+        document.getElementsByTagName('filter-tab')[0].clearTag('title')
         // init fresh tags
         //store.filterTags.helpers.getTag('genre').boxes = []
         store.filterTags.helpers.getTag('genre').updateLabels(store.search.results)

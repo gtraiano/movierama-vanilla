@@ -9,8 +9,6 @@ const template =
 </div>
 `
 class Filter extends HTMLElement {
-    //tags = []
-    
     constructor() {
         super()
     }
@@ -134,7 +132,7 @@ class Filter extends HTMLElement {
     clearTag = tag => {
         const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag).parentElement
         if(!target) {
-            console.log(`clearTag: Tag ${tag.name} does not exist`)
+            console.log(`clearTag: Tag ${tag} does not exist`)
             return
         }
 
@@ -145,8 +143,8 @@ class Filter extends HTMLElement {
                 //target.children[1].removeChild(c)
             })
         }
-        else {
-            console.info('Clear input tag not implemented yet')
+        else if(target.children[1].tagName === 'INPUT') {
+            target.children[1].value = ''
         }
     }
 }
