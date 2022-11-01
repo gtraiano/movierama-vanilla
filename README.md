@@ -84,13 +84,16 @@ Control of component display can be achieved with the following attributes:
 Complimentary to the above, the attribute `message` is used to set the text to be displayed within the alert box.
 
 ### **`<loading-spinner>`**
-This component implement a loading spinner with a text label appended.
+This component implements a loading spinner with a text label appended.
 The following attributes are observed:
 1. `message` sets the text label
 2. `direction` set either to "row" (label appened next to spinner) or "column" (label appended below spinner) controls the flow of the component
 
 ### **`<top-bar>`**
 This component implements a top header bar, which can contain other content (in our case the `search-bar`).
+
+### **`<filter-tab>`**
+This component implements a simple filter panel. The component dispatches events to signal changes, depending on the event handler to act on the events.
 
 ### **`main.js`**
 This is the main application component (entry point) that handles all user flows. The component stores _"in theaters"_ and _"search for movie"_ results locally, along with _"view movie details"_ data. All user flow actions are initiated by custom events which the app listens to.
@@ -122,6 +125,13 @@ The following table presents the store schema
 |**`search`**||||search query [results](https://developers.themoviedb.org/3/search/search-movies)|
 |**`movieDetails`**||||movie [details](https://developers.themoviedb.org/3/movies/get-movie-details) and relative data|
 |**`mode`**||||application mode|
+|**`filter`**||||movie list filter tags|
+||`name: string, type: input\|checkbox-container, applyFilter: function, value?: string, boxes?: [], updateLabels?: function`|||tag object properties|
+||`tags`|||array containing tag objects|
+||`helpers`|||helper functions|
+|||`getTag(name)`||returns reference to tag in `tags` with name equal to provided name|
+|||`setTag(tag)`||sets tag with given name in `tags` equal to provided tag object|
+|||`appendToTag(tag)`||appends elements to tag|
 
 ### **Custom Events**
 |Event Name|Description|Use in Application|
@@ -135,3 +145,4 @@ The following table presents the store schema
 |`openoverlay`|signals a request to show the `over-lay`|hide overflow of document body and call method to open `over-lay`|
 |`closeoverlay`|signals a request to hide the `over-lay`|restore overflow of doument body and call method to close `over-lay`|
 |`updatepreference`|signals that a preference value has changed|dispatched by the method `store.preferences.helpers.setPreference`, which in turn is called by change event listeners in `preferences-menu`|
+|`filtertag`|signals that a filter tag value has changed|dispatched by the `<filter-tab>` component|
