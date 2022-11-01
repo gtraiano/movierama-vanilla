@@ -74,6 +74,10 @@ html[theme="light"] filter-tab {
     cursor: pointer;
 }
 
+.checkbox-container > div input[type="checkbox"] ~ label {
+    margin-left: 5%;
+}
+
 .checkbox-container > div input {
     margin-left: 0;
 }
