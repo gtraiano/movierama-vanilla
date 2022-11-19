@@ -78,3 +78,16 @@ drop-down > div > * {
 drop-down[visible] > div > * {
     display: inline-flex;
 }
+
+/* position right edge of dropdown under right edge of button */
+@media only screen and (max-width: 599px) {
+    drop-down {
+        transform: translateY(2.5rem) translateX(-100%);
+    }
+}
+
+@media only screen and (min-width: 800px) and (max-width: 900px) {
+    drop-down {
+        transform: translateY(2.5rem) translateX(-35%);
+    }
+}
