@@ -33,6 +33,7 @@
 #app {
   height: auto;
   width: 100%;
+  padding-top: 6vh;
 }
 
 a {
@@ -56,8 +57,7 @@ h1.main-title {
   line-height: 1;
 }
 #app > h1.main-title {
-  /* compensate for <top-header> height */
-  margin-top: 4.5%
+  margin: 0;
 }
 
 @media (prefers-color-scheme: light) {
