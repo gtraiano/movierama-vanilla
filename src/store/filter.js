@@ -46,13 +46,15 @@ export const filterTags = {
         }
     ],
     helpers: {
+        isActive: () => filterTags.tags.some(t => t.type === 'input' ? t.value.length : t.boxes.some(b => b.value)),
+        
         getTag: (name) => filterTags.tags.find(t => t.name === name),
         
         setTag: (tag) => {
             const target = filterTags.helpers.getTag(tag.name)
             if(!target) return console.warn(`Tag ${tag.name} does not exist`)
-            if(target.type === 'input') target.value = tag.value
-            else {
+            if(target.type === 'input') target.value = tag.value.trim()
+            else if(target.type === 'checkbox-container') {
                 const cb = target.boxes.find(l => l.label === tag.label)
                 if(!cb) return console.warn(`Checkbox ${tag.label} does not exist`)
                 cb.value = tag.value
@@ -73,5 +75,4 @@ export const filterTags = {
             }
         }
     }
-    
 }
