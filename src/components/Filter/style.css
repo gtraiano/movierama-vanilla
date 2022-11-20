@@ -2,11 +2,17 @@ filter-tab {
     position: fixed;
     top: 7em;
     right: 0.25vw;
-    background-color: black;
+    background-color: transparent;
 }
 
-html[theme="light"] filter-tab {
+filter-tab > * > * {
+    background-color: black;
+    color: white;
+}
+
+html[theme="light"] filter-tab > * > * {
     background-color: white;
+    color: black;
 }
 
 .filter-button {
@@ -16,12 +22,18 @@ html[theme="light"] filter-tab {
     font-size: medium;
     letter-spacing: 0.5ch;
     border: none;
-    box-shadow: 1px 1px black;
+    padding: 4%;
+    border-radius: 4px;
+}
+
+.filter-button.active {
+    box-shadow: 0px 0px 6px 3px;
 }
 
 .filter-tab {
     display: none;
     opacity: 0;
+    margin-top: 4%;
 }
 
 .filter-tab[visible] {

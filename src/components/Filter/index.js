@@ -38,7 +38,10 @@ class Filter extends HTMLElement {
             
             const inp = document.createElement('input')
             inp.oninput = dispatchFilterTag(tag.name)
-            inp.addEventListener('input', e => { dispatchFilterTag({ name: tag.name, value: e.target.value }) });
+            inp.addEventListener('input', e => {
+                dispatchFilterTag({ name: tag.name, value: e.target.value });
+                this.querySelector('.filter-button').classList[this.#isActive() ? 'add' : 'remove']('active')
+            });
             fe.append(inp)
         }
         else if(tag.type === 'checkbox-container') {
@@ -62,7 +65,10 @@ class Filter extends HTMLElement {
                 const cb = document.createElement('input')
                 cb.type = 'checkbox'
                 cb.id = box.label
-                cb.addEventListener('change', e => { dispatchFilterTag({ name: tag.name, label: box.label, value: e.target.checked }) })
+                cb.addEventListener('change', e => {
+                    dispatchFilterTag({ name: tag.name, label: box.label, value: e.target.checked })
+                    this.querySelector('.filter-button').classList[this.#isActive() ? 'add' : 'remove']('active')
+                })
 
                 b.append(cb)
                 b.append(l)
@@ -92,6 +98,7 @@ class Filter extends HTMLElement {
         tags.forEach(tag => {
             this.insertTag(tag)
         })
+        this.querySelector('.filter-button').classList[this.#isActive() ? 'add' : 'remove']('active')
     }
 
     appendToTag = (tag, label) => {
@@ -146,6 +153,10 @@ class Filter extends HTMLElement {
         else if(target.children[1].tagName === 'INPUT') {
             target.children[1].value = ''
         }
+    }
+
+    #isActive = () => {
+        return [...this.querySelectorAll('.filter-element input')].some(t => t.type === 'text' ? t.value.trim().length : t.checked)
     }
 }
 
