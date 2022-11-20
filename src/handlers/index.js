@@ -74,6 +74,9 @@ export const scrolledToBottom = () => {
 
 export const onInfiniteScroll = async () => {
     try {
+        // prevent infinite scroll behaviour when filtering is active
+        if(store.filterTags.helpers.isActive()) throw Error('Will not fetch further results while filter is active')
+        
         // part of store to use
         const mode = store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search'
         // movieDBAPI fetcher to use
