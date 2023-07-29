@@ -21,6 +21,12 @@ movie-details {
     color: black;
 }
 
+.movie-details section > .movie-trailer {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
 .row {
     display: flex;
     flex-direction: row;

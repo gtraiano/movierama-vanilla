@@ -31,7 +31,7 @@ class MovieDetails extends HTMLElement {
         return (
             `
             <section>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/${videos.results.filter(v => v.type === 'Trailer' && v.site === 'YouTube')[0]?.key}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>
+                <iframe class="movie-trailer" width="560" height="315" src="https://www.youtube.com/embed/${videos.results.filter(v => v.type === 'Trailer' && v.site === 'YouTube')[0]?.key}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>
             </section>
             `
         )
@@ -40,7 +40,7 @@ class MovieDetails extends HTMLElement {
     generateCredits(movie, credits) {
         return (
             `
-            <section style="width: 25%;">
+            <section class="movie-credits">
                 <div class="row">
                     <div style="width: 25%" class="column left"><strong>Released</strong></div>
                     <div style="width: 70%" class="column left">${movie.release_date}</div>
