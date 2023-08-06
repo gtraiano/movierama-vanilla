@@ -28,10 +28,16 @@ class MovieDetails extends HTMLElement {
     }
 
     generateTrailer(videos) {
+        const trailer = videos.results.filter(v => v.type === 'Trailer' && v.site === 'YouTube')[0]?.key;
         return (
             `
             <section>
-                <iframe class="movie-trailer" width="560" height="315" src="https://www.youtube.com/embed/${videos.results.filter(v => v.type === 'Trailer' && v.site === 'YouTube')[0]?.key}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>
+                ${
+                    trailer
+                    ? `<iframe class="movie-trailer" width="560" height="315" src="https://www.youtube.com/embed/${trailer}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>`
+                    : '<div class="movie-trailer"></div>' // empty div
+                }
+                
             </section>
             `
         )
