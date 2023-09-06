@@ -82,19 +82,23 @@ window.addEventListener(EndSearchQuery, onEndSearchQuery)
 // movie details request
 window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
 
-window.addEventListener('beforeunload', () => {
-    window.addEventListener('load', initializeApp)
-    window.addEventListener(InitializedApp, onInitializedApp)
-    window.addEventListener('scroll', scrolledToBottom)
-    window.addEventListener(InfiniteScroll, onInfiniteScroll)
-    window.addEventListener(ModeUpdate, onModeUpdate)
-    window.addEventListener(CloseOverlay, onCloseOverlay)
-    window.addEventListener(OpenOverlay, onOpenOverlay)
-    window.addEventListener(SearchQuery, onSearchQuery)
-    window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
-})
-
 // updated preference
 window.addEventListener(UpdatePreference, onUpdatePreference)
 
-window.addEventListener(FilterTag, onFilterTag);
+// update filter tag
+window.addEventListener(FilterTag, onFilterTag)
+
+// cleanup
+window.addEventListener('beforeunload', () => {
+    window.removeEventListener('load', initializeApp)
+    window.removeEventListener(InitializedApp, onInitializedApp)
+    window.removeEventListener('scroll', scrolledToBottom)
+    window.removeEventListener(InfiniteScroll, onInfiniteScroll)
+    window.removeEventListener(ModeUpdate, onModeUpdate)
+    window.removeEventListener(CloseOverlay, onCloseOverlay)
+    window.removeEventListener(OpenOverlay, onOpenOverlay)
+    window.removeEventListener(SearchQuery, onSearchQuery)
+    window.removeEventListener(RequestMovieDetails, onRequestMovieDetails)
+    window.removeEventListener(UpdatePreference, onUpdatePreference)
+    window.removeEventListener(FilterTag, onFilterTag)
+})
