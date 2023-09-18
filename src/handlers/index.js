@@ -63,11 +63,11 @@ export const scrolledToBottom = () => {
     const {
         scrollTop,
         scrollHeight,
-        clientHeight
+        clientHeight,
     } = document.documentElement;
 
-    // just a little before page bottom
-    if(scrollTop + clientHeight >= scrollHeight - 2) {
+    // reached page bottom
+    if(scrollTop + clientHeight >= scrollHeight) {
         dispatchInfiniteScroll()
     }
 }
@@ -78,9 +78,9 @@ export const onInfiniteScroll = async () => {
         if(store.filterTags.helpers.isActive()) throw Error('Will not fetch further results while filter is active')
         
         // part of store to use
-        const mode = store.mode === appModes.NOW_PLAYING ? 'nowPlaying' : 'search'
+        const mode = store.mode
         // movieDBAPI fetcher to use
-        const fetcher = store.mode === appModes.NOW_PLAYING ? movieDBAPI.fetchNowPlaying : movieDBAPI.fetchMovie
+        const fetcher = mode === appModes.NOW_PLAYING ? movieDBAPI.fetchNowPlaying : movieDBAPI.fetchMovie
     
         // prevent requests if we have fetched all pages
         if(Object.keys(store[mode]).length && store[mode]?.page === store[mode]?.total_pages) {

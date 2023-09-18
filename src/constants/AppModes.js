@@ -1,5 +1,5 @@
 export const appModes = {
-    NOW_PLAYING: 'now playing',
+    NOW_PLAYING: 'nowPlaying',
     SEARCH: 'search'
 }
 
