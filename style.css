@@ -18,10 +18,13 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   text-align: center;
+  --text-stroke-color: white;
+  --text-color-width: 1px;
 }
 
 :root[theme="dark"] {
   color: rgba(255, 255, 255, 0.87);
+  --text-stroke-color: black;
   background-color: #242424;
 }
 
@@ -55,6 +58,7 @@ body {
 h1.main-title {
   font-size: 3.2em;
   line-height: 1;
+  -webkit-text-stroke: var(--text-color-width) var(--text-stroke-color);
 }
 #app > h1.main-title {
   margin: 0;
