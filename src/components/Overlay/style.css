@@ -37,10 +37,12 @@ over-lay[show] {
     cursor: pointer;
     color: white;
     z-index: 10;
+    -webkit-text-stroke: 1.5px black;
 }
 
 .close-button:hover {
-    filter: brightness(0) contrast(.5);
+    color: black;
+    -webkit-text-stroke: 1.5px white;
 }
 
 .loading {
