@@ -134,6 +134,14 @@ ul.horizontal > :not(li:last-child)::after {
     content: ',';
 }
 
+div.cast {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media only screen and (max-width: 640px) { 
     .movie-details section {
         width: 90%;

@@ -75,9 +75,9 @@ class MovieDetails extends HTMLElement {
                     </div>
                     <div class="row">
                         <div class="column left"><strong>Starring</strong></div>
-                        <div class="column left">
+                        <div class="column left cast">
                             <ul class="horizontal">
-                                ${credits?.cast.slice(0, 3).map(a => `<li>${a.name}</li>`).join('\n')}
+                                ${credits?.cast.map(a => `<li>${a.name}</li>`).join('\n')}
                             </ul>
                         </div>
                     </div>
