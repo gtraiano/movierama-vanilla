@@ -111,6 +111,29 @@ movie-details {
     font-weight: 600;
 }
 
+.movie-credits ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+}
+
+.movie-credits > div.row > div:first-child {
+    width: 25%;
+}
+
+.movie-credits > div.row > div:last-child {
+    width: 70%;
+}
+
+ul.horizontal > li {
+    display: inline-block;
+}
+
+ul.horizontal > :not(li:last-child)::after {
+    content: ',';
+}
+
 @media only screen and (max-width: 640px) { 
     .movie-details section {
         width: 90%;

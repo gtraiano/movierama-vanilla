@@ -48,35 +48,35 @@ class MovieDetails extends HTMLElement {
             `
             <section class="movie-credits">
                 <div class="row">
-                    <div style="width: 25%" class="column left"><strong>Released</strong></div>
-                    <div style="width: 70%" class="column left">${movie.release_date}</div>
+                    <div class="column left"><strong>Released</strong></div>
+                    <div class="column left">${movie.release_date}</div>
                 </div>
                 <div class="row">
-                    <div style="width: 25%" class="column left"><strong>Producers</strong></div>
-                    <div style="width: 70%" class="column left">
-                        <ul style="margin: 0; padding: 0; list-style: none; text-align: left;">
+                    <div class="column left"><strong>Producers</strong></div>
+                    <div class="column left">
+                        <ul class="horizontal">
                             ${movie.production_companies.map(c => `<li>${c.name}${c.origin_country ? ' ('+c.origin_country+')' : ''}</li>`).join('\n')}
                         </ul>
                     </div>
                 </div>
                 <div class="row">
-                    <div style="width: 25%;" class="column left"><strong>Genres</strong></div>
-                        <div style="width: 70%;" class="column left">
-                            <ul style="margin: 0; padding: 0; list-style: none; text-align: left;">
+                    <div class="column left"><strong>Genres</strong></div>
+                        <div class="column left">
+                            <ul class="horizontal">
                                 ${movie.genres.map(g => `<li>${g.name}</li>`).join('\n')}
                             </ul>
                         </div>
                     </div>
                     <div class="row">
-                        <div style="width: 25%;" class="column left"><strong>Director</strong></div>
-                        <div style="width: 70%;" class="column left">
+                        <div class="column left"><strong>Director</strong></div>
+                        <div class="column left">
                             ${credits?.crew.find(c => c.job.toLowerCase() === 'director')?.name ?? ''}
                         </div>
                     </div>
                     <div class="row">
-                        <div style="width: 25%;" class="column left"><strong>Starring</strong></div>
-                        <div style="width: 70%;" class="column left">
-                            <ul style="margin: 0; padding: 0; list-style: none; text-align: left;">
+                        <div class="column left"><strong>Starring</strong></div>
+                        <div class="column left">
+                            <ul class="horizontal">
                                 ${credits?.cast.slice(0, 3).map(a => `<li>${a.name}</li>`).join('\n')}
                             </ul>
                         </div>
