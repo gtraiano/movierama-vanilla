@@ -8,9 +8,15 @@ export const store = Object.seal({
     configuration,                  // moviedb api configuration
     preferences,                    // app preferences
     genres,                         // movie genres
-    [appModes.NOW_PLAYING]: {},     // now playing data
+    [appModes.NOW_PLAYING]: {       // now playing data
+        page: 0,
+        total_pages: 0
+    },
     query: '',                      // search query text
-    [appModes.SEARCH]: {},          // search results data
+    [appModes.SEARCH]: {            // search results data
+        page: 0,
+        total_pages: 0
+    },
     movieDetails: {                 // movie details data
         details: null,
         credits: null,
@@ -19,7 +25,7 @@ export const store = Object.seal({
         similar: null
     },               
     mode: appModes.NOW_PLAYING,     // app mode
-    filterTags
+    filterTags                      // displayed data filtering tags
 })
 
 export default store
