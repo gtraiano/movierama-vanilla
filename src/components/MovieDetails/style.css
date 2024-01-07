@@ -126,20 +126,57 @@ movie-details {
     width: 70%;
 }
 
+/* list of actors */
 ul.horizontal > li {
     display: inline-block;
 }
-
+/* items separator */
 ul.horizontal > :not(li:last-child)::after {
     content: ',';
 }
 
+/* .cast displays up to 2 lines */
 div.cast {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
+}
+
+/* accordion controls for .cast */
+div.cast > label ~ input {
+    display: none;
+}
+
+div.cast > label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    user-select: none;
+    cursor: pointer;
+    -webkit-text-stroke: 1px white;
+    transition: transform 200ms ease-in-out;
+}
+
+div.cast > label:hover {
+    text-shadow: 0 0 2px whitesmoke;
+}
+
+/* change label content according to input state */
+div.cast > label::before {
+    content: '▼';
+    pointer-events: all;
+}
+
+div.cast > label:has(+ input:checked) {
+    transform: rotate(180deg);
+}
+
+/* display all content on checked input */
+div.cast > input:checked ~ * {
+    overflow: auto;
 }
 
 @media only screen and (max-width: 640px) { 

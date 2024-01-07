@@ -76,6 +76,8 @@ class MovieDetails extends HTMLElement {
                     <div class="row">
                         <div class="column left"><strong>Starring</strong></div>
                         <div class="column left cast">
+                            <label for="show-more"></label>
+                            <input id="show-more" type="checkbox"/>
                             <ul class="horizontal">
                                 ${credits?.cast.map(a => `<li>${a.name}</li>`).join('\n')}
                             </ul>
