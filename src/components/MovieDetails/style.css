@@ -158,10 +158,16 @@ div.cast > label {
     cursor: pointer;
     -webkit-text-stroke: 1px white;
     transition: transform 200ms ease-in-out;
+    font-size: 1em;
 }
 
 div.cast > label:hover {
     text-shadow: 0 0 2px whitesmoke;
+}
+
+/* make room for the accordion control */
+div.cast > ul {
+    width: calc(100% - 1em);
 }
 
 /* change label content according to input state */
