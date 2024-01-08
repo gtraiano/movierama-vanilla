@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "vite": "latest"
+  },
+  "engines": {
+    "node": "21.x"
   }
 }
