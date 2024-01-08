@@ -4,7 +4,8 @@ export const PREFERENCES = Object.freeze({
     INCLUDE_ADULT_SEARCH: 'includeAdultSearch',
     PREVIEW_ADULT_POSTER: 'previewAdultPoster',
     SEARCH_QUERY_DEBOUNCE: 'searchQueryDebounce',
-    THEME: 'theme'
+    THEME: 'theme',
+    CONTENT_LANGUAGE: 'contentLanguage'
 })
 
 const PREFERENCES_LOCAL_STORAGE_KEY = 'preferences'
@@ -16,6 +17,8 @@ export const preferences = Object.seal({
     [PREFERENCES.SEARCH_QUERY_DEBOUNCE]: 1250,      // delay before sending search query
     [PREFERENCES.THEME]:                            // application color theme
         window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+    [PREFERENCES.CONTENT_LANGUAGE]:                 // default language for content
+        navigator.languages.find(l => !l.includes('-')) ?? 'en',
     
     helpers: {                      // helper functions
         // set preference by name and values

@@ -23,7 +23,8 @@ const generateURL = (config) => {
     // include api key if api read access token is not defined
     !movieDB.auth?.headers && url.searchParams.append('api_key', movieDB.auth.apiKey)
     // default to english language
-    url.searchParams.append('language', config?.language ?? 'en-US')
+    //url.searchParams.append('language', config?.language ?? 'en-US')
+    url.searchParams.append('language', store.preferences.contentLanguage)
 
     if(config) {
         // add other query parameters
@@ -71,6 +72,13 @@ const ping = async () => {
 const fetchConfiguration = async () => {
     const url = generateURL({
         path: '/configuration',
+    })
+    return await fetcher(url)
+}
+
+const fetchLanguages = async () => {
+    const url = generateURL({
+        path: '/configuration/languages'
     })
     return await fetcher(url)
 }
@@ -148,5 +156,6 @@ export default {
     fetchMovieSimilar,
     fetchMovieCredits,
     fetchConfiguration,
+    fetchLanguages,
     ping
 };

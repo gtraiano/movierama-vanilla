@@ -73,6 +73,10 @@ export const filterTags = {
                     value: tag.value ?? false
                 })
             }
-        }
+        },
+
+        clearGenreLabels: () => {
+            store.filterTags.helpers.getTag('genre').boxes = []
+        },
     }
 }

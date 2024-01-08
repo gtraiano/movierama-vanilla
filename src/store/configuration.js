@@ -2,6 +2,8 @@ import { generateImageUrls } from "./utils";
 
 // MovieDB API configuration
 export const configuration = {
+    // supported content languages
+    languages: [],
     // helper functions
     helpers: {
         images: {

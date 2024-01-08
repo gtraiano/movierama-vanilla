@@ -33,9 +33,11 @@ export const initializeApp = async () => {
         document.documentElement.setAttribute('theme', store.preferences.theme)
         // fetch moviedb api configuration
         Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
+        // fetch supported content languages
+        Object.assign(store.configuration.languages, (await movieDBAPI.fetchLanguages()).filter(l => l.iso_639_1 !== 'xx'));
         // fetch movie genres
         store.genres.table = await movieDBAPI.fetchGenres()
-   
+        
         // fetch 1st page of in theaters
         document.getElementsByTagName('alert-box')[0].loading(true)
         store.nowPlaying = await movieDBAPI.fetchNowPlaying({
@@ -50,6 +52,8 @@ export const initializeApp = async () => {
 }
 
 export const onInitializedApp = () => {
+    // inject supported content languages to menu
+    document.getElementsByTagName('preferences-menu')[0].injectContentLanguages(store.configuration.languages.sort((a, b) => a.english_name > b.english_name))
     // load preferences to menu
     document.getElementsByTagName('preferences-menu')[0].loadPreferences(store.preferences)
     // render now playing first page
@@ -292,7 +296,7 @@ export const onEndSearchQuery = () => {
     dispatchModeUpdate(appModes.NOW_PLAYING)
 }
 
-export const onUpdatePreference = (e) => {
+export const onUpdatePreference = async (e) => {
     // update search bar query debounce delay
     if(e.detail === PREFERENCES.SEARCH_QUERY_DEBOUNCE) {
         document.getElementsByTagName('search-bar')[0].setDelay(store.preferences.searchQueryDebounce)
@@ -312,6 +316,26 @@ export const onUpdatePreference = (e) => {
     // theme color
     else if(e.detail === PREFERENCES.THEME) {
         document.documentElement.setAttribute('theme', store.preferences.theme)
+    }
+
+    else if(e.detail === PREFERENCES.CONTENT_LANGUAGE) {
+        // alert for change
+        document.getElementsByTagName('alert-box')[0].show(true, 'switching content language')
+        // update store genres strings
+        store.genres.table = await movieDBAPI.fetchGenres()
+        // update all movie-card's content in new language
+        document.querySelectorAll('movie-card').forEach(async mc => {
+            const content = await movieDBAPI.fetchMovieDetails({ movieId: mc.getAttribute('movie-id')})
+            mc.updateCard(content)
+        })
+        // remove genre labels from store filter and insert fresh ones
+        store.filterTags.helpers.clearGenreLabels()
+        store.filterTags.helpers.getTag('genre').updateLabels(store[store.mode].results)
+        // remove all genre tags from filter-tab and insert fresh ones
+        document.getElementsByTagName('filter-tab')[0].clearAllTags()
+        document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
+        // hide alert
+        document.getElementsByTagName('alert-box')[0].show(false)
     }
 }
 

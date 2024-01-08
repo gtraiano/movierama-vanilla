@@ -59,7 +59,7 @@ class MovieCard extends HTMLElement {
                 </div>
                 <div class="movie-item-line">
                     <label>Genres</label>
-                    <span>${this.generateGenres(movie.genre_ids)}</span>
+                    <span>${this.generateGenres(movie.genre_ids ?? movie.genres.map(g => g.id))}</span>
                 </div>
                 <div class="movie-item-line">
                     <label>Vote average</label>

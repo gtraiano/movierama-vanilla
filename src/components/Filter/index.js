@@ -155,6 +155,11 @@ class Filter extends HTMLElement {
         }
     }
 
+    clearAllTags = () => {
+        const targets = [...this.querySelectorAll('.filter-element > label')].map(t => t.parentElement)
+        targets.forEach(t => { t.remove() })
+    }
+
     #isActive = () => {
         return [...this.querySelectorAll('.filter-element input')].some(t => t.type === 'text' ? t.value.trim().length : t.checked)
     }
