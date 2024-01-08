@@ -35,6 +35,8 @@ Permanent storage of your credentials must be inside the `.env` file in the root
    - Type a movie title in a search box and show the results. List behaviour is identical to the previous flow.
 3. _**View movie details**_
    - Show extended information about a movie when the user clicks on it in the movies list.
+4. _**Select content language**_
+   - Allow user to view content in any of the languages MovieDB supports.
 
 ## Implementation
 This section contains brief descriptions of the various components of the application. I utilized custom elements with the intent to separate the HTML and actions of each element from the main application code. This was my initiation to the concept and thus I have only applied the elementary features of custom elements.
@@ -126,7 +128,7 @@ The following table presents the store schema
 |**`movieDetails`**||||movie [details](https://developers.themoviedb.org/3/movies/get-movie-details) and relative data|
 |**`mode`**||||application mode|
 |**`filter`**||||movie list filter tags|
-||`name: string, type: input\|checkbox-container, applyFilter: function, value?: string, boxes?: [], updateLabels?: function`|||tag object properties|
+||`name: string, type: 'input'\|'checkbox-container', applyFilter: function, value?: string, boxes?: [], updateLabels?: function`|||tag object properties|
 ||`tags`|||array containing tag objects|
 ||`helpers`|||helper functions|
 |||`getTag(name)`||returns reference to tag in `tags` with name equal to provided name|
