@@ -11,9 +11,6 @@ const template = `
 `
 
 class SearchBar extends HTMLElement {
-    delay = store.preferences.searchQueryDebounce
-    timer = undefined
-    
     constructor() {
         super()
     }
@@ -28,18 +25,10 @@ class SearchBar extends HTMLElement {
         this.closeButton.addEventListener('click', this.hideResults)
     }
 
-    setDelay = (delay) => {
-        this.delay = delay
-    }
-
-    sendQuery = (delay = this.delay) => {
+    sendQuery = () => {
         // do not send empty query
         if(!this.input.value.length) return
-        // debounce sending query
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-            dispatchSearchQuery(this.input.value.trim())
-        }, delay)
+        dispatchSearchQuery(this.input.value.trim())
     }
 
     hideResults = () => {

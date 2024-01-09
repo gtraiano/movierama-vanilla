@@ -297,12 +297,8 @@ export const onEndSearchQuery = () => {
 }
 
 export const onUpdatePreference = async (e) => {
-    // update search bar query debounce delay
-    if(e.detail === PREFERENCES.SEARCH_QUERY_DEBOUNCE) {
-        document.getElementsByTagName('search-bar')[0].setDelay(store.preferences.searchQueryDebounce)
-    }
     // apply filter to adult posters
-    else if(e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
+    if(e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
         document.querySelectorAll('.adult .poster > img').forEach(img => {
             img.classList.toggle('adult')
         })

@@ -17,10 +17,6 @@ const template = `
                 <label for="prev_adult_poster">Hide adult poster previews</label>
                 <input id="prev_adult_poster" type="checkbox"></input>
             </div>
-            <div>
-                <label for="typing_done_ms">Search query debounce</label>
-                <input id="typing_done_ms" placeholder="in ms" type="number" style="width:30%;"></input>
-            </div>
             <div class="separator label">internationalisation</div>
             <div>
                 <label for="content_language">Content language</label>
@@ -51,7 +47,6 @@ class PreferencesMenu extends HTMLElement {
         this.getElementsByTagName('button')[0].addEventListener('click', this.#openDropDown)
         this.querySelector('#incl_adult').addEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
         this.querySelector('#prev_adult_poster').addEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))
-        this.querySelector('#typing_done_ms').addEventListener('change', this.#setPreference(PREFERENCES.SEARCH_QUERY_DEBOUNCE))
         this.querySelector('#content_language').addEventListener('change', this.#setPreference(PREFERENCES.CONTENT_LANGUAGE))
         this.querySelector('#theme_color').addEventListener('change', this.#setPreference(PREFERENCES.THEME))
     }
@@ -60,7 +55,6 @@ class PreferencesMenu extends HTMLElement {
         this.getElementsByTagName('button')[0].removeEventListener('click', this.#openDropDown)
         this.querySelector('#incl_adult').removeEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
         this.querySelector('#prev_adult_poster').removeEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))
-        this.querySelector('#typing_done_ms').removeEventListener('change', this.#setPreference(PREFERENCES.SEARCH_QUERY_DEBOUNCE))
         this.querySelector('#theme_color').removeEventListener('change', this.#setPreference(PREFERENCES.THEME))
     }
 
@@ -93,7 +87,6 @@ class PreferencesMenu extends HTMLElement {
         console.info('Loading preferences in <preferences-menu>')
         this.querySelector('#incl_adult').checked = pref.includeAdultSearch
         this.querySelector('#prev_adult_poster').checked = pref.previewAdultPoster
-        this.querySelector('#typing_done_ms').value = pref.searchQueryDebounce
         this.querySelector('#content_language').querySelector(`option[value=${pref.contentLanguage}]`).setAttribute('selected', '')
         this.querySelector('#theme_color').value = pref.theme ?? 'black'
     }
