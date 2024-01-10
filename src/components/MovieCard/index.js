@@ -22,7 +22,7 @@ class MovieCard extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
     }
 
-    generateGenres = (ids, separator = ', ') => ids.map(id => store.genres.lookup(id)).join(separator)
+    generateGenres = (ids, separator = ', ') => ids.map(id => store.genres.lookup(id)).filter(g => typeof g == 'string').join(separator)
 
     requestMovieDetails = () => {
         // use arrow function to have it bound to the class!
