@@ -75,7 +75,7 @@ class MovieDetails extends HTMLElement {
                     </div>
                     <div class="row">
                         <div class="column left"><strong>Starring</strong></div>
-                        <div class="column left cast">
+                        <div class="column left accordion">
                             <label for="show-more"></label>
                             <input id="show-more" type="checkbox"/>
                             <ul class="horizontal">

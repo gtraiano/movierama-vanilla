@@ -136,7 +136,7 @@ ul.horizontal > :not(li:last-child)::after {
 }
 
 /* .cast displays up to 2 lines */
-div.cast {
+div.accordion {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -146,11 +146,11 @@ div.cast {
 }
 
 /* accordion controls for .cast */
-div.cast > label ~ input {
+div.accordion > label ~ input {
     display: none;
 }
 
-div.cast > label {
+div.accordion > label {
     position: absolute;
     top: 0;
     right: 0;
@@ -161,27 +161,27 @@ div.cast > label {
     font-size: 1em;
 }
 
-div.cast > label:hover {
+div.accordion > label:hover {
     text-shadow: 0 0 2px whitesmoke;
 }
 
 /* make room for the accordion control */
-div.cast > ul {
+div.accordion > ul {
     width: calc(100% - 1em);
 }
 
 /* change label content according to input state */
-div.cast > label::before {
+div.accordion > label::before {
     content: '▼';
     pointer-events: all;
 }
 
-div.cast > label:has(+ input:checked) {
+div.accordion > label:has(+ input:checked) {
     transform: rotate(180deg);
 }
 
 /* display all content on checked input */
-div.cast > input:checked ~ * {
+div.accordion > input:checked ~ * {
     overflow: auto;
 }
 
