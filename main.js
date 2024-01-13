@@ -47,6 +47,9 @@ document.querySelector('#app').innerHTML = `
             <div style="min-width: 50%;"><search-bar></search-bar></div>
             <preferences-menu></preferences-menu>
         </div>
+        <span class="tmdb-attribution">
+            <a href="https://developer.themoviedb.org" referrerpolicy="no-referrer" target="_blank"><img src="https://files.readme.io/29c6fee-blue_short.svg"></a>
+        </span>
     </top-bar>
     <filter-tab></filter-tab>
     <h1 class="main-title">In Theaters</h1>

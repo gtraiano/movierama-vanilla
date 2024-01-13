@@ -29,3 +29,30 @@ top-bar > div {
 top-bar > div > * > * {
     height: 100%;
 }
+
+.tmdb-attribution {
+    position: absolute;
+    font-size: small;
+    top: 25%;
+    right: 1%;
+    user-select: none;
+  }
+  
+  .tmdb-attribution::before {
+    content: 'Powered by';
+  }
+  
+  .tmdb-attribution img {
+    width: auto;
+    height: 0.75em;
+  }
+  
+  .tmdb-attribution img:hover {
+    filter: brightness(2);
+  }
+  
+  @media (max-width: 1900px) {
+    .tmdb-attribution {
+      display: none;
+    }
+  }
