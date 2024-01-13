@@ -58,28 +58,47 @@ movie-card.adult .movie-item-line.poster img.adult:hover {
   filter: none;
 }
 
-/*
-https://medium.com/@mjtweaver/build-an-accordion-without-javascript-e97d319ca371
-*/
-
-div.accordion {
-  display: inline-block;
-}
-.accordion label {
-  letter-spacing: .3rem;
-  cursor: pointer;
-}
-.accordion input {
-  display: none;
+.movie-item {
+  position: relative;
 }
 
-.accordion span {
-  display: none;
+.overview-container {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: justify;
-  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 100%;
+  width: 100%;
+  padding: 2ch;
+  margin: 0 !important;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  color: white !important;
+  background-image: linear-gradient(180deg, transparent 0, rgba(0,0,0,.4) 25%, rgba(0,0,0,.8) 70%);
+  will-change: opacity;
+  transition: opacity 500ms ease-in-out;
 }
 
-.accordion input:checked ~ span {
-  display: inline-block;
-  font-style: initial;
+.overview-container > .overview-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 12;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* show overview when hovering on hover */
+.movie-item:hover .overview-container {
+  opacity: 1;
+}
+
+/* do not show overview if its text is empty*/
+.movie-item:hover .overview-container:has(.overview-text:empty) {
+  opacity: 0;
 }
