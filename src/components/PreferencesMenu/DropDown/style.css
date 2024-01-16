@@ -1,7 +1,7 @@
 /* position menu below button */
 drop-down {
     position: absolute;
-    transform: translateY(2.5rem);
+    transform: translateY(2.5rem) translateX(-100%);
     width: fit-content;
     z-index: 100;
     transition: opacity 350ms ease-in-out;
@@ -80,7 +80,7 @@ drop-down[visible] > div > * {
 }
 
 /* position right edge of dropdown under right edge of button */
-@media only screen and (max-width: 599px) {
+/*@media only screen and (max-width: 599px) {
     drop-down {
         transform: translateY(2.5rem) translateX(-100%);
     }
@@ -91,3 +91,4 @@ drop-down[visible] > div > * {
         transform: translateY(2.5rem) translateX(-35%);
     }
 }
+*/
