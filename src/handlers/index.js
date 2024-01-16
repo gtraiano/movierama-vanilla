@@ -1,13 +1,15 @@
-import { dispatchInfiniteScroll } from "../events/InfiniteScroll";
 import { dispatchModeUpdate } from "../events/ModeUpdate";
 import { dispatchInitializedApp } from "../events/InitializedApp";
 
 import movieDBAPI from "../controllers/MovieDB";
-import appModes from "../constants/AppModes";
+import appModes, { browseModes } from "../constants/AppModes";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
+import { fetchFromAPI, setAppMainTitle } from "./util";
 
-// api request controllers
+export { scrolledToBottom, setAppMainTitle } from './util'
+
+ // api request controllers
 const searchController = {
     isFetching: false,
     abortController: null
@@ -25,6 +27,7 @@ const movieDetailsController = {
 
 export const initializeApp = async () => {
     try {
+        setAppMainTitle()
         // check if api connection is ok
         await movieDBAPI.ping()
         // load preferences from localStorage
@@ -34,13 +37,13 @@ export const initializeApp = async () => {
         // fetch moviedb api configuration
         Object.assign(store.configuration, await movieDBAPI.fetchConfiguration())
         // fetch supported content languages
-        Object.assign(store.configuration.languages, (await movieDBAPI.fetchLanguages()).filter(l => l.iso_639_1 !== 'xx'));
+        Object.assign(store.configuration.languages, (await movieDBAPI.fetchLanguages()).filter(l => l.iso_639_1 !== 'xx'))
         // fetch movie genres
         store.genres.table = await movieDBAPI.fetchGenres()
         
         // fetch 1st page of in theaters
         document.getElementsByTagName('alert-box')[0].loading(true)
-        store.nowPlaying = await movieDBAPI.fetchNowPlaying({
+        store[store.mode] = await movieDBAPI[store.mode === appModes.NOW_PLAYING ? 'fetchNowPlaying' : 'fetchUpcoming']({
             page: 1
         })
         document.getElementsByTagName('alert-box')[0].loading(false)
@@ -57,23 +60,10 @@ export const onInitializedApp = () => {
     // load preferences to menu
     document.getElementsByTagName('preferences-menu')[0].loadPreferences(store.preferences)
     // render now playing first page
-    document.getElementsByTagName('movie-list')[0].appendMovieCards(store.nowPlaying)
+    document.getElementsByTagName('movie-list')[0].appendMovieCards(store[store.mode])
     // add genre tags to store filter tags and update filter-tab checkboxes
-    store.filterTags.helpers.getTag('genre').updateLabels(store.nowPlaying.results)
+    store.filterTags.helpers.getTag('genre').updateLabels(store[store.mode].results)
     document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
-}
-
-export const scrolledToBottom = () => {
-    const {
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-    } = document.documentElement;
-
-    // reached page bottom
-    if(scrollTop + clientHeight >= scrollHeight) {
-        dispatchInfiniteScroll()
-    }
 }
 
 export const onInfiniteScroll = async () => {
@@ -83,29 +73,16 @@ export const onInfiniteScroll = async () => {
         
         // part of store to use
         const mode = store.mode
-        // movieDBAPI fetcher to use
-        const fetcher = mode === appModes.NOW_PLAYING ? movieDBAPI.fetchNowPlaying : movieDBAPI.fetchMovie
     
         // prevent requests if we have fetched all pages
-        if(Object.keys(store[mode]).length && store[mode]?.page === store[mode]?.total_pages) {
+        if(store[mode].page && store[mode].page === store[mode].total_pages) {
             document.getElementsByTagName('alert-box')[0].showFor('Last page', 750)
             return
         }
 
-        // check if fetcher is already busy
-        if(infiniteScrollController.abortController) {
-            infiniteScrollController.abortController.abort('onInfiniteScroll is already fetching next page')
-        }
-        infiniteScrollController.abortController = new AbortController()
-        infiniteScrollController.isFetching = true
-
         // show fetching alert
         document.getElementsByTagName('alert-box')[0].loading(true)
-        const nextPage = await fetcher({
-            page: (store[mode]?.page ?? 0) + 1,
-            ...(store.mode === appModes.SEARCH && { query: store.query }), // query only necessary for search
-            signal: infiniteScrollController.abortController.signal
-        })
+        const nextPage = await fetchFromAPI(mode, infiniteScrollController)
         // update results
         if(!infiniteScrollController.abortController.signal.aborted) {
             store[mode] = {
@@ -113,7 +90,6 @@ export const onInfiniteScroll = async () => {
                 ...nextPage,
                 results: [...(store[mode]?.results ?? []), ...nextPage.results]
             }
-        
             // append new page items to movie list
             document.getElementsByTagName('movie-list')[0].appendMovieCards(nextPage)
         }
@@ -133,19 +109,16 @@ export const onInfiniteScroll = async () => {
     }
 }
 
-export const onModeUpdate = (e) => {
+export const onModeUpdate = async (e) => {
     store.mode = e.detail
+    // on entering search mode, disable navigation menu
+    document.querySelector('browse-mode')[e.detail === appModes.SEARCH ? 'disable' : 'enable']()
+
     // clear movie list items
     document.getElementsByTagName('movie-list')[0].clear()
     
-    // when returning from search mode
-    if(store.mode === appModes.NOW_PLAYING) {
-        // render now playing items in movie list
-        document.getElementsByTagName('movie-list')[0].appendMovieCards(store.nowPlaying)
-    }
-    
     // update page header
-    document.querySelector('#app h1').textContent = store.mode === appModes.NOW_PLAYING ? 'In Theaters' : 'Search'
+    setAppMainTitle()
     window.scrollTo(0, 0)
 
     // clear filter-tab tags and title
@@ -153,10 +126,25 @@ export const onModeUpdate = (e) => {
     store.filterTags.helpers.getTag('title').value = ''
     document.getElementsByTagName('filter-tab')[0].clearTag('title')
     
-    // restore now playing tags
-    if(store.mode === appModes.NOW_PLAYING) {
-        store.filterTags.helpers.getTag('genre').updateLabels(store.nowPlaying.results)
-
+    // restore app mode tags (other than search)
+    if(browseModes.includes(store.mode)) {
+        // fetch results from API if we have none in store
+        if(!store[store.mode].results.length) {
+            // show fetching alert
+            document.getElementsByTagName('alert-box')[0].loading(true)
+            const nextPage = await fetchFromAPI(store.mode, infiniteScrollController)
+            // update results
+            store[store.mode] = {
+                ...store[store.mode],
+                ...nextPage,
+                results: [...(store[store.mode]?.results ?? []), ...nextPage.results]
+            }
+            document.getElementsByTagName('alert-box')[0].loading(false)
+        }
+        // render now playing items in movie list
+        document.getElementsByTagName('movie-list')[0].appendMovieCards(store[store.mode])
+        // update filter in store and filter-tab
+        store.filterTags.helpers.getTag('genre').updateLabels(store[store.mode].results)
         document.getElementsByTagName('filter-tab')[0].clearTag('genre')
         store.filterTags.helpers.getTag('genre').boxes.forEach(b => {
             document.getElementsByTagName('filter-tab')[0].appendToTag('genre', b.label)    
@@ -185,7 +173,6 @@ export const onOpenOverlay = () => {
 export const onSearchQuery = async e => {
     try {
         // signal app mode change
-        store.mode = appModes.SEARCH
         dispatchModeUpdate(appModes.SEARCH)
         // update store
         store.query = e.detail
@@ -292,8 +279,8 @@ export const onEndSearchQuery = () => {
     // clear stored query text and search results
     store.query = ''
     store.search = {}
-    // update app mode
-    dispatchModeUpdate(appModes.NOW_PLAYING)
+    // retrieve previous app mode
+    dispatchModeUpdate(document.querySelector('browse-mode').getActiveMode())
 }
 
 export const onUpdatePreference = async (e) => {
@@ -336,7 +323,6 @@ export const onUpdatePreference = async (e) => {
 }
 
 export const onFilterTag = e => {
-    console.log(e.detail)
     //if(e.name === undefined) return
     if(e.detail.name === 'title') {
         //if(e.detail.value === '') return

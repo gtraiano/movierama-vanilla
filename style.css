@@ -59,6 +59,7 @@ h1.main-title {
   font-size: 3.2em;
   line-height: 1;
   -webkit-text-stroke: var(--text-color-width) var(--text-stroke-color);
+  text-transform: capitalize;
 }
 #app > h1.main-title {
   margin: 0;

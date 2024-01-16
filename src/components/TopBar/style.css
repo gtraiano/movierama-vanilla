@@ -20,7 +20,6 @@ top-bar.above {
 top-bar > div {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     flex-wrap: nowrap;
     height: 100%;
     width: 100%;
@@ -31,28 +30,28 @@ top-bar > div > * > * {
 }
 
 .tmdb-attribution {
-    position: absolute;
-    font-size: small;
-    top: 25%;
-    right: 1%;
-    user-select: none;
+  position: absolute;
+  font-size: small;
+  top: 25%;
+  right: 1%;
+  user-select: none;
+}
+
+.tmdb-attribution::before {
+  content: 'Powered by';
+}
+
+.tmdb-attribution img {
+  width: auto;
+  height: 0.75em;
+}
+
+.tmdb-attribution img:hover {
+  filter: brightness(2);
+}
+
+@media (max-width: 1900px) {
+  .tmdb-attribution {
+    display: none;
   }
-  
-  .tmdb-attribution::before {
-    content: 'Powered by';
-  }
-  
-  .tmdb-attribution img {
-    width: auto;
-    height: 0.75em;
-  }
-  
-  .tmdb-attribution img:hover {
-    filter: brightness(2);
-  }
-  
-  @media (max-width: 1900px) {
-    .tmdb-attribution {
-      display: none;
-    }
-  }
+}

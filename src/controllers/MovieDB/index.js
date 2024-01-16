@@ -93,6 +93,36 @@ const fetchNowPlaying = async (config) => {
     return await fetcher(url, config.signal)
 }
 
+const fetchUpcoming = async (config) => {
+    const url = generateURL({
+        path: '/movie/upcoming',
+        searchParams: {
+            page: config.page ?? 1
+        }
+    })
+    return await fetcher(url, config.signal)
+}
+
+const fetchPopular = async (config) => {
+    const url = generateURL({
+        path: '/movie/popular',
+        searchParams: {
+            page: config.page ?? 1
+        }
+    })
+    return await fetcher(url, config.signal)
+}
+
+const fetchTopRated = async (config) => {
+    const url = generateURL({
+        path: '/movie/top_rated',
+        searchParams: {
+            page: config.page ?? 1
+        }
+    })
+    return await fetcher(url, config.signal)
+}
+
 const fetchGenres = async () => {
     const url = generateURL({
         path: '/genre/movie/list'
@@ -148,6 +178,9 @@ const fetchMovieCredits = async (config) => {
 
 export default {
     fetchNowPlaying,
+    fetchUpcoming,
+    fetchPopular,
+    fetchTopRated,
     fetchGenres,
     fetchMovie,
     fetchMovieDetails,

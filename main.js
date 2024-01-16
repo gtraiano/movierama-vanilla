@@ -39,12 +39,14 @@ import './src/components/AlertBox'
 import './src/components/TopBar'
 import './src/components/PreferencesMenu'
 import './src/components/Filter'
+import './src/components/BrowseMode'
 
 // app html template
 document.querySelector('#app').innerHTML = `
     <top-bar>
         <div>
-            <div style="min-width: 50%;"><search-bar></search-bar></div>
+            <browse-mode></browse-mode>
+            <div><search-bar></search-bar></div>
             <preferences-menu></preferences-menu>
         </div>
         <span class="tmdb-attribution">
@@ -52,7 +54,7 @@ document.querySelector('#app').innerHTML = `
         </span>
     </top-bar>
     <filter-tab></filter-tab>
-    <h1 class="main-title">In Theaters</h1>
+    <h1 class="main-title"></h1>
     <movie-list></movie-list>
     <over-lay></over-lay>
     <alert-box></alert-box>

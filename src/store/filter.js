@@ -20,6 +20,7 @@ export const filterTags = {
             type: 'checkbox-container',
             boxes: [],
             updateLabels: (results) => {
+                if(!results) return
                 const genres = [...new Set(results.map(r => r.genre_ids).reduce((g, cg) => {
                     cg.forEach(v => { g.push(store.genres.lookup(v)) })
                     return g

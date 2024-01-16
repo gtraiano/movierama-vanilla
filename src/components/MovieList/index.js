@@ -26,6 +26,7 @@ export class MovieList extends HTMLElement {
     }
 
     appendMovieCards(movies) {
+        if(!movies.results || !movies.results.length) return
         /*
         // no results, add a message stating so
         if(!movies.results || !movies.results.length) {

@@ -10,12 +10,29 @@ export const store = Object.seal({
     genres,                         // movie genres
     [appModes.NOW_PLAYING]: {       // now playing data
         page: 0,
-        total_pages: 0
+        total_pages: 0,
+        results: []
+    },
+    [appModes.UPCOMING]: {          // upcoming movies data
+        page: 0,
+        total_pages: 0,
+        results: []
+    },
+    [appModes.POPULAR]: {           // popular movies data
+        page: 0,
+        total_pages: 0,
+        results: []
+    },
+    [appModes.TOP_RATED]: {         // top rated movies data
+        page: 0,
+        total_pages: 0,
+        results: []
     },
     query: '',                      // search query text
     [appModes.SEARCH]: {            // search results data
         page: 0,
-        total_pages: 0
+        total_pages: 0,
+        results: []
     },
     movieDetails: {                 // movie details data
         details: null,
@@ -24,7 +41,7 @@ export const store = Object.seal({
         reviews: null,
         similar: null
     },               
-    mode: appModes.NOW_PLAYING,     // app mode
+    mode: appModes.NOW_PLAYING,        // app mode
     filterTags                      // displayed data filtering tags
 })
 
