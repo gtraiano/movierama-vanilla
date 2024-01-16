@@ -3,6 +3,7 @@ filter-tab {
     top: 7em;
     right: 0.25vw;
     background-color: transparent;
+    z-index: 1;
 }
 
 filter-tab > * > * {
