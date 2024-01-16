@@ -119,11 +119,7 @@ class MovieDetails extends HTMLElement {
     }
 
     generateReviews(reviews) {
-        const sanitize = (input) => {
-            const e = document.createElement('div')
-            e.innerText = input
-            return e.innerHTML
-        }
+        const sanitize = (input) => document.createTextNode(input).textContent
         return `
             <section class="movie-reviews-container">
                 <h2>Reviews</h2>
