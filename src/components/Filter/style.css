@@ -94,3 +94,9 @@ html[theme="light"] filter-tab > * > * {
 .checkbox-container > div input {
     margin-left: 0;
 }
+
+/* hide filter-tab when drop-down is visible */
+body:has(drop-down[visible]) filter-tab {
+    z-index: -1;
+    opacity: 0;
+}
