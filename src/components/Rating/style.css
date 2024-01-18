@@ -1,0 +1,45 @@
+/* credit: https://css-tricks.com/five-methods-for-five-star-ratings/#aa-method-5-using-unicode-symbols */
+:root {
+  --star-size: 1em;
+  --star-color: #fff;
+  --star-background: #fc0;
+}
+
+star-rating {
+  width: fit-content;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+}
+
+star-rating::after {
+  font-size: small;
+  vertical-align: bottom;
+}
+
+/* show rating and ratings count (but not 0) after stars */
+star-rating[rating]:not([ratings-count="0"])::after {
+  content: "(" attr(rating) " from " attr(ratings-count) " votes)";
+}
+
+/* show rating after stars */
+star-rating[rating]::after,
+/* if ratings-count is empty, ignore attribute */
+star-rating[rating][ratings-count=""]::after {
+  content: "(" attr(rating) ")";
+}
+
+.stars {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  font-size: var(--star-size);
+  line-height: 1;
+  width: fit-content;
+  height: fit-content;
+  letter-spacing: 3px;
+  background: linear-gradient(90deg, var(--star-background) 0%, var(--star-color) 0%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

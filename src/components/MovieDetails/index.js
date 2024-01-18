@@ -1,6 +1,7 @@
 import { dispatchRequestMovieDetails } from '../../events/RequestMovieDetails'
 import store from '../../store'
 import './style.css'
+import StarRating from '../Rating'
 
 class MovieDetails extends HTMLElement {
     constructor() {
@@ -50,6 +51,10 @@ class MovieDetails extends HTMLElement {
                 <div class="row">
                     <div class="column left"><strong>Released</strong></div>
                     <div class="column left">${movie.release_date}</div>
+                </div>
+                <div class="row">
+                    <div class="column left"><strong>Vote Average</strong></div>
+                    <div class="column left"><star-rating rating="${movie.vote_average}" ratings-count="${movie.vote_count ?? ''}"></star-rating></div>
                 </div>
                 <div class="row">
                     <div class="column left"><strong>Producers</strong></div>
