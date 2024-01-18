@@ -40,6 +40,12 @@ nav.browse-mode > ul > li > a:not(.active):hover {
     will-change: color;
 }
 
+@media only screen and (max-width: 915px) {
+    browse-mode > nav.browse-mode > ul {
+        font-size: small;
+    }
+}
+
 @media only screen and (max-width: 1512px) {
     browse-mode > nav.browse-mode {
         display: flex;
