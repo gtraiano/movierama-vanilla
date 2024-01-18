@@ -7,7 +7,7 @@ export const appModes = {
 }
 
 export const appModesTitles = {
-    [appModes.NOW_PLAYING]: 'now playing',
+    [appModes.NOW_PLAYING]: 'in theaters',
     [appModes.UPCOMING]: 'upcoming',
     [appModes.POPULAR]: 'popular',
     [appModes.TOP_RATED]: 'top rated',
