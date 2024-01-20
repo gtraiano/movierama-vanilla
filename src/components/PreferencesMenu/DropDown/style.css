@@ -22,6 +22,7 @@ drop-down > div > * {
     justify-content: space-between;
     white-space: nowrap;
     text-align: start;
+    width: 100%;
 }
 
 /* give text white color */
@@ -64,7 +65,7 @@ drop-down > div {
 /* dropdown container div when visible */
 drop-down[visible] > div {
     opacity: 1;
-    width: fit-content;
+    width: 100%;
     height: fit-content;
     padding: 10px;
 }
@@ -79,16 +80,12 @@ drop-down[visible] > div > * {
     display: inline-flex;
 }
 
-/* position right edge of dropdown under right edge of button */
-/*@media only screen and (max-width: 599px) {
-    drop-down {
-        transform: translateY(2.5rem) translateX(-100%);
-    }
+drop-down label + select {
+    max-width: 50%;
 }
 
-@media only screen and (min-width: 800px) and (max-width: 900px) {
-    drop-down {
-        transform: translateY(2.5rem) translateX(-35%);
+@media only screen and (max-width: 700px) {
+    drop-down[visible] {
+        width: 90vw;
     }
 }
-*/
