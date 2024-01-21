@@ -13,6 +13,10 @@ top-bar {
     filter: invert(1)
 }
 
+:root[theme="light"] top-bar .clear {
+  filter: invert(1)
+}
+
 top-bar.above {
     z-index: 1;
 }
