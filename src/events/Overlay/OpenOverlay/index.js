@@ -1,7 +1,7 @@
 export const eventName = 'openoverlay'
 
 export const dispatchOpenOverlay = () => {
-    dispatchEvent(new Event(eventName))
+    document.body.dispatchEvent(new Event(eventName))
 }
 
 export default {

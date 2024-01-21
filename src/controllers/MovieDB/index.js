@@ -176,6 +176,17 @@ const fetchMovieCredits = async (config) => {
     return await fetcher(url, config.signal)
 }
 
+const fetchPerson = async(config) => {
+    const url = generateURL({
+        path: '/search/person',
+        searchParams: {
+            query: config.query,
+            page: config.page ?? 1
+        }
+    })
+    return await fetcher(url, config.signal)
+}
+
 export default {
     fetchNowPlaying,
     fetchUpcoming,
@@ -190,5 +201,6 @@ export default {
     fetchMovieCredits,
     fetchConfiguration,
     fetchLanguages,
+    fetchPerson,
     ping
 };

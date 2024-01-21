@@ -5,7 +5,7 @@ import movieDBAPI from "../controllers/MovieDB";
 import appModes, { browseModes } from "../constants/AppModes";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
-import { fetchFromAPI, setAppMainTitle } from "./util";
+import { fetchNextPageFromAPI, setAppMainTitle } from "./util";
 
 export { scrolledToBottom, setAppMainTitle } from './util'
 
@@ -82,7 +82,7 @@ export const onInfiniteScroll = async () => {
 
         // show fetching alert
         document.getElementsByTagName('alert-box')[0].loading(true)
-        const nextPage = await fetchFromAPI(mode, infiniteScrollController)
+        const nextPage = await fetchNextPageFromAPI(mode, infiniteScrollController)
         // update results
         if(!infiniteScrollController.abortController.signal.aborted) {
             store[mode] = {
@@ -132,7 +132,7 @@ export const onModeUpdate = async (e) => {
         if(!store[store.mode].results.length) {
             // show fetching alert
             document.getElementsByTagName('alert-box')[0].loading(true)
-            const nextPage = await fetchFromAPI(store.mode, infiniteScrollController)
+            const nextPage = await fetchNextPageFromAPI(store.mode, infiniteScrollController)
             // update results
             store[store.mode] = {
                 ...store[store.mode],
@@ -175,7 +175,8 @@ export const onSearchQuery = async e => {
         // signal app mode change
         dispatchModeUpdate(appModes.SEARCH)
         // update store
-        store.query = e.detail
+        //store.query = e.detail
+        store.searchQuery = e.detail
 
         // show alert box while search runs
         document.getElementsByTagName('alert-box')[0].show(true, 'Searching')
@@ -185,7 +186,8 @@ export const onSearchQuery = async e => {
         searchController.abortController = new AbortController()
         searchController.isFetching = true
         store.search = await movieDBAPI.fetchMovie({
-            query: store.query,
+            //query: store.query,
+            query: store.searchQuery.query,
             signal: searchController.abortController.signal
         })
         // render search results in movie list
@@ -277,10 +279,16 @@ export const onEndSearchQuery = () => {
         searchController.abortController.abort()
     }
     // clear stored query text and search results
-    store.query = ''
+    //store.query = ''
+    //store.searchQuery = { query: '', type: '' }
     store.search = {}
     // retrieve previous app mode
     dispatchModeUpdate(document.querySelector('browse-mode').getActiveMode())
+}
+
+export const onSearchTypeChange = (e) => {
+    store.searchQuery.type = e.detail.type
+    console.log(store.searchQuery)
 }
 
 export const onUpdatePreference = async (e) => {

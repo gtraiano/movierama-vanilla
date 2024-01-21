@@ -1,7 +1,7 @@
 export const eventName = 'modeupdate';
 
 export const dispatchModeUpdate = mode => {
-    dispatchEvent(new CustomEvent(
+    document.body.dispatchEvent(new CustomEvent(
         eventName,
         {
             bubbles: true,

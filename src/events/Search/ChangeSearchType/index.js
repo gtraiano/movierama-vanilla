@@ -1,16 +1,16 @@
-export const eventName = 'searchquery';
+export const eventName = 'searchtypechange';
 
-export const dispatchSearchQuery = ({ query, type }) => {
+export const dispatchSearchTypeChange = ({ type }) => {
     document.body.dispatchEvent(new CustomEvent(
         eventName,
         {
             bubbles: true,
-            detail: { query, type }
+            detail: { type }
         }
     ))
 }
 
 export default {
     eventName,
-    dispatchSearchQuery
+    dispatchSearchTypeChange
 }

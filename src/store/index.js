@@ -1,4 +1,4 @@
-import appModes from "../constants/AppModes"
+import appModes, { searchTypes } from "../constants/AppModes"
 import { preferences } from "./preferences";
 import { configuration } from "./configuration";
 import { genres } from "./genres";
@@ -28,7 +28,11 @@ export const store = Object.seal({
         total_pages: 0,
         results: []
     },
-    query: '',                      // search query text
+    //query: '',                      // search query text
+    searchQuery: {
+        query: '',
+        type: searchTypes.MOVIE
+    },
     [appModes.SEARCH]: {            // search results data
         page: 0,
         total_pages: 0,

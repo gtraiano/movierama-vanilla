@@ -16,4 +16,9 @@ export const appModesTitles = {
 
 export const browseModes = [appModes.NOW_PLAYING, appModes.UPCOMING, appModes.POPULAR, appModes.TOP_RATED]
 
+export const searchTypes = {
+    MOVIE: 'movie',
+    PERSON: 'person'
+}
+
 export default appModes

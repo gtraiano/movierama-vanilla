@@ -1,7 +1,7 @@
 export const eventName = 'filtertag';
 
 export const dispatchFilterTag = tag => {
-    dispatchEvent(new CustomEvent(
+    document.body.dispatchEvent(new CustomEvent(
         eventName,
         {
             bubbles: true,

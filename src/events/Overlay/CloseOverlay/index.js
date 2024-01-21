@@ -1,7 +1,7 @@
 export const eventName = 'closeoverlay'
 
 export const dispatchCloseOverlay = () => {
-    dispatchEvent(new Event(eventName))
+    document.body.dispatchEvent(new Event(eventName))
 }
 
 export default {

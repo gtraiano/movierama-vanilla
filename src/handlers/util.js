@@ -1,4 +1,4 @@
-import appModes, { appModesTitles } from "../constants/AppModes"
+import appModes, { appModesTitles, searchTypes } from "../constants/AppModes"
 import movieDBAPI from "../controllers/MovieDB"
 import { dispatchInfiniteScroll } from "../events/InfiniteScroll"
 import store from "../store"
@@ -16,7 +16,7 @@ export const scrolledToBottom = () => {
     }
 }
 
-export const fetchFromAPI = async (mode, abortController) => {
+export const fetchNextPageFromAPI = async (mode, abortController) => {
     // movieDBAPI fetcher to use
     let fetcher
     switch(mode) {
@@ -32,7 +32,7 @@ export const fetchFromAPI = async (mode, abortController) => {
         case appModes.TOP_RATED:
             fetcher = movieDBAPI.fetchTopRated
         case appModes.SEARCH:
-            fetcher = movieDBAPI.fetchMovie
+            fetcher = store.searchQuery.type === searchTypes.MOVIE ? movieDBAPI.fetchMovie : movieDBAPI.fetchPerson
             break
     }
 
@@ -45,7 +45,7 @@ export const fetchFromAPI = async (mode, abortController) => {
 
     const nextPage = await fetcher({
         page: (store[mode]?.page ?? 0) + 1,
-        ...(store.mode === appModes.SEARCH && { query: store.query }), // query only necessary for search
+        ...(store.mode === appModes.SEARCH && { query: store.searchQuery.query }), // query only necessary for search
         signal: abortController.abortController.signal
     })
 
