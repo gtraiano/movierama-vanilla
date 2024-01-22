@@ -30,6 +30,7 @@ class Filter extends HTMLElement {
         // create tag container
         const fe = document.createElement('div')
         fe.classList.add('filter-element')
+        !tag.use && fe.setAttribute('hidden', '')
         
         if(tag.type === 'input') {            
             const lbl = document.createElement('label')
@@ -102,6 +103,7 @@ class Filter extends HTMLElement {
     }
 
     appendToTag = (tag, label) => {
+        console.info('appendToTag', tag, label)
         const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag).parentElement
 
         if(!target) {
@@ -162,6 +164,16 @@ class Filter extends HTMLElement {
 
     #isActive = () => {
         return [...this.querySelectorAll('.filter-element input')].some(t => t.type === 'text' ? t.value.trim().length : t.checked)
+    }
+
+    toggleTag = (tag, show) => {
+        const target = Array.from(this.querySelectorAll('.filter-element > label')).find(l => l.textContent === tag)
+        if(show) target.parentElement.removeAttribute('hidden')
+        else if(show === false) target.parentElement.setAttribute('hidden', '')
+        else {
+            if(target.getAttribute('hidden')) target.parentElement.removeAttribute('hidden')
+            else target.parentElement.setAttribute('hidden', '')
+        }
     }
 }
 

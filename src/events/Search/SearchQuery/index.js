@@ -1,7 +1,7 @@
 export const eventName = 'searchquery';
 
 export const dispatchSearchQuery = ({ query, type }) => {
-    document.body.dispatchEvent(new CustomEvent(
+    document.dispatchEvent(new CustomEvent(
         eventName,
         {
             bubbles: true,

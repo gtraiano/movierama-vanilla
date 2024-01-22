@@ -12,6 +12,7 @@ import { eventName as InitializedApp } from './src/events/InitializedApp'
 import { eventName as EndSearchQuery } from './src/events/Search/EndSearchQuery'
 import { eventName as UpdatePreference } from './src/events/UpdatePreference'
 import { eventName as FilterTag } from './src/events/FilterTag'
+import { eventName as ChangeSearchType } from './src/events/Search/ChangeSearchType'
 
 // event handlers
 import {
@@ -26,7 +27,8 @@ import {
     onRequestMovieDetails,
     onEndSearchQuery,
     onUpdatePreference,
-    onFilterTag
+    onFilterTag,
+    onSearchTypeChange
 } from './src/handlers'
 
 // custom elements
@@ -40,6 +42,7 @@ import './src/components/TopBar'
 import './src/components/PreferencesMenu'
 import './src/components/Filter'
 import './src/components/BrowseMode'
+import './src/components/PersonCard'
 
 // app html template
 document.querySelector('#app').innerHTML = `
@@ -64,39 +67,41 @@ document.querySelector('#app').innerHTML = `
 window.addEventListener('load', initializeApp)
 
 // render now playing items in movie list after app initalization
-window.addEventListener(InitializedApp, onInitializedApp)
+document.addEventListener(InitializedApp, onInitializedApp)
 
 // scroll
-window.addEventListener('scroll', scrolledToBottom)
+document.addEventListener('scroll', scrolledToBottom)
 
 // infinite scroll
-window.addEventListener(InfiniteScroll, onInfiniteScroll)
+document.addEventListener(InfiniteScroll, onInfiniteScroll)
 
 // app mode switching
-window.addEventListener(ModeUpdate, onModeUpdate)
+document.addEventListener(ModeUpdate, onModeUpdate)
 
 // overlay events
-window.addEventListener(CloseOverlay, onCloseOverlay)
-window.addEventListener(OpenOverlay, onOpenOverlay)
+document.addEventListener(CloseOverlay, onCloseOverlay)
+document.addEventListener(OpenOverlay, onOpenOverlay)
 
 // search query received
-window.addEventListener(SearchQuery, onSearchQuery)
+document.addEventListener(SearchQuery, onSearchQuery)
 // search query ended
-window.addEventListener(EndSearchQuery, onEndSearchQuery)
+document.addEventListener(EndSearchQuery, onEndSearchQuery)
+// search type changed
+document.addEventListener(ChangeSearchType, onSearchTypeChange)
 
 // movie details request
-window.addEventListener(RequestMovieDetails, onRequestMovieDetails)
+document.addEventListener(RequestMovieDetails, onRequestMovieDetails)
 
 // updated preference
-window.addEventListener(UpdatePreference, onUpdatePreference)
+document.addEventListener(UpdatePreference, onUpdatePreference)
 
 // update filter tag
-window.addEventListener(FilterTag, onFilterTag)
+document.addEventListener(FilterTag, onFilterTag)
 
 // cleanup
 window.addEventListener('beforeunload', () => {
     window.removeEventListener('load', initializeApp)
-    window.removeEventListener(InitializedApp, onInitializedApp)
+    /*window.removeEventListener(InitializedApp, onInitializedApp)
     window.removeEventListener('scroll', scrolledToBottom)
     window.removeEventListener(InfiniteScroll, onInfiniteScroll)
     window.removeEventListener(ModeUpdate, onModeUpdate)
@@ -105,5 +110,5 @@ window.addEventListener('beforeunload', () => {
     window.removeEventListener(SearchQuery, onSearchQuery)
     window.removeEventListener(RequestMovieDetails, onRequestMovieDetails)
     window.removeEventListener(UpdatePreference, onUpdatePreference)
-    window.removeEventListener(FilterTag, onFilterTag)
+    window.removeEventListener(FilterTag, onFilterTag)*/
 })

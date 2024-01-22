@@ -29,7 +29,7 @@ class MovieCard extends HTMLElement {
         dispatchRequestMovieDetails(this.attributes.getNamedItem('movie-id').value)
     }
 
-    updateCard = (movie) => {
+    render = (movie) => {
         this.innerHTML = this.generateTemplate(movie)
         movie.adult && this.classList.add('adult')
         this.setAttribute('movie-id', movie.id)

@@ -1,7 +1,7 @@
 export const eventName = 'requstmoviedetails';
 
 export const dispatchRequestMovieDetails = id => {
-    document.body.dispatchEvent(new CustomEvent(
+    document.dispatchEvent(new CustomEvent(
         eventName,
         {
             bubbles: true,

@@ -1,3 +1,5 @@
+import appModes, { browseModes } from '../../constants/AppModes'
+import store from '../../store'
 import './style.css'
 
 const template = `
@@ -25,6 +27,17 @@ export class MovieList extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
     }
 
+    appendItems(items) {
+        if(!items.results || !items.results.length) return
+        const type = store.mode === appModes.SEARCH ? store.searchQuery.type : 'movie'
+        const container = this.children[0]
+        items.results.forEach(np => {
+            const card = document.createElement(`${type}-card`);
+            card.render(np)
+            container.append(card)
+        })
+    }
+
     appendMovieCards(movies) {
         if(!movies.results || !movies.results.length) return
         /*
@@ -44,6 +57,16 @@ export class MovieList extends HTMLElement {
         movies.results.forEach(np => {
             const card = document.createElement('movie-card');
             card.updateCard(np)
+            container.append(card)
+        })
+    }
+
+    appendPersonCards(person) {
+        if(!person.results || !person.results.length) return
+        const container = this.children[0]
+        person.results.forEach(np => {
+            const card = document.createElement('person-card')
+            card.render(np)
             container.append(card)
         })
     }

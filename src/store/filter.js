@@ -6,10 +6,10 @@ export const filterTags = {
             name: 'title',
             value: '',
             type: 'input',
+            use: true,
             applyFilter: function () {
                 const re = new RegExp(this.value, 'i')
                 document.querySelectorAll('movie-list .in-theaters movie-card').forEach(card => {
-                    //console.log(card.querySelector('div.movie-item ').children[1].children[1].innerText.includes(e.detail.value))
                     if(!re.test(card.querySelector('div.movie-item ').children[1].children[1].innerText)) card.style.display = 'none'
                     else card.style.display = ''
                 })
@@ -19,6 +19,7 @@ export const filterTags = {
             name: 'genre',
             type: 'checkbox-container',
             boxes: [],
+            use: true,
             updateLabels: (results) => {
                 if(!results) return
                 const genres = [...new Set(results.map(r => r.genre_ids).reduce((g, cg) => {
@@ -42,6 +43,31 @@ export const filterTags = {
                 document.querySelectorAll('movie-list .in-theaters movie-card').forEach(mc => {
                     if(!re.test(mc.children[0].children[3].children[1].textContent)) mc.style.display = 'none'
                     else mc.style.display = ''
+                })
+            }
+        },
+        {
+            name: 'known for',
+            type: 'checkbox-container',
+            boxes: [],
+            use: false,
+            updateLabels: results => {
+                if(!results || !filterTags.tags[2].use) return
+                const knownFor = [...new Set(results.map(p => p.known_for_department))].sort()
+                knownFor.forEach(kf => {
+                    store.filterTags.helpers.appendToTag({
+                        name: 'known for',
+                        label: kf,
+                        value: false
+                    })
+                })
+            },
+            applyFilter: () => {
+                const activeTypes = filterTags.helpers.getTag('known for').boxes.filter(b => b.value).map(t => t.label).join('|')
+                const re = new RegExp(activeTypes, 'i')
+                document.querySelectorAll('movie-list .in-theaters person-card').forEach(pc => {
+                    if(!re.test(pc.querySelector('.known-for').textContent)) pc.style.display = 'none'
+                    else pc.style.display = ''
                 })
             }
         }

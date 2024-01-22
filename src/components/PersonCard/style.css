@@ -1,0 +1,64 @@
+person-card {
+  min-height: 100%;
+}
+
+.person-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  background-color: rgba(128, 128, 128, 0.375);
+  transition: height 0.5s ease-in-out 0.5s;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  box-shadow: 4px 2px 2px 2px rgba(127, 127, 127, 0.8);
+  min-height: 100%;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  margin: 0;
+  aspect-ratio: 1 / 1.5;
+}
+
+.person-item > figcaption {
+  margin-top: 1ch;
+}
+
+.person-item img {
+  height: 70%;
+  max-width: 85%;
+  /*margin-bottom: 1ch;*/
+  display: flex;
+  align-items: center;
+  transition: all 0.5s ease-in-out;
+  will-change: width, height;
+}
+
+/* https://dev.to/sasscrafter/how-to-style-broken-images-with-css-4il2 */
+.person-item img::before {
+  content: attr(alt);
+
+  font-size: 18px;
+  color: rgb(100, 100, 100);
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.person-item p {
+  margin: 0;
+  padding: 0;
+}
+
+.person-item p:first-child {
+  font-weight: bold;
+}
+
+.person-item p:last-child {
+  font-style: italic;
+  font-size: smaller;
+}

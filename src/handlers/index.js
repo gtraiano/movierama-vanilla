@@ -2,7 +2,7 @@ import { dispatchModeUpdate } from "../events/ModeUpdate";
 import { dispatchInitializedApp } from "../events/InitializedApp";
 
 import movieDBAPI from "../controllers/MovieDB";
-import appModes, { browseModes } from "../constants/AppModes";
+import appModes, { browseModes, searchTypes } from "../constants/AppModes";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
 import { fetchNextPageFromAPI, setAppMainTitle } from "./util";
@@ -60,7 +60,7 @@ export const onInitializedApp = () => {
     // load preferences to menu
     document.getElementsByTagName('preferences-menu')[0].loadPreferences(store.preferences)
     // render now playing first page
-    document.getElementsByTagName('movie-list')[0].appendMovieCards(store[store.mode])
+    document.getElementsByTagName('movie-list')[0].appendItems(store[store.mode])
     // add genre tags to store filter tags and update filter-tab checkboxes
     store.filterTags.helpers.getTag('genre').updateLabels(store[store.mode].results)
     document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
@@ -91,13 +91,49 @@ export const onInfiniteScroll = async () => {
                 results: [...(store[mode]?.results ?? []), ...nextPage.results]
             }
             // append new page items to movie list
-            document.getElementsByTagName('movie-list')[0].appendMovieCards(nextPage)
+            document.getElementsByTagName('movie-list')[0].appendItems(nextPage)
         }
         document.getElementsByTagName('alert-box')[0].loading(false)
+
+        if(store.mode === appModes.SEARCH) {
+            if(store.searchQuery.type === searchTypes.MOVIE) {
+                // clear filter title
+                document.getElementsByTagName('filter-tab')[0].clearTag('title')
+                // init fresh tags
+                //store.filterTags.helpers.getTag('genre').boxes = []
+                store.filterTags.helpers.getTag('genre').use = true
+                store.filterTags.helpers.getTag('title').use = true
+                store.filterTags.helpers.getTag('known for').use = false
+                document.querySelector('filter-tab').toggleTag('genre', true)
+                document.querySelector('filter-tab').toggleTag('title', true)
+                document.querySelector('filter-tab').toggleTag('known for', false)
+    
+                document.getElementsByTagName('filter-tab')[0].clearTag('genre')
+                store.filterTags.helpers.getTag('genre').boxes.forEach(b => {
+                    document.getElementsByTagName('filter-tab')[0].appendToTag('genre', b.label)    
+                })
+            }
+            else if(store.searchQuery.type === searchTypes.PERSON) {
+                store.filterTags.helpers.getTag('genre').use = false
+                store.filterTags.helpers.getTag('title').use = false
+                store.filterTags.helpers.getTag('known for').use = true
+                document.querySelector('filter-tab').toggleTag('genre', false)
+                document.querySelector('filter-tab').toggleTag('title', false)
+                document.querySelector('filter-tab').toggleTag('known for', true)
+                
+                store.filterTags.helpers.getTag('known for').updateLabels(store.search.results)
+                document.getElementsByTagName('filter-tab')[0].clearTag('known for')
+                store.filterTags.helpers.getTag('known for').boxes.forEach(b => {
+                    document.getElementsByTagName('filter-tab')[0].appendToTag('known for', b.label)    
+                })
+            }
+        }
+        else {
+            // add new genre tags to store filter tags and update filter-tab checkboxes
+            store.filterTags.helpers.getTag('genre').updateLabels(store[mode].results)
+            //document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
+        }
         
-        // add new genre tags to store filter tags and update filter-tab checkboxes
-        store.filterTags.helpers.getTag('genre').updateLabels(store[mode].results)
-        //document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
@@ -142,7 +178,7 @@ export const onModeUpdate = async (e) => {
             document.getElementsByTagName('alert-box')[0].loading(false)
         }
         // render now playing items in movie list
-        document.getElementsByTagName('movie-list')[0].appendMovieCards(store[store.mode])
+        document.getElementsByTagName('movie-list')[0].appendItems(store[store.mode])
         // update filter in store and filter-tab
         store.filterTags.helpers.getTag('genre').updateLabels(store[store.mode].results)
         document.getElementsByTagName('filter-tab')[0].clearTag('genre')
@@ -175,7 +211,6 @@ export const onSearchQuery = async e => {
         // signal app mode change
         dispatchModeUpdate(appModes.SEARCH)
         // update store
-        //store.query = e.detail
         store.searchQuery = e.detail
 
         // show alert box while search runs
@@ -185,30 +220,52 @@ export const onSearchQuery = async e => {
         }
         searchController.abortController = new AbortController()
         searchController.isFetching = true
-        store.search = await movieDBAPI.fetchMovie({
-            //query: store.query,
+        store.search = await movieDBAPI[store.searchQuery.type === searchTypes.MOVIE ? 'fetchMovie' : 'fetchPerson']({
             query: store.searchQuery.query,
             signal: searchController.abortController.signal
         })
+
         // render search results in movie list
         document.getElementsByTagName('movie-list')[0].clear()
-        document.getElementsByTagName('movie-list')[0].appendMovieCards(store.search)
+        document.getElementsByTagName('movie-list')[0].appendItems(store.search)
         window.scrollTo(0,0)
         // hide alert box after cards have been rendered
         document.getElementsByTagName('alert-box')[0].show(false)
 
-        // clear filter title
-        document.getElementsByTagName('filter-tab')[0].clearTag('title')
-        // init fresh tags
-        //store.filterTags.helpers.getTag('genre').boxes = []
-        store.filterTags.helpers.getTag('genre').updateLabels(store.search.results)
+        if(store.searchQuery.type === searchTypes.MOVIE) {
+            // clear filter title
+            document.getElementsByTagName('filter-tab')[0].clearTag('title')
+            // init fresh tags
+            //store.filterTags.helpers.getTag('genre').boxes = []
+            store.filterTags.helpers.getTag('genre').use = true
+            store.filterTags.helpers.getTag('title').use = true
+            store.filterTags.helpers.getTag('known for').use = false
+            document.querySelector('filter-tab').toggleTag('genre', true)
+            document.querySelector('filter-tab').toggleTag('title', true)
+            document.querySelector('filter-tab').toggleTag('known for', false)
 
-        document.getElementsByTagName('filter-tab')[0].clearTag('genre')
-        store.filterTags.helpers.getTag('genre').boxes.forEach(b => {
-            document.getElementsByTagName('filter-tab')[0].appendToTag('genre', b.label)    
-        })
+            document.getElementsByTagName('filter-tab')[0].clearTag('genre')
+            store.filterTags.helpers.getTag('genre').boxes.forEach(b => {
+                document.getElementsByTagName('filter-tab')[0].appendToTag('genre', b.label)    
+            })
+        }
+        else if(store.searchQuery.type === searchTypes.PERSON) {
+            store.filterTags.helpers.getTag('genre').use = false
+            store.filterTags.helpers.getTag('title').use = false
+            store.filterTags.helpers.getTag('known for').use = true
+            document.querySelector('filter-tab').toggleTag('genre', false)
+            document.querySelector('filter-tab').toggleTag('title', false)
+            document.querySelector('filter-tab').toggleTag('known for', true)
+            
+            store.filterTags.helpers.getTag('known for').updateLabels(store.search.results)
+            document.getElementsByTagName('filter-tab')[0].clearTag('known for')
+            store.filterTags.helpers.getTag('known for').boxes.forEach(b => {
+                document.getElementsByTagName('filter-tab')[0].appendToTag('known for', b.label)    
+            })
+        }
     }
     catch(error) {
+        console.log(error)
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
             document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
         }
@@ -279,16 +336,14 @@ export const onEndSearchQuery = () => {
         searchController.abortController.abort()
     }
     // clear stored query text and search results
-    //store.query = ''
-    //store.searchQuery = { query: '', type: '' }
+    store.searchQuery.query = ''
     store.search = {}
     // retrieve previous app mode
     dispatchModeUpdate(document.querySelector('browse-mode').getActiveMode())
 }
 
 export const onSearchTypeChange = (e) => {
-    store.searchQuery.type = e.detail.type
-    console.log(store.searchQuery)
+    store.searchQuery.type = e.detail
 }
 
 export const onUpdatePreference = async (e) => {
@@ -317,7 +372,7 @@ export const onUpdatePreference = async (e) => {
         // update all movie-card's content in new language
         document.querySelectorAll('movie-card').forEach(async mc => {
             const content = await movieDBAPI.fetchMovieDetails({ movieId: mc.getAttribute('movie-id')})
-            mc.updateCard(content)
+            mc.render(content)
         })
         // remove genre labels from store filter and insert fresh ones
         store.filterTags.helpers.clearGenreLabels()
@@ -341,5 +396,8 @@ export const onFilterTag = e => {
         store.filterTags.helpers.setTag(e.detail)
         store.filterTags.helpers.getTag('genre').applyFilter()
     }
-    
+    else if(e.detail.name === 'known for') {
+        store.filterTags.helpers.setTag(e.detail)
+        store.filterTags.helpers.getTag('known for').applyFilter()
+    }
 }

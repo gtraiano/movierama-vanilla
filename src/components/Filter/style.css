@@ -48,6 +48,10 @@ html[theme="light"] filter-tab > * > * {
     border-color: inherit;
 }
 
+.filter-element[hidden] {
+    visibility: collapse;
+}
+
 .filter-element {
     display: flex;
     flex-direction: column;

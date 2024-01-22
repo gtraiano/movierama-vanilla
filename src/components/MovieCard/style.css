@@ -8,7 +8,6 @@
   box-shadow: 4px 2px 2px 2px rgba(127,127,127,0.8);
   min-height: 100%;
 }
-
 .movie-item div {
   display: flex;
   margin-top: 1%;
@@ -16,13 +15,11 @@
   margin-left: 5%;
   margin-right: 5%;
 }
-
 .movie-item label {
   font-weight: 600;
   width: 40%;
   text-align: start;
 }
-
 .movie-item span {
   font-style: italic;
   text-align: start;
@@ -31,7 +28,6 @@
   width: 25ch;
   white-space: nowrap;
 }
-
 .movie-item .poster img {
   width: 100%;
   height: auto;
@@ -54,26 +50,21 @@
   justify-content: space-between;
   /*height: 1.5em;*/
 }
-
 .poster {
   height: 70%;
   cursor: pointer;
   aspect-ratio: 1 / 1.5;
 }
-
 movie-card.adult .movie-item-line.poster img.adult {
   filter: blur(12px) brightness(0.2);
   transition: all 100ms ease-in-out;
 }
-
 movie-card.adult .movie-item-line.poster img.adult:hover {
   filter: none;
 }
-
 .movie-item {
   position: relative;
 }
-
 .overview-container {
   position: absolute;
   top: 0;
@@ -96,7 +87,6 @@ movie-card.adult .movie-item-line.poster img.adult:hover {
   will-change: opacity;
   transition: opacity 500ms ease-in-out;
 }
-
 .overview-container > .overview-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -104,12 +94,10 @@ movie-card.adult .movie-item-line.poster img.adult:hover {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 /* show overview when hovering on hover */
 .movie-item:hover .overview-container {
   opacity: 1;
 }
-
 /* do not show overview if its text is empty*/
 .movie-item:hover .overview-container:has(.overview-text:empty) {
   opacity: 0;

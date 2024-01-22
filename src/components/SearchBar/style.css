@@ -36,3 +36,8 @@ search-bar {
     transform: translateX(-0.85em);
     cursor: pointer;
 }
+
+.search-bar select {
+    transform: translateX(-0.85em);
+    text-align: end;
+}

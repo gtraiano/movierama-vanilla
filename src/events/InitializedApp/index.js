@@ -1,7 +1,7 @@
 export const eventName = 'initializedApp'
 
 export const dispatchInitializedApp = () => {
-    document.body.dispatchEvent(new Event('initializedApp'))
+    document.dispatchEvent(new Event('initializedApp'))
 }
 
 export default {

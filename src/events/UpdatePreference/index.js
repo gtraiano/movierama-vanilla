@@ -1,7 +1,7 @@
 export const eventName = 'update';
 
 export const dispatchUpdatePreference = name => {
-    document.body.dispatchEvent(new CustomEvent(
+    document.dispatchEvent(new CustomEvent(
         eventName,
         {
             bubbles: true,
