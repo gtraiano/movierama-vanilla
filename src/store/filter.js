@@ -75,9 +75,10 @@ const tags = {
         use: false,
         inBrowseModes: [],
         inSearchTypes: [searchTypes.PERSON],
-        updateLabels: results => {
+        updateLabels: function(results) {
             //if(!results) return
-            const knownFor = [...new Set(results.map(p => p.known_for_department))].filter(kf => kf.trim().length).sort()
+            this.boxes.clear()
+            const knownFor = [...new Set(results.map(p => p.known_for_department))].filter(kf => kf?.trim().length).sort()
             knownFor.forEach(kf => {
                 store.filterTags.helpers.appendToTag({
                     name: tags.knownFor.name,
