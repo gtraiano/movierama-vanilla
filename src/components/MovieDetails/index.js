@@ -96,7 +96,7 @@ class MovieDetails extends HTMLElement {
     generateSimilar(similar) {
         return `
             <section class="movies-similar">
-                <h2>Similar movies</h2>
+                <h2>Similar Movies</h2>
                 <ul>
                     ${
                         similar?.results.map((s, i) => (
@@ -128,19 +128,14 @@ class MovieDetails extends HTMLElement {
         return `
             <section class="movie-reviews-container">
                 <h2>Reviews</h2>
-                ${
-                    reviews?.results.length
-                    ?
-                        reviews?.results
-                            ?.slice(0, 2)
-                            .map((r, i) => (
-                                `<blockquote class="movie-review">
-                                    ${sanitize(r.content)}
-                                </blockquote>
-                                <span>by <em>${r.author}</em></span>`
-                            )).join('\n')
-                    :  
-                        `<span>No reviews listed</span>`
+                ${reviews?.results
+                    ?.slice(0, 2)
+                    .map((r, i) => (
+                        `<blockquote class="movie-review">
+                            ${sanitize(r.content)}
+                        </blockquote>
+                        <span>by <em>${r.author}</em></span>`
+                    )).join('\n')
                 }
             </section>
         `

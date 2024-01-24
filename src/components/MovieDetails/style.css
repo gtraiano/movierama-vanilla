@@ -57,12 +57,24 @@ movie-details {
     margin-right: auto;
 }
 
+.movie-reviews-container:not(:has(.movie-review))::after {
+    content: 'no reviews listed';
+    font-style: italic;
+    text-transform: capitalize;
+}
+
 .movie-overview {
     text-align: justify;
     color: black;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.movie-overview > div:empty::before {
+	content: 'no overview listed';
+	font-style: italic;
+    text-transform: capitalize;
 }
 
 .movie-review {
@@ -100,6 +112,12 @@ movie-details {
     list-style: none;
     padding: 0;
     line-height: 1.5;
+}
+
+.movies-similar:not(:has(ul > li))::after {
+    content: 'no similar movies listed';
+    font-style: italic;
+    text-transform: capitalize;
 }
 
 .movies-similar-entry {

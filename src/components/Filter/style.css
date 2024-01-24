@@ -27,8 +27,14 @@ html[theme="light"] filter-tab > * > * {
     border-radius: 4px;
 }
 
-.filter-button.active {
+/* if any filter is active */
+filter-tab:has(.filter-tab input:checked) .filter-button,
+filter-tab:has(.filter-tab input[type=text]:not(:placeholder-shown)) .filter-button {
     box-shadow: 0px 0px 6px 3px;
+}
+
+filter-tab:has(.filter-tab input[type=text]:invalid) .filter-button {
+    box-shadow: none;
 }
 
 .filter-tab {

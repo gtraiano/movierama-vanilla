@@ -49,19 +49,19 @@ class MovieCard extends HTMLElement {
                         title="Click for movie details"
                     />
                 </div>
-                <div class="movie-item-line">
+                <div class="movie-item-line" role="movie-title">
                     <label>Title</label>
                     <span>${movie.title}${movie.original_language !== 'en' ? ' ('+movie.original_title+')' : ''}</span>
                 </div>
-                <div class="movie-item-line">
+                <div class="movie-item-line" role="movie-release-date">
                     <label>Released</label>
                     <span>${movie.release_date ?? ''}</span>
                 </div>
-                <div class="movie-item-line">
+                <div class="movie-item-line" role="movie-genres">
                     <label>Genres</label>
-                    <span>${this.generateGenres(movie.genre_ids ?? movie.genres.map(g => g.id))}</span>
+                    <span>${this.generateGenres(movie.genre_ids ?? movie.genres.map(g => g.id))}${movie.adult && movie.genre_ids.length >= 1 ? ', ' : ''}${movie.adult ? store.genres.lookup(0) : ''}</span>
                 </div>
-                <div class="movie-item-line">
+                <div class="movie-item-line" role="movie-rating">
                     <label>Vote average</label>
                     <span>${movie.vote_average}</span>
                 </div>

@@ -30,6 +30,7 @@ class Filter extends HTMLElement {
         // create tag container
         const fe = document.createElement('div')
         fe.classList.add('filter-element')
+        fe.id = `filter-${tag.name.replaceAll(/\s/g, '-')}`
         !tag.use && fe.setAttribute('hidden', '')
         
         if(tag.type === 'input') {            
@@ -38,10 +39,11 @@ class Filter extends HTMLElement {
             fe.append(lbl);
             
             const inp = document.createElement('input')
-            inp.oninput = dispatchFilterTag(tag.name)
+            inp.type = 'text'
+            inp.placeholder = ''
+            inp.pattern = '(\\w+\\s*)+'
             inp.addEventListener('input', e => {
                 dispatchFilterTag({ name: tag.name, value: e.target.value });
-                this.querySelector('.filter-button').classList[this.#isActive() ? 'add' : 'remove']('active')
             });
             fe.append(inp)
         }
@@ -56,19 +58,23 @@ class Filter extends HTMLElement {
             cnt.classList.add(tag.type)
             
             // create checkboxes with labels
-            tag.boxes.forEach(box => {
+            Array.from(tag.boxes.keys()).sort().forEach(tagLabel => {
                 const b = document.createElement('div')
                 
                 const l = document.createElement('label')
-                l.textContent = box.label
-                l.htmlFor = box.label
+                //l.textContent = box.label
+                //l.htmlFor = box.label
+                l.textContent = tagLabel
+                l.htmlFor = tagLabel
                 
                 const cb = document.createElement('input')
                 cb.type = 'checkbox'
-                cb.id = box.label
+                //cb.id = box.label
+                cb.id = tagLabel
                 cb.addEventListener('change', e => {
-                    dispatchFilterTag({ name: tag.name, label: box.label, value: e.target.checked })
-                    this.querySelector('.filter-button').classList[this.#isActive() ? 'add' : 'remove']('active')
+                    //dispatchFilterTag({ name: tag.name, label: box.label, value: e.target.checked })
+                    dispatchFilterTag({ name: tag.name, label: tagLabel, value: e.target.checked })
+                    //this.querySelector('.filter-button').classList[this.#isActive() ? 'add' : 'remove']('active')
                 })
 
                 b.append(cb)
@@ -86,24 +92,25 @@ class Filter extends HTMLElement {
     }
 
     insertTag = tag => {
+        if(!tag || !tag.name?.trim().length) return
         // to avoid duplicates
-        if([...this.querySelectorAll('.filter-element > label')].findIndex(l => l.textContent === tag.name) !== -1) {
-            console.warn(`insertTag: Tag name ${tag.name} already exists`)
-            return
-        }
         const t = this.createTag(tag)
-        this.getElementsByClassName('filter-tab')[0].append(t)
+        // replace existing
+        if(this.querySelector(`.filter-element#filter-${tag.name.replaceAll(/\s/g, '-')}`)) {
+            this.querySelector(`.filter-element#filter-${tag.name.replaceAll(/\s/g, '-')}`).replaceWith(t)
+        }
+        // append new
+        else this.getElementsByClassName('filter-tab')[0].append(t)
     }
 
     insertTags = (tags) => {
         tags.forEach(tag => {
             this.insertTag(tag)
         })
-        this.querySelector('.filter-button').classList[this.#isActive() ? 'add' : 'remove']('active')
     }
 
     appendToTag = (tag, label) => {
-        console.info('appendToTag', tag, label)
+        if(!tag || !label?.trim().length) return
         const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag).parentElement
 
         if(!target) {
@@ -141,7 +148,7 @@ class Filter extends HTMLElement {
     clearTag = tag => {
         const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag).parentElement
         if(!target) {
-            console.log(`clearTag: Tag ${tag} does not exist`)
+            console.warn(`clearTag: Tag ${tag} does not exist`)
             return
         }
 
