@@ -1,4 +1,4 @@
-import appModes, { appModesTitles, searchTypes } from "../constants/AppModes"
+import appModes, { appModesTitles, searchTypes } from "../constants"
 import movieDBAPI from "../controllers/MovieDB"
 import { dispatchInfiniteScroll } from "../events/InfiniteScroll"
 import store from "../store"

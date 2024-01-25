@@ -1,5 +1,5 @@
 import './style.css'
-import { appModesTitles, browseModes } from "../../constants/AppModes"
+import { appModesTitles, browseModes } from "../../constants"
 import { dispatchModeUpdate } from '../../events/ModeUpdate'
 import store from '../../store'
 import { stringTemplateToFragment } from '../util'

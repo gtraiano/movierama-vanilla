@@ -2,7 +2,7 @@ import './style.css'
 import { dispatchSearchQuery } from '../../events/Search/SearchQuery/index.js'
 import { dispatchEndSearchQuery } from '../../events/Search/EndSearchQuery'
 import store from '../../store'
-import { searchTypes } from '../../constants/AppModes.js'
+import { searchTypes } from '../../constants'
 import { dispatchSearchTypeChange } from '../../events/Search/ChangeSearchType/index.js'
 import { stringTemplateToFragment } from '../util.js'
 

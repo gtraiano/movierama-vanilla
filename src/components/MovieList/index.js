@@ -1,4 +1,4 @@
-import appModes, { browseModes } from '../../constants/AppModes'
+import appModes, { browseModes } from '../../constants'
 import store from '../../store'
 import './style.css'
 

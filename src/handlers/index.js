@@ -2,7 +2,7 @@ import { dispatchModeUpdate } from "../events/ModeUpdate";
 import { dispatchInitializedApp } from "../events/InitializedApp";
 
 import movieDBAPI from "../controllers/MovieDB";
-import appModes, { AdultGenre, browseModes, searchTypes } from "../constants/AppModes";
+import appModes, { AdultGenre, browseModes, searchTypes } from "../constants";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
 import { fetchNextPageFromAPI, setAppMainTitle } from "./util";
@@ -48,13 +48,14 @@ export const initializeApp = async () => {
         store[store.mode] = await movieDBAPI[store.mode === appModes.NOW_PLAYING ? 'fetchNowPlaying' : 'fetchUpcoming']({
             page: 1
         })
+        document.getElementsByTagName('alert-box')[0].loading(false)
         dispatchInitializedApp()
     }
     catch(error) {
         document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
     }
     finally {
-        document.getElementsByTagName('alert-box')[0].loading(false)
+        //document.getElementsByTagName('alert-box')[0].loading(false)
     }
 }
 
@@ -96,6 +97,7 @@ export const onInfiniteScroll = async () => {
             // append new page items to movie list
             document.getElementsByTagName('movie-list')[0].appendItems(nextPage)
         }
+        document.getElementsByTagName('alert-box')[0].loading(false)
         // update filter tags 
         store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
         
@@ -110,7 +112,6 @@ export const onInfiniteScroll = async () => {
     }
     finally {
         infiniteScrollController.isFetching = false
-        document.getElementsByTagName('alert-box')[0].loading(false)
     }
 }
 
@@ -184,10 +185,11 @@ export const onSearchQuery = async e => {
             query: store.searchQuery.query,
             signal: searchController.abortController.signal
         })
-
         // render search results in movie list
         document.getElementsByTagName('movie-list')[0].clear()
         document.getElementsByTagName('movie-list')[0].appendItems(store.search)
+        // hide alert box after cards have been rendered
+        document.getElementsByTagName('alert-box')[0].show(false)
         window.scrollTo(0,0)
         // update filter tags
         store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
@@ -199,8 +201,7 @@ export const onSearchQuery = async e => {
     }
     finally {
         searchController.isFetching = false
-        // hide alert box after cards have been rendered
-        document.getElementsByTagName('alert-box')[0].show(false)
+        
     }
 }
 

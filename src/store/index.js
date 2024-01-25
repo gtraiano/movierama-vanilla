@@ -1,4 +1,4 @@
-import appModes, { searchTypes } from "../constants/AppModes"
+import appModes, { searchTypes } from "../constants"
 import { preferences } from "./preferences";
 import { configuration } from "./configuration";
 import { genres } from "./genres";

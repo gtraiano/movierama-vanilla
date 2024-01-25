@@ -1,5 +1,5 @@
 import store from "."
-import appModes, { AdultGenre, browseModes, searchTypes } from "../constants/AppModes"
+import appModes, { AdultGenre, browseModes, searchTypes } from "../constants"
 
 export const TagTypes = {
     TEXT: 'text',
