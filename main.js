@@ -43,25 +43,29 @@ import './src/components/PreferencesMenu'
 import './src/components/Filter'
 import './src/components/BrowseMode'
 import './src/components/PersonCard'
+import { stringTemplateToFragment } from './src/components/util'
+
+const template =
+`
+<top-bar>
+    <div>
+        <browse-mode></browse-mode>
+        <div><search-bar></search-bar></div>
+        <preferences-menu></preferences-menu>
+    </div>
+    <span class="tmdb-attribution">
+        <a href="https://developer.themoviedb.org" referrerpolicy="no-referrer" target="_blank"><img src="https://files.readme.io/29c6fee-blue_short.svg"></a>
+    </span>
+</top-bar>
+<filter-tab></filter-tab>
+<h1 class="main-title"></h1>
+<movie-list></movie-list>
+<over-lay></over-lay>
+<alert-box></alert-box>
+`
 
 // app html template
-document.querySelector('#app').innerHTML = `
-    <top-bar>
-        <div>
-            <browse-mode></browse-mode>
-            <div><search-bar></search-bar></div>
-            <preferences-menu></preferences-menu>
-        </div>
-        <span class="tmdb-attribution">
-            <a href="https://developer.themoviedb.org" referrerpolicy="no-referrer" target="_blank"><img src="https://files.readme.io/29c6fee-blue_short.svg"></a>
-        </span>
-    </top-bar>
-    <filter-tab></filter-tab>
-    <h1 class="main-title"></h1>
-    <movie-list></movie-list>
-    <over-lay></over-lay>
-    <alert-box></alert-box>
-`
+document.querySelector('#app').append(stringTemplateToFragment(template))
 
 // initalize application
 window.addEventListener('load', initializeApp)

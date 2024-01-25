@@ -1,5 +1,7 @@
 import './style.css';
 import { dispatchFilterTag } from '../../events/FilterTag';
+import { stringTemplateToFragment } from '../util';
+import { TagTypes } from '../../store/filter';
 
 const template =
 `
@@ -8,13 +10,16 @@ const template =
     <div class="filter-tab"></div>
 </div>
 `
+
 class Filter extends HTMLElement {
     constructor() {
         super()
     }
 
     connectedCallback() {
-        this.innerHTML = template
+        //this.innerHTML = template
+        Array.from(this.children).forEach(c => c.remove())
+        this.append(stringTemplateToFragment(template))
         this.getElementsByClassName('filter-button')[0].addEventListener('click', () => {
             const tab = this.getElementsByClassName('filter-tab')[0]
             if(!tab.hasAttribute('visible')) tab.setAttribute('visible', '')
@@ -33,7 +38,7 @@ class Filter extends HTMLElement {
         fe.id = `filter-${tag.name.replaceAll(/\s/g, '-')}`
         !tag.use && fe.setAttribute('hidden', '')
         
-        if(tag.type === 'input') {            
+        if(tag.type === TagTypes.TEXT) {            
             const lbl = document.createElement('label')
             lbl.textContent = tag.name
             fe.append(lbl);
@@ -47,7 +52,7 @@ class Filter extends HTMLElement {
             });
             fe.append(inp)
         }
-        else if(tag.type === 'checkbox-container') {
+        else if(tag.type === TagTypes.CHECKBOXES) {
             // create label
             const lbl = document.createElement('label')
             lbl.textContent = tag.name

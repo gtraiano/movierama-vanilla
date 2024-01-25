@@ -4,17 +4,14 @@ import { dispatchEndSearchQuery } from '../../events/Search/EndSearchQuery'
 import store from '../../store'
 import { searchTypes } from '../../constants/AppModes.js'
 import { dispatchSearchTypeChange } from '../../events/Search/ChangeSearchType/index.js'
+import { stringTemplateToFragment } from '../util.js'
 
 const template = `
-    <div class="search-bar">
-        <input autoComplete="true" placeholder="search for movie"></input>
-        <span class="clear">&times</span>
-        <select></select>
-        <!--div class="controls">
-            <span class="clear">&times</span>
-            <select></select>
-        </div-->
-    </div>
+<div class="search-bar">
+    <input autoComplete="true"></input>
+    <span class="clear">&times</span>
+    <select></select>
+</div>
 `
 
 class SearchBar extends HTMLElement {
@@ -23,11 +20,14 @@ class SearchBar extends HTMLElement {
     }
 
     render() {
-        this.innerHTML = template
+        Array.from(this.children).forEach(c => c.remove())
+        this.append(stringTemplateToFragment(template))
         // references to elements
         this.input = this.querySelector('input')
         this.clearButton = this.querySelector('.clear')
         const select = this.querySelector('select')
+        
+        this.setAttribute('search-type', store.searchQuery.type)
         // populate options
         Object.values(searchTypes).forEach(st => {
             const option = document.createElement('option')
@@ -57,6 +57,7 @@ class SearchBar extends HTMLElement {
 
     updateSearchType = (e) => {
         dispatchSearchTypeChange(e.currentTarget.value)
+        this.setAttribute('search-type', e.currentTarget.value)
     }
 
     // connect component
@@ -67,6 +68,16 @@ class SearchBar extends HTMLElement {
     disconnectedCallback() {
         this.input.removeEventListener('keyup', this.sendQuery)
         this.clearButton.removeEventListener('click', this.hideResults)
+    }
+
+    static get observedAttributes() {
+        return ['search-type']
+    }
+  
+    attributeChangedCallback(name, oldValue, newValue) {
+        if(name === 'search-type') {
+            this.querySelector('input').placeholder = newValue?.length ? `search for ${newValue}` : 'search'
+        }
     }
 }
 

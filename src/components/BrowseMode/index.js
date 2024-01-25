@@ -2,6 +2,13 @@ import './style.css'
 import { appModesTitles, browseModes } from "../../constants/AppModes"
 import { dispatchModeUpdate } from '../../events/ModeUpdate'
 import store from '../../store'
+import { stringTemplateToFragment } from '../util'
+
+const template =`
+<nav class="browse-mode">
+    <ul>${browseModes.map(m => `<li><a href="" app-mode="${m}">${appModesTitles[m]}</a></li>`).join('\n')}</ul>
+</nav>
+`
 
 class BrowseMode extends HTMLElement {
     constructor() {
@@ -9,10 +16,8 @@ class BrowseMode extends HTMLElement {
     }
 
     connectedCallback() {
-        this.innerHTML = `
-            <nav class="browse-mode">
-                <ul>${browseModes.map(m => `<li><a href="" app-mode="${m}">${appModesTitles[m]}</a></li>`).join('\n')}</ul>
-            </nav>`
+        Array.from(this.children).forEach(c => c.remove())
+        this.append(stringTemplateToFragment(template))
         this.setAttribute('active-link', store.mode)
         this.querySelectorAll('.browse-mode > ul > li > a').forEach(a => {
             a.addEventListener('click', e => {

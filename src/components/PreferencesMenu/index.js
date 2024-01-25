@@ -2,6 +2,7 @@ import './DropDown'
 import store from '../../store'
 import { PREFERENCES } from '../../store/preferences'
 import './style.css'
+import { stringTemplateToFragment } from '../util'
 
 const template = `
 <div>
@@ -43,7 +44,8 @@ class PreferencesMenu extends HTMLElement {
     }
 
     connectedCallback() {
-        this.innerHTML = template
+        Array.from(this.children).forEach(c => c.remove())
+        this.append(stringTemplateToFragment(template))
         this.getElementsByTagName('button')[0].addEventListener('click', this.#openDropDown)
         this.querySelector('#incl_adult').addEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
         this.querySelector('#prev_adult_poster').addEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))

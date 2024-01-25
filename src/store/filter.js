@@ -1,14 +1,19 @@
 import store from "."
-import appModes, { browseModes, searchTypes } from "../constants/AppModes"
+import appModes, { AdultGenre, browseModes, searchTypes } from "../constants/AppModes"
 
-const tags = {
+export const TagTypes = {
+    TEXT: 'text',
+    CHECKBOXES: 'checkbox-container'
+}
+
+export const tags = {
     title: {
         name: 'title',                              // tag name
-        type: 'input',                              // tag type 'input'|'checkbox-container'
+        type: TagTypes.TEXT,                        // tag type 'input'|'checkbox-container'
         value: '',                                  // input text value (only for type 'input')
-        use: true,                                  // is in use
-        inBrowseModes: browseModes,                 // used in app browse modes
-        inSearchTypes: [searchTypes.MOVIE],         // used in app search types
+        use: true,                                  // use in approved app browse modes/search types
+        inBrowseModes: browseModes,                 // approved app browse modes
+        inSearchTypes: [searchTypes.MOVIE],         // approved app search types
         applyFilter: function() {                   // apply filter on UI
             const re = new RegExp(this.value, 'i')
             document.querySelectorAll('movie-list .in-theaters movie-card').forEach(card => {
@@ -20,7 +25,7 @@ const tags = {
 
     genre: {
         name: 'genre',
-        type: 'checkbox-container',
+        type: TagTypes.CHECKBOXES,
         boxes: new Map(),                           // checkboxes (label, truth) pair values
         use: true,
         inBrowseModes: browseModes,
@@ -35,11 +40,15 @@ const tags = {
         },
         updateLabels: function(results) {           // generate labels from results as received from API
             if(!results) return
+            this.boxes.clear()
             const genres = [...new Set(results.map(r => r.genre_ids).reduce((g, cg) => {
                 cg.forEach(v => { g.push(store.genres.lookup(v)) })
                 return g
-            }, []))].sort()
-            
+            }, []))]
+            if(results.map(m => m.adult).some(Boolean)) {
+                genres.push(AdultGenre.name)
+            }
+            genres.sort()
             genres.forEach(g => {
                 store.filterTags.helpers.appendToTag({
                     name: tags.genre.name,
@@ -47,14 +56,13 @@ const tags = {
                     value: false
                 })  
             })
-            
             document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
         }
     },
 
     name: {
         name: 'name',
-        type: 'input',
+        type: TagTypes.TEXT,
         value: '',
         use: false,
         inBrowseModes: [],
@@ -70,13 +78,13 @@ const tags = {
 
     knownFor: {
         name: 'known for',
-        type: 'checkbox-container',
+        type: TagTypes.CHECKBOXES,
         boxes: new Map(),
         use: false,
         inBrowseModes: [],
         inSearchTypes: [searchTypes.PERSON],
         updateLabels: function(results) {
-            //if(!results) return
+            if(!results) return
             this.boxes.clear()
             const knownFor = [...new Set(results.map(p => p.known_for_department))].filter(kf => kf?.trim().length).sort()
             knownFor.forEach(kf => {
@@ -102,22 +110,22 @@ const tags = {
 export const filterTags = {
     tags: Object.values(tags),
     helpers: {
-        isActive: () => filterTags.tags.some(t => t.type === 'input' ? t.value.length : Array.from(t.boxes.values()).some(b => b)),
+        isActive: () => filterTags.tags.some(t => t.type === TagTypes.TEXT ? t.value.length : Array.from(t.boxes.values()).some(b => b)),
         
         getTag: (name) => filterTags.tags.find(t => t.name === name),
 
         getTagEntries: name => {
             const tag = filterTags.tags.find(t => t.name === name)
             if(!tag) return []
-            if(tag.type === 'input') return tag.value
-            else if(tag.type === 'checkbox-container') return Array.from(tag.boxes.entries()).sort()
+            if(tag.type === TagTypes.TEXT) return tag.value
+            else if(tag.type === TagTypes.CHECKBOXES) return Array.from(tag.boxes.entries()).sort()
         },
         
         setTag: (tag) => {
             const target = filterTags.helpers.getTag(tag.name)
             if(!target) return console.warn(`Tag ${tag.name} does not exist`)
-            if(target.type === 'input') target.value = tag.value.trim()
-            else if(target.type === 'checkbox-container') {
+            if(target.type === TagTypes.TEXT) target.value = tag.value.trim()
+            else if(target.type === TagTypes.CHECKBOXES) {
                 if(!target.boxes.has(tag.label)) return console.warn(`Checkbox ${tag.label} does not exist`)
                 target.boxes.set(tag.label, tag.value)
             }
@@ -129,15 +137,15 @@ export const filterTags = {
                 console.warn(`Tag ${tag.name} does not exist`)
                 return
             }
-            if(target.type === 'checkbox-container') {
+            if(target.type === TagTypes.CHECKBOXES) {
                target.boxes.set(tag.label, tag.value ?? false)
             }
         },
 
         clearTag: name => {
             const target = store.filterTags.helpers.getTag(name)
-            if(target.type === 'input') target.value = ''
-            else if(target.type === 'checkbox-container') target.boxes.clear()
+            if(target.type === TagTypes.TEXT) target.value = ''
+            else if(target.type === TagTypes.CHECKBOXES) target.boxes.clear()
         },
 
         onModeUpdate: ({ mode, type, results }) => {
@@ -147,7 +155,7 @@ export const filterTags = {
                 document.getElementsByTagName('filter-tab')[0].clearTag(tags.title.name)
                 // init fresh tags
                 document.querySelector('filter-tab').toggleTag(t.name, t.use)
-                t.use && t.type === 'checkbox-container' && t.updateLabels(results)
+                t.use && t.type === TagTypes.CHECKBOXES && t.updateLabels(results)
             }
         }
     }

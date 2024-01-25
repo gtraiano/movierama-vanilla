@@ -1,6 +1,7 @@
 import './style.css'
 import store from '../../store'
 import { dispatchRequestMovieDetails } from '../../events/RequestMovieDetails'
+import { stringTemplateToFragment } from '../util'
 
 class MovieCard extends HTMLElement {
     constructor() {
@@ -30,7 +31,8 @@ class MovieCard extends HTMLElement {
     }
 
     render = (movie) => {
-        this.innerHTML = this.generateTemplate(movie)
+        Array.from(this.children).forEach(c => c.remove())
+        this.append(stringTemplateToFragment(this.generateTemplate(movie)))
         movie.adult && this.classList.add('adult')
         this.setAttribute('movie-id', movie.id)
         this.querySelector('div.poster').addEventListener('click', this.requestMovieDetails)

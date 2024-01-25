@@ -2,10 +2,11 @@ import { dispatchModeUpdate } from "../events/ModeUpdate";
 import { dispatchInitializedApp } from "../events/InitializedApp";
 
 import movieDBAPI from "../controllers/MovieDB";
-import appModes, { browseModes, searchTypes } from "../constants/AppModes";
+import appModes, { AdultGenre, browseModes, searchTypes } from "../constants/AppModes";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
 import { fetchNextPageFromAPI, setAppMainTitle } from "./util";
+import { tags } from "../store/filter";
 
 export { scrolledToBottom, setAppMainTitle } from './util'
 
@@ -39,20 +40,21 @@ export const initializeApp = async () => {
         // fetch supported content languages
         Object.assign(store.configuration.languages, (await movieDBAPI.fetchLanguages()).filter(l => l.iso_639_1 !== 'xx'))
         // fetch movie genres
-        //store.genres.table = await movieDBAPI.fetchGenres()
         store.genres.setGenres(await movieDBAPI.fetchGenres())
-        store.genres.addGenre({ id: 0, name: 'Adult' })
+        store.genres.addGenre(AdultGenre)
         
         // fetch 1st page of in theaters
         document.getElementsByTagName('alert-box')[0].loading(true)
         store[store.mode] = await movieDBAPI[store.mode === appModes.NOW_PLAYING ? 'fetchNowPlaying' : 'fetchUpcoming']({
             page: 1
         })
-        document.getElementsByTagName('alert-box')[0].loading(false)
         dispatchInitializedApp()
     }
     catch(error) {
         document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
+    }
+    finally {
+        document.getElementsByTagName('alert-box')[0].loading(false)
     }
 }
 
@@ -64,8 +66,7 @@ export const onInitializedApp = () => {
     // render now playing first page
     document.getElementsByTagName('movie-list')[0].appendItems(store[store.mode])
     // add genre tags to store filter tags and update filter-tab checkboxes
-    store.filterTags.helpers.getTag('genre').updateLabels(store[store.mode].results)
-    //document.getElementsByTagName('filter-tab')[0].insertTags(store.filterTags.tags)
+    store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
 }
 
 export const onInfiniteScroll = async () => {
@@ -95,8 +96,7 @@ export const onInfiniteScroll = async () => {
             // append new page items to movie list
             document.getElementsByTagName('movie-list')[0].appendItems(nextPage)
         }
-        document.getElementsByTagName('alert-box')[0].loading(false)
-
+        // update filter tags 
         store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
         
     }
@@ -104,9 +104,13 @@ export const onInfiniteScroll = async () => {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
             document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
         }
+        else {
+            console.log(error)
+        }
     }
     finally {
         infiniteScrollController.isFetching = false
+        document.getElementsByTagName('alert-box')[0].loading(false)
     }
 }
 
@@ -122,10 +126,6 @@ export const onModeUpdate = async (e) => {
     setAppMainTitle()
     window.scrollTo(0, 0)
 
-    // clear filter-tab tags and title
-    /*store.filterTags.helpers.getTag('genre').boxes.clear()
-    store.filterTags.helpers.getTag('title').value = ''
-    document.getElementsByTagName('filter-tab')[0].clearTag('title')*/
     // restore app mode tags (other than search)
     if(browseModes.includes(store.mode)) {
         // fetch results from API if we have none in store
@@ -142,7 +142,9 @@ export const onModeUpdate = async (e) => {
             document.getElementsByTagName('alert-box')[0].loading(false)
         }
     }
+    // render cards
     document.querySelector('movie-list').appendItems(store[store.mode])
+    // update filter tags
     store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
 }
 
@@ -187,9 +189,7 @@ export const onSearchQuery = async e => {
         document.getElementsByTagName('movie-list')[0].clear()
         document.getElementsByTagName('movie-list')[0].appendItems(store.search)
         window.scrollTo(0,0)
-        // hide alert box after cards have been rendered
-        document.getElementsByTagName('alert-box')[0].show(false)
-
+        // update filter tags
         store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
     }
     catch(error) {
@@ -199,6 +199,8 @@ export const onSearchQuery = async e => {
     }
     finally {
         searchController.isFetching = false
+        // hide alert box after cards have been rendered
+        document.getElementsByTagName('alert-box')[0].show(false)
     }
 }
 
@@ -303,8 +305,7 @@ export const onUpdatePreference = async (e) => {
             mc.render(content)
         })
         // remove genre labels from store filter and insert fresh ones
-        store.filterTags.helpers.clearTag('genre')
-        store.filterTags.helpers.getTag('genre').updateLabels(store[store.mode].results)
+        store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
         // hide alert
         document.getElementsByTagName('alert-box')[0].show(false)
     }

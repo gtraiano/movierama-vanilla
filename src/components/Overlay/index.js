@@ -2,11 +2,12 @@ import './style.css'
 import { dispatchCloseOverlay } from "../../events/Overlay/CloseOverlay"
 import { dispatchOpenOverlay } from '../../events/Overlay/OpenOverlay'
 import "../Spinner/index"
+import { stringTemplateToFragment } from '../util'
 
 const template = `
-    <div tabindex="1" class="overlay">
-        <span class="close-button">&times</span>
-    </div>
+<div tabindex="1" class="overlay">
+    <span class="close-button">&times</span>
+</div>
 `
 
 class Overlay extends HTMLElement {
@@ -54,7 +55,7 @@ class Overlay extends HTMLElement {
     }
 
     render() {
-        this.innerHTML = template
+        this.append(stringTemplateToFragment(template))
         // close button listener
         this.children[0].children[0].addEventListener('click', this.closeOverlay)
         // close on ESC key press

@@ -1,0 +1,1 @@
+export const stringTemplateToFragment = template => new Range().createContextualFragment(template)

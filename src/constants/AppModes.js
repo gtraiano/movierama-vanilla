@@ -21,4 +21,9 @@ export const searchTypes = {
     PERSON: 'person'
 }
 
+export const AdultGenre = {
+    id: 0,
+    name: 'Adult'
+}
+
 export default appModes
