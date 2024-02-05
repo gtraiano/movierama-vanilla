@@ -4,7 +4,7 @@ import { dispatchEndSearchQuery } from '../../events/Search/EndSearchQuery'
 import store from '../../store'
 import { searchTypes } from '../../constants'
 import { dispatchSearchTypeChange } from '../../events/Search/ChangeSearchType/index.js'
-import { stringTemplateToFragment } from '../util.js'
+import { stringTemplateToFragment, debounce } from '../util.js'
 
 const template = `
 <div class="search-bar">
@@ -15,6 +15,9 @@ const template = `
 `
 
 class SearchBar extends HTMLElement {
+    // send search request debounce
+    doneTypingDelay = 1000;
+    
     constructor() {
         super()
     }
@@ -44,11 +47,11 @@ class SearchBar extends HTMLElement {
         select.addEventListener('change', this.updateSearchType)
     }
 
-    sendQuery = () => {
-        // do not send empty query
-        if(!this.input.value.length) return
-        dispatchSearchQuery({ query: this.input.value.trim(), type: store.searchQuery.type })
-    }
+    sendQuery = debounce(() => {
+        const query = this.input.value?.trim()
+        if(!query?.length) return
+        dispatchSearchQuery({ query, type: store.searchQuery.type })
+    }, this.doneTypingDelay)
 
     hideResults = () => {
         this.input.value = ''

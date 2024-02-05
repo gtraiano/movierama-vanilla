@@ -21,6 +21,13 @@ movie-list {
     transition-timing-function: ease-in-out;
 }
 
+.in-theaters:not(:has(> *))::after {
+	content: 'Nothing to show';
+	font-size: xx-large;
+	grid-column: 1 / -1;
+	margin-top: 35vh;
+}
+
 @media only screen and (max-width: 599px) {
     .in-theaters {
         grid-template-columns: repeat(1, 1fr);

@@ -1,10 +1,11 @@
-import appModes, { browseModes } from '../../constants'
+import appModes from '../../constants'
 import store from '../../store'
+import { stringTemplateToFragment } from '../util'
 import './style.css'
 
 const template = `
-    <div class="in-theaters">
-    </div>
+<div class="in-theaters">
+</div>
 `
 
 export class MovieList extends HTMLElement {
@@ -13,7 +14,7 @@ export class MovieList extends HTMLElement {
     }
 
     render() {
-        this.innerHTML = template
+        this.append(stringTemplateToFragment(template))
     }
 
     connectedCallback() {
