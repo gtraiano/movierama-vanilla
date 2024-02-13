@@ -77,7 +77,7 @@ export const tags = {
     },
 
     knownFor: {
-        name: 'known for',
+        name: 'department',
         type: TagTypes.CHECKBOXES,
         boxes: new Map(),
         use: false,
