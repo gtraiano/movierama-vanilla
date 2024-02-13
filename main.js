@@ -34,7 +34,7 @@ import {
 // custom elements
 import './src/components/SearchBar/'
 import './src/components/Overlay'
-import './src/components/MovieList'
+import './src/components/ItemGrid'
 import './src/components/MovieCard'
 import './src/components/MovieDetails'
 import './src/components/AlertBox'
@@ -59,7 +59,7 @@ const template =
 </top-bar>
 <filter-tab></filter-tab>
 <h1 class="main-title"></h1>
-<movie-list></movie-list>
+<item-grid></item-grid>
 <over-lay></over-lay>
 <alert-box></alert-box>
 `

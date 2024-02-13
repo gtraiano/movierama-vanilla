@@ -46,4 +46,4 @@ export class MovieList extends HTMLElement {
     }
 }
 
-customElements.define('movie-list', MovieList)
+customElements.define('item-grid', MovieList)

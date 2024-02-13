@@ -59,7 +59,7 @@ It is used both in _"search for movie"_ and _"in theaters"_ user flows.
 
 When the user clicks on the movie poster, the application shows the movie details in an overlay. The component dispatches a custom event to the main app to initiate all required actions for the _"view movie details"_ user flow.
 
-### **`<movie-list>`**
+### **`<item-grid>`**
 This component presents `<movie-card>`s' in a grid and is used in _"search for movie"_, _"in theaters"_ and _"select different movie lists"_ user flows.
 
 ### **`<over-lay>`**
@@ -125,7 +125,7 @@ The following table presents the store schema
 ||||`backdropBasewidth`|backdrop base width (in pixels) used in calculating ratios|
 ||||`generateBackdropUrls(fname, mode, includeOriginal)`|generates `image-set` urls for given `fname`<br>`mode` = 'x' \| 'w' determines whether urls will contain image width to `backdropBaseSize` ratio (e.g. 1.5x) or image width (e.g. 720w) suffix|
 |**`genres`**||||movie genres|
-||`table`|||movie genres lookup [table](https://developers.themoviedb.org/3/genres/get-movie-list)|
+||`table`|||movie genres lookup [table](https://developers.themoviedb.org/3/genres/get-item-grid)|
 ||`lookup(id)`|||movie genres lookup function|
 |**`nowPlaying`**||||in theaters [results](https://developers.themoviedb.org/3/movies/get-now-playing)|
 |**`query`**||||search query text|
@@ -144,8 +144,8 @@ The following table presents the store schema
 |Event Name|Description|Use in Application|
 |-|-|-|
 |`initializedApp`|signals application initialization is complete|*MDB API* configuration and genre data have been fetched|
-|`infinitescroll`|signals an infinite scroll event|fetch next page of movie data and render it as `movie-cards` in the `movie-list`|
-|`modeupdate`|signals application has switched user mode flow|<ul style="padding-left:4%; list-style-type:decimal"><li>determine which movie dataset (_in theaters_ or _search_) to render in `movie-list`</li><li>determine which movie dataset to update on `infinitescroll` event</li></ul>|
+|`infinitescroll`|signals an infinite scroll event|fetch next page of movie data and render it as `movie-cards` in the `item-grid`|
+|`modeupdate`|signals application has switched user mode flow|<ul style="padding-left:4%; list-style-type:decimal"><li>determine which movie dataset (_in theaters_ or _search_) to render in `item-grid`</li><li>determine which movie dataset to update on `infinitescroll` event</li></ul>|
 |`searchquery`|signals a search query has been initiated|receive query text and perform necessary *MDB API* requests for _"search for movie"_ user flow|
 |`endsearchquery`|signals a search query has ended/must end|switch app mode to _"in theaters"_|
 |`requestmoviedetails`|signals a request for movie details|<ul style="padding-left:4%; list-style-type:decimal"><li>receive movie id and perform necessary *MDB API* requests for _"view movie details"_ user flow</li><li>render a `movie-details` element and present it inside the `over-lay` element</li></ul>|

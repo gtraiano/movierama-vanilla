@@ -16,7 +16,7 @@ export const tags = {
         inSearchTypes: [searchTypes.MOVIE],         // approved app search types
         applyFilter: function() {                   // apply filter on UI
             const re = new RegExp(this.value, 'i')
-            document.querySelectorAll('movie-list .in-theaters movie-card').forEach(card => {
+            document.querySelectorAll('item-grid .in-theaters movie-card').forEach(card => {
                 if(!re.test(card.querySelector('div.movie-item ').children[1].children[1].innerText)) card.style.display = 'none'
                 else card.style.display = ''
             })
@@ -33,7 +33,7 @@ export const tags = {
         applyFilter: function() {
             const activeGenres = Array.from(this.boxes.entries()).filter(([k, v]) => v === true).map((([k, v]) => k)).join('|')
             const re = new RegExp(activeGenres, 'i')
-            document.querySelectorAll('movie-list .in-theaters movie-card').forEach(mc => {
+            document.querySelectorAll('item-grid .in-theaters movie-card').forEach(mc => {
                 if(!re.test(mc.querySelector('div[role=movie-genres] > span').textContent)) mc.style.display = 'none'
                 else mc.style.display = ''
             })
@@ -69,7 +69,7 @@ export const tags = {
         inSearchTypes: [searchTypes.PERSON],
         applyFilter: function() {
             const re = new RegExp(this.value, 'i')
-            document.querySelectorAll('movie-list .in-theaters person-card').forEach(card => {
+            document.querySelectorAll('item-grid .in-theaters person-card').forEach(card => {
                 if(!re.test(card.querySelector('.name').textContent)) card.style.display = 'none'
                 else card.style.display = ''
             })
@@ -99,7 +99,7 @@ export const tags = {
         applyFilter: function() {
             const activeTypes = Array.from(this.boxes.entries()).filter(([k, v]) => v === true).map((([k, v]) => k)).join('|')
             const re = new RegExp(activeTypes, 'i')
-            document.querySelectorAll('movie-list .in-theaters person-card').forEach(pc => {
+            document.querySelectorAll('item-grid .in-theaters person-card').forEach(pc => {
                 if(!re.test(pc.querySelector('.known-for').textContent)) pc.style.display = 'none'
                 else pc.style.display = ''
             })

@@ -65,7 +65,7 @@ export const onInitializedApp = () => {
     // load preferences to menu
     document.getElementsByTagName('preferences-menu')[0].loadPreferences(store.preferences)
     // render now playing first page
-    document.getElementsByTagName('movie-list')[0].appendItems(store[store.mode])
+    document.getElementsByTagName('item-grid')[0].appendItems(store[store.mode])
     // add genre tags to store filter tags and update filter-tab checkboxes
     store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
 }
@@ -95,7 +95,7 @@ export const onInfiniteScroll = async () => {
                 results: [...(store[mode]?.results ?? []), ...nextPage.results]
             }
             // append new page items to movie list
-            document.getElementsByTagName('movie-list')[0].appendItems(nextPage)
+            document.getElementsByTagName('item-grid')[0].appendItems(nextPage)
         }
         document.getElementsByTagName('alert-box')[0].loading(false)
         // update filter tags 
@@ -121,7 +121,7 @@ export const onModeUpdate = async (e) => {
     document.querySelector('browse-mode')[e.detail === appModes.SEARCH ? 'disable' : 'enable']()
 
     // clear movie list items
-    document.getElementsByTagName('movie-list')[0].clear()
+    document.getElementsByTagName('item-grid')[0].clear()
     
     // update page header
     setAppMainTitle()
@@ -144,7 +144,7 @@ export const onModeUpdate = async (e) => {
         }
     }
     // render cards
-    document.querySelector('movie-list').appendItems(store[store.mode])
+    document.querySelector('item-grid').appendItems(store[store.mode])
     // update filter tags
     store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
 }
@@ -186,8 +186,8 @@ export const onSearchQuery = async e => {
             signal: searchController.abortController.signal
         })
         // render search results in movie list
-        document.getElementsByTagName('movie-list')[0].clear()
-        document.getElementsByTagName('movie-list')[0].appendItems(store.search)
+        document.getElementsByTagName('item-grid')[0].clear()
+        document.getElementsByTagName('item-grid')[0].appendItems(store.search)
         // hide alert box after cards have been rendered
         document.getElementsByTagName('alert-box')[0].show(false)
         window.scrollTo(0,0)
