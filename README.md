@@ -9,6 +9,8 @@ Developed using [vite](https://vitejs.dev)
 
 All data provided by [The Movie DB API](https://developers.themoviedb.org/3/getting-started)
 
+Using favicon by <a href="https://www.freepik.com/icon/photography_14062716#fromView=search&term=film+reel&track=ais&page=6&position=12&uuid=ce47139d-cd2d-422b-9912-ce2c647f2488">Roundicons Premium</a>
+
 ## Configuration
 Requests to The Movie DB API require authentication. Should you run the application locally, you need to [issue](https://developers.themoviedb.org/3/getting-started/authentication) an API key.
 
