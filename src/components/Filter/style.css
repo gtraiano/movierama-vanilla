@@ -62,8 +62,8 @@ filter-tab:has(.filter-tab input[type=text]:invalid) .filter-button {
 .filter-element {
     display: flex;
     flex-direction: column;
-    margin-top: 2%;
-    margin-bottom: 2%;
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
 
 .filter-element > label {
