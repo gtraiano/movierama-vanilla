@@ -7,7 +7,7 @@ export const configuration = {
     // helper functions
     helpers: {
         images: {
-            posterBaseWidth: window.screen.width / 8,    // poster target width in pixels
+            posterBaseWidth: (window.screen.width / 8) * window.devicePixelRatio,    // poster target width in pixels
             generatePosterUrls: function(fname, mode = 'x', includeOriginal = true) {
                 // poster img srcset urls generator
                 // @fname               poster file name
@@ -15,7 +15,7 @@ export const configuration = {
                 // @includeOriginal     whether to include original size in list
                 return generateImageUrls(
                     configuration.images.secure_base_url,
-                    configuration.helpers.images.posterBaseWidth,
+                    this.posterBaseWidth,
                     configuration.images.poster_sizes,
                     fname,
                     mode,
@@ -23,7 +23,7 @@ export const configuration = {
                 )
             },
 
-            backdropBaseWidth: window.screen.width / 2,  // backdrop target width in pixels
+            backdropBaseWidth: (window.screen.width / 2) * window.devicePixelRatio,  // backdrop target width in pixels
             generateBackdropUrls: function(fname, mode = 'x', includeOriginal = true) {
                 // backdrop background-image image-set urls generator
                 // @fname               backdrop file name
