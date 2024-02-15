@@ -42,6 +42,8 @@ export const initializeApp = async () => {
         // fetch movie genres
         store.genres.setGenres(await movieDBAPI.fetchGenres())
         store.genres.addGenre(AdultGenre)
+        // set movie poster image base width
+        store.configuration.helpers.images.posterBaseWidth = store.configuration.helpers.images.gridItemWidth()
         
         // fetch 1st page of in theaters
         document.getElementsByTagName('alert-box')[0].loading(true)

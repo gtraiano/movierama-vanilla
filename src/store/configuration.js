@@ -7,7 +7,8 @@ export const configuration = {
     // helper functions
     helpers: {
         images: {
-            posterBaseWidth: (window.screen.width / 8) * window.devicePixelRatio,    // poster target width in pixels
+            gridItemWidth: () => Number.parseFloat(/\d+\.?\d+?(?=px\s*?)/gm.exec(window.getComputedStyle(document.querySelector('.item-grid')).gridTemplateColumns)[0]),
+            posterBaseWidth: (window.screen.width / 8) * window.devicePixelRatio,    // poster target width in pixels (value changed on app initialization)
             generatePosterUrls: function(fname, mode = 'x', includeOriginal = true) {
                 // poster img srcset urls generator
                 // @fname               poster file name
