@@ -2,10 +2,11 @@
 drop-down {
     position: absolute;
     transform: translateY(2.5rem) translateX(-100%);
-    width: fit-content;
+    /*width: fit-content;*/
+    width: clamp(fit-content, fit-content, calc(100vw - 12.5%));
     z-index: 100;
     transition: opacity 350ms ease-in-out;
-    max-width: calc(100vw - 12.5%);
+    /*max-width: calc(100vw - 12.5%);*/
 }
 
 drop-down > div {
