@@ -5,7 +5,7 @@ browse-mode {
 
 browse-mode[disabled] {
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.3;
 }
 
 nav.browse-mode > ul {
