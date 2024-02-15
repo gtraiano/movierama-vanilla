@@ -6,7 +6,7 @@ item-grid {
     display: block;
 }
 
-.in-theaters {
+.item-grid {
     display: grid;
     grid-template-rows: auto;
     row-gap: 2em;
@@ -21,7 +21,7 @@ item-grid {
     transition-timing-function: ease-in-out;
 }
 
-.in-theaters:not(:has(> *))::after {
+.item-grid:not(:has(> *))::after {
 	content: 'Nothing to show';
 	font-size: xx-large;
 	grid-column: 1 / -1;
@@ -29,63 +29,63 @@ item-grid {
 }
 
 @media only screen and (max-width: 599px) {
-    .in-theaters {
+    .item-grid {
         grid-template-columns: repeat(1, 1fr);
     }
 
     /* extra margin for last row movie-card items to compensate for movie-card div box-shadow */
-    .in-theaters > movie-card:nth-child(n):nth-last-child(-n+2) ~ movie-card {
+    .item-grid > movie-card:nth-child(n):nth-last-child(-n+2) ~ movie-card {
         margin-bottom: 8px;
     }
 }
 
 @media only screen and (min-width: 600px) { 
-    .in-theaters {
+    .item-grid {
         grid-template-columns: repeat(1, 1fr);
     }
 
-    .in-theaters > movie-card:nth-child(n):nth-last-child(-n+2) ~ movie-card {
+    .item-grid > movie-card:nth-child(n):nth-last-child(-n+2) ~ movie-card {
         margin-bottom: 8px;
     }
  }
 
 @media only screen and (min-width: 900px) {
-    .in-theaters {
+    .item-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .in-theaters > movie-card:nth-child(2n):nth-last-child(-n+3) ~ movie-card {
+    .item-grid > movie-card:nth-child(2n):nth-last-child(-n+3) ~ movie-card {
         margin-bottom: 8px;
     }
 }
 
 @media only screen and (min-width: 1200px) {
-    .in-theaters {
+    .item-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .in-theaters > movie-card:nth-child(3n):nth-last-child(-n+4) ~ movie-card {
+    .item-grid > movie-card:nth-child(3n):nth-last-child(-n+4) ~ movie-card {
         margin-bottom: 8px;
     }
 }
 
 @media only screen and (min-width: 1800px) {
-    .in-theaters {
+    .item-grid {
         grid-template-columns: repeat(4, 1fr);
     }
 
-    .in-theaters > movie-card:nth-child(4n):nth-last-child(-n+5) ~ movie-card {
+    .item-grid > movie-card:nth-child(4n):nth-last-child(-n+5) ~ movie-card {
         margin-bottom: 8px;
     }
 }
 
 @media only screen and (min-width: 1900px) {
-    .in-theaters {
+    .item-grid {
         grid-template-columns: repeat(5, 1fr);
     }
 
     /* https://keithclark.co.uk/articles/targeting-first-and-last-rows-in-css-grid-layouts/ */
-    .in-theaters > movie-card:nth-child(5n):nth-last-child(-n+6) ~ movie-card {
+    .item-grid > movie-card:nth-child(5n):nth-last-child(-n+6) ~ movie-card {
         margin-bottom: 8px;
     }
 }

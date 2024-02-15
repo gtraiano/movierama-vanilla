@@ -4,7 +4,7 @@ import { stringTemplateToFragment } from '../util'
 import './style.css'
 
 const template = `
-<div class="in-theaters">
+<div class="item-grid">
 </div>
 `
 
