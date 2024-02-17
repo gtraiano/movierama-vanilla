@@ -2,11 +2,11 @@
 drop-down {
     position: absolute;
     transform: translateY(2.5rem) translateX(-100%);
-    /*width: fit-content;*/
-    width: clamp(fit-content, fit-content, calc(100vw - 12.5%));
+    width: fit-content;
+    max-width: 90vw;
+    height: fit-content;
     z-index: 100;
     transition: opacity 350ms ease-in-out;
-    /*max-width: calc(100vw - 12.5%);*/
 }
 
 drop-down > div {
@@ -53,7 +53,6 @@ drop-down {
 drop-down[visible] {
     opacity: 1;
     width: fit-content;
-    height: fit-content;
 }
 
 /* dropdown container div when not visible */
