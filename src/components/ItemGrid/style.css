@@ -12,6 +12,7 @@ item-grid {
     row-gap: 2em;
     column-gap: 2em;
     height: auto;
+    min-height: 75vh;
     margin-left: auto;
     margin-right: auto;
     margin-top: 2vh;
@@ -21,11 +22,17 @@ item-grid {
     transition-timing-function: ease-in-out;
 }
 
-.item-grid:not(:has(> *))::after {
-	content: 'Nothing to show';
-	font-size: xx-large;
-	grid-column: 1 / -1;
-	margin-top: 35vh;
+/* no search results */
+item-grid[search]:not(:has(.item-grid > *)) .item-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 75vh;
+    align-items: center;
+    justify-items: center;
+}
+/* no search results message */
+item-grid[search]:not(:has(.item-grid > *)) .item-grid::after {
+    content: 'No results';
+    font-size: xx-large;
 }
 
 @media only screen and (max-width: 599px) {

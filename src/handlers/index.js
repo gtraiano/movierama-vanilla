@@ -46,28 +46,25 @@ export const initializeApp = async () => {
         store.configuration.helpers.images.posterBaseWidth = store.configuration.helpers.images.gridItemWidth()
         
         // fetch 1st page of in theaters
-        document.getElementsByTagName('alert-box')[0].loading(true)
+        document.querySelector('alert-box').loading(true)
         store[store.mode] = await movieDBAPI[store.mode === appModes.NOW_PLAYING ? 'fetchNowPlaying' : 'fetchUpcoming']({
             page: 1
         })
-        document.getElementsByTagName('alert-box')[0].loading(false)
+        document.querySelector('alert-box').loading(false)
         dispatchInitializedApp()
     }
     catch(error) {
-        document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
-    }
-    finally {
-        //document.getElementsByTagName('alert-box')[0].loading(false)
+        document.querySelector('alert-box').showFor(error.message, 3000)
     }
 }
 
 export const onInitializedApp = () => {
     // inject supported content languages to menu
-    document.getElementsByTagName('preferences-menu')[0].injectContentLanguages(store.configuration.languages.sort((a, b) => a.english_name > b.english_name))
+    document.querySelector('preferences-menu').injectContentLanguages(store.configuration.languages.sort((a, b) => a.english_name > b.english_name))
     // load preferences to menu
-    document.getElementsByTagName('preferences-menu')[0].loadPreferences(store.preferences)
+    document.querySelector('preferences-menu').loadPreferences(store.preferences)
     // render now playing first page
-    document.getElementsByTagName('item-grid')[0].appendItems(store[store.mode])
+    document.querySelector('item-grid').appendItems(store[store.mode])
     // add genre tags to store filter tags and update filter-tab checkboxes
     store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
 }
@@ -82,12 +79,12 @@ export const onInfiniteScroll = async () => {
     
         // prevent requests if we have fetched all pages
         if(store[mode].page && store[mode].page === store[mode].total_pages) {
-            document.getElementsByTagName('alert-box')[0].showFor('Last page', 750)
+            document.querySelector('alert-box').showFor('Last page', 750)
             return
         }
 
         // show fetching alert
-        document.getElementsByTagName('alert-box')[0].loading(true)
+        document.querySelector('alert-box').loading(true)
         const nextPage = await fetchNextPageFromAPI(mode, infiniteScrollController)
         // update results
         if(!infiniteScrollController.abortController.signal.aborted) {
@@ -97,16 +94,16 @@ export const onInfiniteScroll = async () => {
                 results: [...(store[mode]?.results ?? []), ...nextPage.results]
             }
             // append new page items to movie list
-            document.getElementsByTagName('item-grid')[0].appendItems(nextPage)
+            document.querySelector('item-grid').appendItems(nextPage)
         }
-        document.getElementsByTagName('alert-box')[0].loading(false)
+        document.querySelector('alert-box').loading(false)
         // update filter tags 
         store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
         
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
-            document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
+            document.querySelector('alert-box').showFor(error.message, 3000)
         }
         else {
             console.log(error)
@@ -123,7 +120,7 @@ export const onModeUpdate = async (e) => {
     document.querySelector('browse-mode')[e.detail === appModes.SEARCH ? 'disable' : 'enable']()
 
     // clear movie list items
-    document.getElementsByTagName('item-grid')[0].clear()
+    document.querySelector('item-grid').clear()
     
     // update page header
     setAppMainTitle()
@@ -131,10 +128,12 @@ export const onModeUpdate = async (e) => {
 
     // restore app mode tags (other than search)
     if(browseModes.includes(store.mode)) {
+        // cleanup search attribute from item-grid
+        document.querySelector('item-grid').removeAttribute('search', '');
         // fetch results from API if we have none in store
         if(!store[store.mode].results.length) {
             // show fetching alert
-            document.getElementsByTagName('alert-box')[0].loading(true)
+            document.querySelector('alert-box').loading(true)
             const nextPage = await fetchNextPageFromAPI(store.mode, infiniteScrollController)
             // update results
             store[store.mode] = {
@@ -142,8 +141,12 @@ export const onModeUpdate = async (e) => {
                 ...nextPage,
                 results: [...(store[store.mode]?.results ?? []), ...nextPage.results]
             }
-            document.getElementsByTagName('alert-box')[0].loading(false)
+            document.querySelector('alert-box').loading(false)
         }
+    }
+    else if(store.mode === appModes.SEARCH) {
+        // add attribute to item-grid
+        document.querySelector('item-grid').setAttribute('search', '');
     }
     // render cards
     document.querySelector('item-grid').appendItems(store[store.mode])
@@ -156,16 +159,16 @@ export const onCloseOverlay = () => {
     movieDetailsController.abortController.abort()
     movieDetailsController.abortController = new AbortController()
     // hide alert
-    document.getElementsByTagName('alert-box')[0].show(false)
+    document.querySelector('alert-box').show(false)
     // hide overlay and show top bar
-    document.getElementsByTagName('over-lay')[0].closeOverlay()
-    document.getElementsByTagName('top-bar')[0].classList.add('above')
+    document.querySelector('over-lay').closeOverlay()
+    document.querySelector('top-bar').classList.add('above')
 }
 
 export const onOpenOverlay = () => {
     // hide top bar show overlay
-    document.getElementsByTagName('top-bar')[0].classList.remove('above')
-    document.getElementsByTagName('over-lay')[0].openOverlay()
+    document.querySelector('top-bar').classList.remove('above')
+    document.querySelector('over-lay').openOverlay()
     
 }
 
@@ -177,7 +180,10 @@ export const onSearchQuery = async e => {
         store.searchQuery = e.detail
 
         // show alert box while search runs
-        document.getElementsByTagName('alert-box')[0].show(true, 'Searching')
+        document.querySelector('alert-box').show(true, 'Searching')
+        // switch item-grid attribute
+        document.querySelector('item-grid').removeAttribute('search', '')
+        document.querySelector('item-grid').setAttribute('searching', '')
         if(searchController.abortController) {
             searchController.abortController.abort()
         }
@@ -188,17 +194,20 @@ export const onSearchQuery = async e => {
             signal: searchController.abortController.signal
         })
         // render search results in movie list
-        document.getElementsByTagName('item-grid')[0].clear()
-        document.getElementsByTagName('item-grid')[0].appendItems(store.search)
+        document.querySelector('item-grid').clear()
+        document.querySelector('item-grid').appendItems(store.search)
+        // restore item-grid attribute
+        document.querySelector('item-grid').removeAttribute('searching')
+        document.querySelector('item-grid').setAttribute('search', '')
         // hide alert box after cards have been rendered
-        document.getElementsByTagName('alert-box')[0].show(false)
+        document.querySelector('alert-box').show(false)
         window.scrollTo(0,0)
         // update filter tags
         store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
-            document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
+            document.querySelector('alert-box').showFor(error.message, 3000)
         }
     }
     finally {
@@ -210,8 +219,8 @@ export const onSearchQuery = async e => {
 export const onRequestMovieDetails = async e => {
     try {
         // show overlay with loading screen
-        document.getElementsByTagName('over-lay')[0].openOverlay()
-        document.getElementsByTagName('over-lay')[0].setAttribute('loading', 'true')
+        document.querySelector('over-lay').openOverlay()
+        document.querySelector('over-lay').setAttribute('loading', 'true')
 
         movieDetailsController.isFetching = true
         
@@ -245,18 +254,18 @@ export const onRequestMovieDetails = async e => {
         movieDetails.render(store.movieDetails)
         
         // display in overlay
-        document.getElementsByTagName('over-lay')[0].updateContent(movieDetails)
+        document.querySelector('over-lay').updateContent(movieDetails)
     }
     catch(error) {
         // display NON abort errors in alert-box
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
-            document.getElementsByTagName('alert-box')[0].showFor(error.message, 3000)
+            document.querySelector('alert-box').showFor(error.message, 3000)
         }
     }
     finally {
         movieDetailsController.isFetching = false
         // stop overlay loading screen
-        document.getElementsByTagName('over-lay')[0].removeAttribute('loading')
+        document.querySelector('over-lay').removeAttribute('loading')
     }
 }
 
@@ -298,7 +307,7 @@ export const onUpdatePreference = async (e) => {
 
     else if(e.detail === PREFERENCES.CONTENT_LANGUAGE) {
         // alert for change
-        document.getElementsByTagName('alert-box')[0].show(true, 'switching content language')
+        document.querySelector('alert-box').show(true, 'switching content language')
         // update store genres strings
         store.genres.setGenres(await movieDBAPI.fetchGenres())
         store.genres.addGenre({ id: 0, name: 'Adult' })
@@ -310,7 +319,7 @@ export const onUpdatePreference = async (e) => {
         // remove genre labels from store filter and insert fresh ones
         store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
         // hide alert
-        document.getElementsByTagName('alert-box')[0].show(false)
+        document.querySelector('alert-box').show(false)
     }
 }
 
