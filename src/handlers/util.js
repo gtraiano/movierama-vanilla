@@ -6,12 +6,11 @@ import store from "../store"
 export const scrolledToBottom = () => {
     const {
         scrollTop,
-        scrollHeight,
-        clientHeight,
+        scrollTopMax
     } = document.documentElement;
 
     // reached page bottom
-    if(scrollTop + clientHeight >= scrollHeight) {
+    if(scrollTop === scrollTopMax) {
         dispatchInfiniteScroll()
     }
 }

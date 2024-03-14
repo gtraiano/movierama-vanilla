@@ -74,8 +74,7 @@ window.addEventListener('load', initializeApp)
 document.addEventListener(InitializedApp, onInitializedApp)
 
 // scroll
-document.addEventListener('scroll', scrolledToBottom)
-document.addEventListener('touchmove', scrolledToBottom) // for mobile
+document.addEventListener('scrollend', scrolledToBottom)
 
 // infinite scroll
 document.addEventListener(InfiniteScroll, onInfiniteScroll)
