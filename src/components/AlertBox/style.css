@@ -60,11 +60,11 @@ alert-box[loading] > div.alert-box::after {
     /*content: "Fetching";*/
     content: attr(message);
     margin: auto;
-    animation: alternating 750ms ease-in-out infinite;
+    /*animation: alternating 750ms ease-in-out infinite;*/
     letter-spacing: 1ch;
     font-weight: 700;
 }
-
+/*
 @keyframes alternating {
     0% {
         opacity: 1;
@@ -79,3 +79,4 @@ alert-box[loading] > div.alert-box::after {
         opacity: 0.2;
     }
 }
+*/

@@ -58,4 +58,8 @@ top-bar > div > * > * {
   .tmdb-attribution {
     display: none;
   }
+
+  top-bar > div {
+    justify-content: center;
+  }
 }

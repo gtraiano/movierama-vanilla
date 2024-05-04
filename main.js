@@ -44,6 +44,7 @@ import './src/components/Filter'
 import './src/components/BrowseMode'
 import './src/components/PersonCard'
 import { stringTemplateToFragment } from './src/components/util'
+import './src/components/Spinner/'
 
 const template =
 `
