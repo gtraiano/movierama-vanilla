@@ -1,5 +1,6 @@
 person-card {
   min-height: 100%;
+  height: fit-content;
 }
 
 .person-item {
