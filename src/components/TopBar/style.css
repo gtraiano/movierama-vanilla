@@ -1,5 +1,5 @@
 top-bar {
-    position: fixed;
+    position: sticky;
     top: 1%;
     left: 0;
     width: 100vw;
