@@ -53,10 +53,10 @@ const template =
         <browse-mode></browse-mode>
         <div><search-bar></search-bar></div>
         <preferences-menu></preferences-menu>
+        <span class="tmdb-attribution">
+            <a href="https://developer.themoviedb.org" referrerpolicy="no-referrer" target="_blank"><img src="https://files.readme.io/29c6fee-blue_short.svg"></a>
+        </span>
     </div>
-    <span class="tmdb-attribution">
-        <a href="https://developer.themoviedb.org" referrerpolicy="no-referrer" target="_blank"><img src="https://files.readme.io/29c6fee-blue_short.svg"></a>
-    </span>
 </top-bar>
 <filter-tab></filter-tab>
 <h1 class="main-title"></h1>

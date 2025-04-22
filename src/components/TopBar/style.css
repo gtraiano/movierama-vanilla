@@ -34,11 +34,13 @@ top-bar > div > * > * {
 }
 
 .tmdb-attribution {
-  position: absolute;
+  /*position: absolute;*/
   font-size: small;
-  top: 25%;
-  right: 1%;
+  /*top: 25%;
+  right: 1%;*/
   user-select: none;
+  align-self: center;
+  flex-grow: 1;
 }
 
 .tmdb-attribution::before {
