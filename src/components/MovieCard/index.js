@@ -5,7 +5,7 @@ import { fileTemplateToHTMLTemplate } from '../util'
 
 let template
 (async () => {
-    template = await fileTemplateToHTMLTemplate("./src/components/MovieCard/template.html")
+    template = await fileTemplateToHTMLTemplate("/movie-card-template.html")
 })()
 
 class MovieCard extends HTMLElement {
