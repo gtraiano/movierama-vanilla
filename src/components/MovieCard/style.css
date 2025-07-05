@@ -7,8 +7,13 @@
   padding-bottom: 2%;
   /*box-shadow: 4px 2px 2px 2px rgba(127,127,127,0.8);*/
   box-shadow: 0px 0px 6px 6px rgba(127,127,127,0.8);
-  min-height: 100%;
+  /*min-height: 100%;*/
 }
+
+movie-card.adult > .movie-item {
+  background-color: rgba(255, 192, 203, 0.75);
+}
+
 .movie-item div {
   display: flex;
   margin-top: 1%;
@@ -92,6 +97,7 @@ movie-card.adult .movie-item-line.poster img.adult:hover {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 12;
+  line-clamp: 12;
   overflow: hidden;
   text-overflow: ellipsis;
 }

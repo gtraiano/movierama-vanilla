@@ -3,18 +3,20 @@ person-card {
   height: fit-content;
 }
 
+person-card.adult > .person-item {
+  background-color: rgba(255, 192, 203, 0.75);
+}
+
 .person-item {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 4px;
   background-color: rgba(128, 128, 128, 0.375);
   transition: height 0.5s ease-in-out 0.5s;
   padding-top: 2%;
   padding-bottom: 2%;
-  /*box-shadow: 4px 2px 2px 2px rgba(127, 127, 127, 0.8);*/
   box-shadow: 0px 0px 6px 6px rgba(127,127,127,0.8);
   min-height: 100%;
   width: 100%;
