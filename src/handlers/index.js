@@ -312,10 +312,14 @@ export const onUpdatePreference = async (e) => {
         store.genres.setGenres(await movieDBAPI.fetchGenres())
         store.genres.addGenre({ id: 0, name: 'Adult' })
         // update all movie-card's content in new language
-        document.querySelectorAll('movie-card').forEach(async mc => {
+        /*document.querySelectorAll('movie-card').forEach(async mc => {
             const content = await movieDBAPI.fetchMovieDetails({ movieId: mc.getAttribute('movie-id')})
-            mc.render(content)
-        })
+            await mc.render(content)
+        })*/
+        for(const mc of Array.from(document.querySelectorAll('movie-card'))) {
+            const content = await movieDBAPI.fetchMovieDetails({ movieId: mc.getAttribute('movie-id')})
+            await mc.render(content)
+        }
         // remove genre labels from store filter and insert fresh ones
         store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
         // hide alert
