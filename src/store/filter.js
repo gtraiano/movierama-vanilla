@@ -42,7 +42,7 @@ export const tags = {
             if(!results) return
             this.boxes.clear()
             const genres = [...new Set(results.map(r => r.genre_ids).reduce((g, cg) => {
-                cg.forEach(v => { g.push(store.genres.lookup(v)) })
+                cg?.forEach(v => { g.push(store.genres.lookup(v)) })
                 return g
             }, []))]
             if(results.map(m => m.adult).some(Boolean)) {
