@@ -21,7 +21,7 @@ class AlertBox extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if(name === 'loading') {
             if(newValue !== null || newValue === 'true') {
-                console.log(name, newValue)
+                //console.log(name, newValue)
                 const spinner = document.createElement('ring-spinner')
                 spinner.style.position = 'absolute'
                 spinner.style.left = '2%';
