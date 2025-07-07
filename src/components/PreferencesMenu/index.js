@@ -18,6 +18,10 @@ const template = `
                 <label for="prev_adult_poster">Hide adult poster previews</label>
                 <input id="prev_adult_poster" type="checkbox"></input>
             </div>
+            <div>
+                <label for="color_code_adult_results">Color code adult results</label>
+                <input id="color_code_adult_results" type="checkbox"></input>
+            </div>
             <div class="separator label">internationalisation</div>
             <div>
                 <label for="content_language">Content language</label>
