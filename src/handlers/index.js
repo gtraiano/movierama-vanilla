@@ -2,10 +2,10 @@ import { dispatchModeUpdate } from "../events/ModeUpdate";
 import { dispatchInitializedApp } from "../events/InitializedApp";
 
 import movieDBAPI from "../controllers/MovieDB";
-import appModes, { AdultGenre, browseModes, searchTypes } from "../constants";
+import appModes, { AdultGenre } from "../constants";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
-import { fetchNextPageFromAPI, setAppMainTitle } from "./util";
+import { hideAdultPosters, hideAdultResults, infiniteScroll, modeUpdate, searchQuery, setAppMainTitle, switchContentLanguage } from "./util";
 import { tags } from "../store/filter";
 
 export { scrolledToBottom, setAppMainTitle } from './util'
@@ -71,35 +71,7 @@ export const onInitializedApp = () => {
 
 export const onInfiniteScroll = async () => {
     try {
-        // prevent infinite scroll behaviour when filtering is active
-        if(store.filterTags.helpers.isActive()) throw Error('Will not fetch further results while filter is active')
-        
-        // part of store to use
-        const mode = store.mode
-    
-        // prevent requests if we have fetched all pages
-        if(store[mode].page && store[mode].page === store[mode].total_pages) {
-            document.querySelector('alert-box').showFor('Last page', 750)
-            return
-        }
-
-        // show fetching alert
-        document.querySelector('alert-box').loading(true)
-        const nextPage = await fetchNextPageFromAPI(mode, infiniteScrollController)
-        // update results
-        if(!infiniteScrollController.abortController.signal.aborted) {
-            store[mode] = {
-                ...store[mode],
-                ...nextPage,
-                results: [...(store[mode]?.results ?? []), ...nextPage.results]
-            }
-            // append new page items to movie list
-            document.querySelector('item-grid').appendItems(nextPage)
-        }
-        document.querySelector('alert-box').loading(false)
-        // update filter tags 
-        store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
-        
+        infiniteScroll(infiniteScrollController)
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
@@ -115,43 +87,7 @@ export const onInfiniteScroll = async () => {
 }
 
 export const onModeUpdate = async (e) => {
-    store.mode = e.detail
-    // on entering search mode, disable navigation menu
-    document.querySelector('browse-mode')[e.detail === appModes.SEARCH ? 'disable' : 'enable']()
-
-    // clear movie list items
-    document.querySelector('item-grid').clear()
-    
-    // update page header
-    setAppMainTitle()
-    window.scrollTo(0, 0)
-
-    // restore app mode tags (other than search)
-    if(browseModes.includes(store.mode)) {
-        // cleanup search attribute from item-grid
-        document.querySelector('item-grid').removeAttribute('search', '');
-        // fetch results from API if we have none in store
-        if(!store[store.mode].results.length) {
-            // show fetching alert
-            document.querySelector('alert-box').loading(true)
-            const nextPage = await fetchNextPageFromAPI(store.mode, infiniteScrollController)
-            // update results
-            store[store.mode] = {
-                ...store[store.mode],
-                ...nextPage,
-                results: [...(store[store.mode]?.results ?? []), ...nextPage.results]
-            }
-            document.querySelector('alert-box').loading(false)
-        }
-    }
-    else if(store.mode === appModes.SEARCH) {
-        // add attribute to item-grid
-        document.querySelector('item-grid').setAttribute('search', '');
-    }
-    // render cards
-    document.querySelector('item-grid').appendItems(store[store.mode])
-    // update filter tags
-    store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
+    modeUpdate(e.detail)
 }
 
 export const onCloseOverlay = () => {
@@ -174,36 +110,7 @@ export const onOpenOverlay = () => {
 
 export const onSearchQuery = async e => {
     try {
-        // signal app mode change
-        dispatchModeUpdate(appModes.SEARCH)
-        // update store
-        store.searchQuery = e.detail
-
-        // show alert box while search runs
-        document.querySelector('alert-box').show(true, 'Searching')
-        // switch item-grid attribute
-        document.querySelector('item-grid').removeAttribute('search', '')
-        document.querySelector('item-grid').setAttribute('searching', '')
-        if(searchController.abortController) {
-            searchController.abortController.abort()
-        }
-        searchController.abortController = new AbortController()
-        searchController.isFetching = true
-        store.search = await movieDBAPI[store.searchQuery.type === searchTypes.MOVIE ? 'fetchMovie' : 'fetchPerson']({
-            query: store.searchQuery.query,
-            signal: searchController.abortController.signal
-        })
-        // render search results in movie list
-        document.querySelector('item-grid').clear()
-        document.querySelector('item-grid').appendItems(store.search)
-        // restore item-grid attribute
-        document.querySelector('item-grid').removeAttribute('searching')
-        document.querySelector('item-grid').setAttribute('search', '')
-        // hide alert box after cards have been rendered
-        document.querySelector('alert-box').show(false)
-        window.scrollTo(0,0)
-        // update filter tags
-        store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
+        searchQuery({ query: e.detail, searchController })
     }
     catch(error) {
         if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
@@ -290,15 +197,11 @@ export const onSearchTypeChange = (e) => {
 export const onUpdatePreference = async (e) => {
     // apply filter to adult posters
     if(e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
-        document.querySelectorAll('.adult .poster > img').forEach(img => {
-            img.classList.toggle('adult')
-        })
+        hideAdultPosters()
     }
     // filter adult results
     else if(e.detail === PREFERENCES.INCLUDE_ADULT_SEARCH) {
-        document.querySelectorAll('movie-card.adult').forEach(c => {
-            c.style.display = store.preferences.includeAdultSearch ? '' : 'none'
-        })
+        hideAdultResults()
     }
     // theme color
     else if(e.detail === PREFERENCES.THEME) {
@@ -306,24 +209,7 @@ export const onUpdatePreference = async (e) => {
     }
 
     else if(e.detail === PREFERENCES.CONTENT_LANGUAGE) {
-        // alert for change
-        document.querySelector('alert-box').show(true, 'switching content language')
-        // update store genres strings
-        store.genres.setGenres(await movieDBAPI.fetchGenres())
-        store.genres.addGenre({ id: 0, name: 'Adult' })
-        // update all movie-card's content in new language
-        /*document.querySelectorAll('movie-card').forEach(async mc => {
-            const content = await movieDBAPI.fetchMovieDetails({ movieId: mc.getAttribute('movie-id')})
-            await mc.render(content)
-        })*/
-        for(const mc of Array.from(document.querySelectorAll('movie-card'))) {
-            const content = await movieDBAPI.fetchMovieDetails({ movieId: mc.getAttribute('movie-id')})
-            await mc.render(content)
-        }
-        // remove genre labels from store filter and insert fresh ones
-        store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
-        // hide alert
-        document.querySelector('alert-box').show(false)
+        switchContentLanguage()
     }
 }
 
