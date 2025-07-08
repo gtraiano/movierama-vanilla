@@ -81,7 +81,7 @@ export const infiniteScroll = async (infiniteScrollController) => {
     store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
 }
 
-export const modeUpdate = async (mode) => {
+export const modeUpdate = async ({ mode, infiniteScrollController }) => {
     store.mode = mode
     // on entering search mode, disable navigation menu
     document.querySelector('browse-mode')[mode === appModes.SEARCH ? 'disable' : 'enable']()

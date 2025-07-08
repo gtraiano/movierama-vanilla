@@ -87,7 +87,7 @@ export const onInfiniteScroll = async () => {
 }
 
 export const onModeUpdate = async (e) => {
-    modeUpdate(e.detail)
+    modeUpdate({ mode: e.detail, infiniteScrollController })
 }
 
 export const onCloseOverlay = () => {
