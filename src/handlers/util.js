@@ -29,6 +29,13 @@ export const hideAdultResults = () => {
     })
 }
 
+export const disableAdultPreferences = () => {
+    // check if adult related options should be disabled
+    document.querySelectorAll('#prev_adult_poster, #color_code_adult_results').forEach(inp => {
+        !store.preferences.includeAdultSearch ? inp.setAttribute("disabled", "") : inp.removeAttribute("disabled")
+    })
+}
+
 export const switchContentLanguage = async () => {
     // alert for change
     document.querySelector('alert-box').show(true, 'switching content language')

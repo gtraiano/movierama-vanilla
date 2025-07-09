@@ -5,12 +5,12 @@ import movieDBAPI from "../controllers/MovieDB";
 import appModes, { AdultGenre } from "../constants";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
-import { hideAdultPosters, hideAdultResults, infiniteScroll, modeUpdate, searchQuery, setAppMainTitle, switchContentLanguage } from "./util";
+import { hideAdultPosters, hideAdultResults, infiniteScroll, modeUpdate, searchQuery, setAppMainTitle, switchContentLanguage, disableAdultPreferences } from "./util";
 import { tags } from "../store/filter";
 
 export { scrolledToBottom, setAppMainTitle } from './util'
 
- // api request controllers
+// api request controllers
 const searchController = {
     isFetching: false,
     abortController: null
@@ -44,7 +44,7 @@ export const initializeApp = async () => {
         store.genres.addGenre(AdultGenre)
         // set movie poster image base width
         store.configuration.helpers.images.posterBaseWidth = store.configuration.helpers.images.gridItemWidth()
-        
+
         // fetch 1st page of in theaters
         document.querySelector('alert-box').loading(true)
         store[store.mode] = await movieDBAPI[store.mode === appModes.NOW_PLAYING ? 'fetchNowPlaying' : 'fetchUpcoming']({
@@ -53,7 +53,7 @@ export const initializeApp = async () => {
         document.querySelector('alert-box').loading(false)
         dispatchInitializedApp()
     }
-    catch(error) {
+    catch (error) {
         document.querySelector('alert-box').showFor(error.message, 3000)
     }
 }
@@ -67,14 +67,15 @@ export const onInitializedApp = () => {
     document.querySelector('item-grid').appendItems(store[store.mode])
     // add genre tags to store filter tags and update filter-tab checkboxes
     store.filterTags.helpers.getTag(tags.genre.name).updateLabels(store[store.mode].results)
+    disableAdultPreferences()
 }
 
 export const onInfiniteScroll = async () => {
     try {
         infiniteScroll(infiniteScrollController)
     }
-    catch(error) {
-        if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
+    catch (error) {
+        if (error.name !== 'AbortError' || !(error instanceof DOMException)) {
             document.querySelector('alert-box').showFor(error.message, 3000)
         }
         else {
@@ -105,21 +106,21 @@ export const onOpenOverlay = () => {
     // hide top bar show overlay
     document.querySelector('top-bar').classList.remove('above')
     document.querySelector('over-lay').openOverlay()
-    
+
 }
 
 export const onSearchQuery = async e => {
     try {
         searchQuery({ query: e.detail, searchController })
     }
-    catch(error) {
-        if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
+    catch (error) {
+        if (error.name !== 'AbortError' || !(error instanceof DOMException)) {
             document.querySelector('alert-box').showFor(error.message, 3000)
         }
     }
     finally {
         searchController.isFetching = false
-        
+
     }
 }
 
@@ -130,7 +131,7 @@ export const onRequestMovieDetails = async e => {
         document.querySelector('over-lay').setAttribute('loading', 'true')
 
         movieDetailsController.isFetching = true
-        
+
         // fetch all movie details and update store
         store.movieDetails.details = await movieDBAPI.fetchMovieDetails({ movieId: e.detail, signal: movieDetailsController.abortController.signal })
         store.movieDetails.credits = await movieDBAPI.fetchMovieCredits({ movieId: e.detail, signal: movieDetailsController.abortController.signal })
@@ -159,13 +160,13 @@ export const onRequestMovieDetails = async e => {
         // create movie details element
         const movieDetails = document.createElement('movie-details')
         movieDetails.render(store.movieDetails)
-        
+
         // display in overlay
         document.querySelector('over-lay').updateContent(movieDetails)
     }
-    catch(error) {
+    catch (error) {
         // display NON abort errors in alert-box
-        if(error.name !== 'AbortError' || !(error instanceof DOMException)) {
+        if (error.name !== 'AbortError' || !(error instanceof DOMException)) {
             document.querySelector('alert-box').showFor(error.message, 3000)
         }
     }
@@ -178,9 +179,9 @@ export const onRequestMovieDetails = async e => {
 
 export const onEndSearchQuery = () => {
     // end search query when displaying in theaters should do nothing
-    if(store.mode === appModes.NOW_PLAYING) return;
+    if (store.mode === appModes.NOW_PLAYING) return;
     // stop search query in progress
-    if(searchController.abortController) {
+    if (searchController.abortController) {
         searchController.abortController.abort()
     }
     // clear stored query text and search results
@@ -195,26 +196,28 @@ export const onSearchTypeChange = (e) => {
 }
 
 export const onUpdatePreference = async (e) => {
+    console.log(e)
     // apply filter to adult posters
-    if(e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
+    if (e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
         hideAdultPosters()
     }
     // filter adult results
-    else if(e.detail === PREFERENCES.INCLUDE_ADULT_SEARCH) {
+    else if (e.detail === PREFERENCES.INCLUDE_ADULT_SEARCH) {
         hideAdultResults()
+        disableAdultPreferences()
     }
     // theme color
-    else if(e.detail === PREFERENCES.THEME) {
+    else if (e.detail === PREFERENCES.THEME) {
         document.documentElement.setAttribute('theme', store.preferences.theme)
     }
 
-    else if(e.detail === PREFERENCES.CONTENT_LANGUAGE) {
+    else if (e.detail === PREFERENCES.CONTENT_LANGUAGE) {
         switchContentLanguage()
     }
 }
 
 export const onFilterTag = e => {
-    if(e.detail.name) {
+    if (e.detail.name) {
         store.filterTags.helpers.setTag(e.detail)
         store.filterTags.helpers.getTag(e.detail.name).applyFilter()
     }
