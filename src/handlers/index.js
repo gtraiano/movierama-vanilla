@@ -88,7 +88,7 @@ export const onInfiniteScroll = async () => {
 }
 
 export const onModeUpdate = async (e) => {
-    modeUpdate({ mode: e.detail, infiniteScrollController })
+    await modeUpdate({ mode: e.detail, infiniteScrollController })
 }
 
 export const onCloseOverlay = () => {
@@ -111,7 +111,7 @@ export const onOpenOverlay = () => {
 
 export const onSearchQuery = async e => {
     try {
-        searchQuery({ query: e.detail, searchController })
+        await searchQuery({ query: e.detail, searchController })
     }
     catch (error) {
         if (error.name !== 'AbortError' || !(error instanceof DOMException)) {
@@ -212,7 +212,7 @@ export const onUpdatePreference = async (e) => {
     }
 
     else if (e.detail === PREFERENCES.CONTENT_LANGUAGE) {
-        switchContentLanguage()
+        await switchContentLanguage()
     }
 }
 
