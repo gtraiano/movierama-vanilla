@@ -72,7 +72,7 @@ export const onInitializedApp = () => {
 
 export const onInfiniteScroll = async () => {
     try {
-        infiniteScroll(infiniteScrollController)
+        await infiniteScroll(infiniteScrollController)
     }
     catch (error) {
         if (error.name !== 'AbortError' || !(error instanceof DOMException)) {
