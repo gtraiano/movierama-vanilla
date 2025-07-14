@@ -93,8 +93,16 @@ drop-down label + select {
 }*/
 
 /* "disable" hide adult poster previews and color code adult results option when include adult results not checked */
+/*
 drop-down :has(#incl_adult:not(:checked)) div:has(#prev_adult_poster) label,
 drop-down :has(#incl_adult:not(:checked)) div:has(#color_code_adult_results) label {
     pointer-events: none;
     opacity: 0.4;
+}
+*/
+
+drop-down > * > div:has(#prev_adult_poster:disabled) label,
+drop-down > * > div:has(#color_code_adult_results:disabled) label {
+    pointer-events: none;
+    opacity: 0.3;
 }
