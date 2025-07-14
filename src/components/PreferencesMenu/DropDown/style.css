@@ -25,6 +25,7 @@ drop-down > div > * {
     white-space: nowrap;
     text-align: start;
     width: 100%;
+    user-select: none;
 }
 
 /* give text white color */
@@ -92,8 +93,8 @@ drop-down label + select {
 }*/
 
 /* "disable" hide adult poster previews and color code adult results option when include adult results not checked */
-drop-down :has(#incl_adult:not(:checked)) div:has(#prev_adult_poster),
-drop-down :has(#incl_adult:not(:checked)) div:has(#color_code_adult_results) {
+drop-down :has(#incl_adult:not(:checked)) div:has(#prev_adult_poster) label,
+drop-down :has(#incl_adult:not(:checked)) div:has(#color_code_adult_results) label {
     pointer-events: none;
     opacity: 0.4;
 }
