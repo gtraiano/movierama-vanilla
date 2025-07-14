@@ -196,7 +196,6 @@ export const onSearchTypeChange = (e) => {
 }
 
 export const onUpdatePreference = async (e) => {
-    console.log(e)
     // apply filter to adult posters
     if (e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
         hideAdultPosters()
