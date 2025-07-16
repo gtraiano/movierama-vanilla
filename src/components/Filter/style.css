@@ -6,12 +6,12 @@ filter-tab {
     z-index: 1;
 }
 
-filter-tab > * > * {
+filter-tab>*>* {
     background-color: black;
     color: white;
 }
 
-html[theme="light"] filter-tab > * > * {
+html[theme="light"] filter-tab>*>* {
     background-color: white;
     color: black;
 }
@@ -66,19 +66,19 @@ filter-tab:has(.filter-tab input[type=text]:invalid) .filter-button {
     margin-bottom: 5%;
 }
 
-.filter-element > label {
+.filter-element>label {
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.4ch;
     user-select: none;
 }
 
-.filter-element > input {
+.filter-element>input {
     background-color: inherit;
     color: inherit;
 }
 
-.filter-element > .checkbox-container {
+.filter-element>.checkbox-container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -86,23 +86,23 @@ filter-tab:has(.filter-tab input[type=text]:invalid) .filter-button {
     overflow: hidden;
 }
 
-.checkbox-container > div {
+.checkbox-container>div {
     text-align: start;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
 }
 
-.checkbox-container > div label {
+.checkbox-container>div label {
     user-select: none;
     cursor: pointer;
 }
 
-.checkbox-container > div input[type="checkbox"] ~ label {
+.checkbox-container>div input[type="checkbox"]~label {
     margin-left: 5%;
 }
 
-.checkbox-container > div input {
+.checkbox-container>div input {
     margin-left: 0;
 }
 
@@ -110,4 +110,14 @@ filter-tab:has(.filter-tab input[type=text]:invalid) .filter-button {
 body:has(drop-down[visible]) filter-tab {
     z-index: -1;
     opacity: 0;
+}
+
+#filter-clear {
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    letter-spacing: .35ch;
+    width: fit-content;
+    align-self: center;
 }
