@@ -3,6 +3,7 @@ import { dispatchUpdatePreference } from "../events/UpdatePreference"
 export const PREFERENCES = Object.freeze({
     INCLUDE_ADULT_SEARCH: 'includeAdultSearch',
     PREVIEW_ADULT_POSTER: 'previewAdultPoster',
+    COLOR_CODE_ADULT_RESULTS: 'colorCodeAdultResults',
     THEME: 'theme',
     CONTENT_LANGUAGE: 'contentLanguage'
 })
@@ -13,6 +14,7 @@ const PREFERENCES_LOCAL_STORAGE_KEY = 'preferences'
 export const preferences = Object.seal({
     [PREFERENCES.INCLUDE_ADULT_SEARCH]: false,      // inlcude adult content in the results
     [PREFERENCES.PREVIEW_ADULT_POSTER]: false,      // hide adult content posters in movie list
+    [PREFERENCES.COLOR_CODE_ADULT_RESULTS]: false,  // no color coding for adult results
     [PREFERENCES.THEME]:                            // application color theme
         window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
     [PREFERENCES.CONTENT_LANGUAGE]:                 // default language for content

@@ -53,6 +53,7 @@ class PreferencesMenu extends HTMLElement {
         this.getElementsByTagName('button')[0].addEventListener('click', this.#openDropDown)
         this.querySelector('#incl_adult').addEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
         this.querySelector('#prev_adult_poster').addEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))
+        this.querySelector('#color_code_adult_results').addEventListener('change', this.#setPreference(PREFERENCES.COLOR_CODE_ADULT_RESULTS))
         this.querySelector('#content_language').addEventListener('change', this.#setPreference(PREFERENCES.CONTENT_LANGUAGE))
         this.querySelector('#theme_color').addEventListener('change', this.#setPreference(PREFERENCES.THEME))
     }
@@ -61,6 +62,7 @@ class PreferencesMenu extends HTMLElement {
         this.getElementsByTagName('button')[0].removeEventListener('click', this.#openDropDown)
         this.querySelector('#incl_adult').removeEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
         this.querySelector('#prev_adult_poster').removeEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))
+        this.querySelector('#color_code_adult_results').removeEventListener('change', this.#setPreference(PREFERENCES.COLOR_CODE_ADULT_RESULTS))
         this.querySelector('#theme_color').removeEventListener('change', this.#setPreference(PREFERENCES.THEME))
     }
 
@@ -93,6 +95,7 @@ class PreferencesMenu extends HTMLElement {
         console.info('Loading preferences in <preferences-menu>')
         this.querySelector('#incl_adult').checked = pref.includeAdultSearch
         this.querySelector('#prev_adult_poster').checked = pref.previewAdultPoster
+        this.querySelector('#color_code_adult_results').checked = pref.colorCodeAdultResults
         this.querySelector('#content_language').querySelector(`option[value=${pref.contentLanguage}]`).setAttribute('selected', '')
         this.querySelector('#theme_color').value = pref.theme ?? 'black'
     }
