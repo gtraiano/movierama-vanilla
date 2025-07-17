@@ -44,7 +44,7 @@ filter-tab:has(.filter-tab input[type=text]:invalid) .filter-button {
     margin-top: 4%;
 }
 
-.filter-tab[visible] {
+filter-tab[visible] .filter-tab {
     opacity: 1;
     display: flex;
     flex-direction: column;

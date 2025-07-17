@@ -24,8 +24,9 @@ class Filter extends HTMLElement {
         this.append(stringTemplateToFragment(template))
         this.getElementsByClassName('filter-button')[0].addEventListener('click', () => {
             const tab = this.getElementsByClassName('filter-tab')[0]
-            if (!tab.hasAttribute('visible')) tab.setAttribute('visible', '')
-            else tab.removeAttribute('visible')
+            this.toggleAttribute('visible')
+            /*if (!tab.hasAttribute('visible')) tab.setAttribute('visible', '')
+            else tab.removeAttribute('visible')*/
         })
         this.querySelector("#filter-clear").addEventListener("click", () => {
             this.uncheckFilterTags()
@@ -33,9 +34,20 @@ class Filter extends HTMLElement {
         })
     }
 
-
     disconnectedCallback() {
         this.removeChild(this.children[0])
+        document.removeEventListener('click', this.#detectClickOutside)
+    }
+
+    static get observedAttributes() {
+        return ['visible']
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if(name === 'visible') {
+            newValue === null && document.removeEventListener('click', this.#detectClickOutside)
+            newValue === '' && document.addEventListener('click', this.#detectClickOutside)
+        }
     }
 
     uncheckFilterTags = () => {
@@ -214,6 +226,10 @@ class Filter extends HTMLElement {
             if (target.getAttribute('hidden')) target.parentElement.removeAttribute('hidden')
             else target.parentElement.setAttribute('hidden', '')
         }
+    }
+
+    #detectClickOutside = (e) => {
+        !this.contains(e.target) && this.toggleAttribute('visible')
     }
 }
 
