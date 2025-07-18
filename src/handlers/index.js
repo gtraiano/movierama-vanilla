@@ -205,6 +205,9 @@ export const onUpdatePreference = async (e) => {
         hideAdultResults()
         disableAdultPreferences()
     }
+    else if (e.detail === PREFERENCES.COLOR_CODE_ADULT_RESULTS) {
+        // done with css
+    }
     // theme color
     else if (e.detail === PREFERENCES.THEME) {
         document.documentElement.setAttribute('theme', store.preferences.theme)

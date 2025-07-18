@@ -3,7 +3,7 @@ person-card {
   height: fit-content;
 }
 
-person-card.adult > .person-item {
+#app:has(#color_code_adult_results:checked) .item-grid > person-card.adult > .person-item {
   background-color: rgba(255, 192, 203, 0.75);
 }
 
