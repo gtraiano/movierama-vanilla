@@ -98,7 +98,7 @@ export const modeUpdate = async ({ mode, infiniteScrollController }) => {
 
     // update page header
     setAppMainTitle()
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
 
     // restore app mode tags (other than search)
     if (browseModes.includes(store.mode)) {
@@ -160,7 +160,7 @@ export const searchQuery = async ({ query, searchController }) => {
     document.querySelector('item-grid').setAttribute('search', '')
     // hide alert box after cards have been rendered
     document.querySelector('alert-box').show(false)
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
     // update filter tags
     store.filterTags.helpers.onModeUpdate({ mode: store.mode, type: store.searchQuery.type, results: store[store.mode].results })
 }
