@@ -5,7 +5,7 @@ import movieDBAPI from "../controllers/MovieDB";
 import appModes, { AdultGenre } from "../constants";
 import store from "../store";
 import { PREFERENCES } from "../store/preferences";
-import { hideAdultPosters, hideAdultResults, infiniteScroll, modeUpdate, searchQuery, setAppMainTitle, switchContentLanguage, disableAdultPreferences } from "./util";
+import { hideAdultResults, infiniteScroll, modeUpdate, searchQuery, setAppMainTitle, switchContentLanguage, disableAdultPreferences } from "./util";
 import { tags } from "../store/filter";
 
 export { scrolledToBottom, setAppMainTitle } from './util'
@@ -198,7 +198,7 @@ export const onSearchTypeChange = (e) => {
 export const onUpdatePreference = async (e) => {
     // apply filter to adult posters
     if (e.detail === PREFERENCES.PREVIEW_ADULT_POSTER) {
-        hideAdultPosters()
+        // implemented via CSS
     }
     // filter adult results
     else if (e.detail === PREFERENCES.INCLUDE_ADULT_SEARCH) {

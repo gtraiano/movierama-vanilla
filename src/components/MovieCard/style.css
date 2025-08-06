@@ -16,6 +16,15 @@
   transition-property: background-color;
 }
 
+#app:has(#prev_adult_poster:checked) .item-grid > movie-card.adult > .movie-item img {
+  filter: blur(12px) brightness(0.2);
+  transition: all 100ms ease-in-out;
+}
+
+#app:has(#prev_adult_poster:checked) .item-grid > movie-card.adult > .movie-item img:hover {
+  filter: none;
+}
+
 .movie-item div {
   display: flex;
   margin-top: 1%;
@@ -63,6 +72,7 @@
   cursor: pointer;
   aspect-ratio: 1 / 1.5;
 }
+/*
 movie-card.adult .movie-item-line.poster img.adult {
   filter: blur(12px) brightness(0.2);
   transition: all 100ms ease-in-out;
@@ -70,6 +80,7 @@ movie-card.adult .movie-item-line.poster img.adult {
 movie-card.adult .movie-item-line.poster img.adult:hover {
   filter: none;
 }
+*/
 .movie-item {
   position: relative;
 }

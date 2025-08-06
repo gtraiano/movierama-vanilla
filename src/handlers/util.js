@@ -17,12 +17,6 @@ export const scrolledToBottom = () => {
     }
 }
 
-export const hideAdultPosters = () => {
-    document.querySelectorAll('.adult .poster > img').forEach(img => {
-        img.classList.toggle('adult')
-    })
-}
-
 export const hideAdultResults = () => {
     document.querySelectorAll('movie-card.adult').forEach(c => {
         c.style.display = store.preferences.includeAdultSearch ? '' : 'none'
@@ -153,7 +147,7 @@ export const searchQuery = async ({ query, searchController }) => {
     document.querySelector('item-grid').appendItems(store.search)
     // check for adult posters preview
     if (store.preferences.includeAdultSearch && store.preferences.previewAdultPoster) {
-        hideAdultPosters()
+        //hideAdultPosters()
     }
     // restore item-grid attribute
     document.querySelector('item-grid').removeAttribute('searching')
