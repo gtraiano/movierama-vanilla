@@ -26,6 +26,7 @@ class PersonCard extends HTMLElement {
 	}
 
 	generateTemplate(person) {
+		this.setAttribute("person-id", person.id)
 		const card = PersonCard.contentTemplate.content.cloneNode(true)
 		const img = card.querySelector("img")
 		const figure = card.querySelector("figure")
