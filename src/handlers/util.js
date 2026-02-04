@@ -174,6 +174,7 @@ export const fetchNextPageFromAPI = async (mode, abortController) => {
             break
         case appModes.TOP_RATED:
             fetcher = movieDBAPI.fetchTopRated
+            break
         case appModes.SEARCH:
             fetcher = store.searchQuery.type === searchTypes.MOVIE ? movieDBAPI.fetchMovie : movieDBAPI.fetchPerson
             break
