@@ -71,6 +71,9 @@ export const onInitializedApp = () => {
 }
 
 export const onInfiniteScroll = async () => {
+    // ignore overlapping requests while a page fetch is already in flight
+    // (e.g. scrolling again before the previous page finished loading)
+    if (infiniteScrollController.isFetching) return
     try {
         await infiniteScroll(infiniteScrollController)
     }
@@ -88,7 +91,14 @@ export const onInfiniteScroll = async () => {
 }
 
 export const onModeUpdate = async (e) => {
-    await modeUpdate({ mode: e.detail, infiniteScrollController })
+    try {
+        await modeUpdate({ mode: e.detail, infiniteScrollController })
+    }
+    catch (error) {
+        if (error.name !== 'AbortError' || !(error instanceof DOMException)) {
+            document.querySelector('alert-box').showFor(error.message, 3000)
+        }
+    }
 }
 
 export const onCloseOverlay = () => {

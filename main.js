@@ -43,7 +43,7 @@ import './src/components/PreferencesMenu'
 import './src/components/Filter'
 import './src/components/BrowseMode'
 import './src/components/PersonCard'
-import { stringTemplateToFragment } from './src/components/util'
+import { stringTemplateToFragment, debounce } from './src/components/util'
 import './src/components/Spinner/'
 
 const template =
@@ -74,8 +74,16 @@ window.addEventListener('load', initializeApp)
 // render now playing items in movie list after app initalization
 document.addEventListener(InitializedApp, onInitializedApp)
 
-// scroll
-document.addEventListener('onscrollend' in document ? 'scrollend' : 'scroll', scrolledToBottom)
+// scroll: exactly one listener per browser; the debounced fallback runs the bottom
+// check once per scroll pause instead of every frame (onInfiniteScroll additionally
+// ignores overlapping requests while a page fetch is in flight)
+const SCROLL_DEBOUNCE_MS = 150
+if ('onscrollend' in document) {
+    document.addEventListener('scrollend', scrolledToBottom)
+}
+else {
+    document.addEventListener('scroll', debounce(scrolledToBottom, SCROLL_DEBOUNCE_MS), { passive: true })
+}
 
 // infinite scroll
 document.addEventListener(InfiniteScroll, onInfiniteScroll)
