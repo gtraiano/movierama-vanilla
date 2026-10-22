@@ -105,14 +105,20 @@ export const modeUpdate = async ({ mode, infiniteScrollController }) => {
         if (!store[store.mode].results.length) {
             // show fetching alert
             document.querySelector('alert-box').loading(true)
-            const nextPage = await fetchNextPageFromAPI(store.mode, infiniteScrollController)
-            // update results
-            store[store.mode] = {
-                ...store[store.mode],
-                ...nextPage,
-                results: [...(store[store.mode]?.results ?? []), ...nextPage.results]
+            try {
+                const nextPage = await fetchNextPageFromAPI(store.mode, infiniteScrollController)
+                // update results
+                store[store.mode] = {
+                    ...store[store.mode],
+                    ...nextPage,
+                    results: [...(store[store.mode]?.results ?? []), ...nextPage.results]
+                }
             }
-            document.querySelector('alert-box').loading(false)
+            finally {
+                // always release the controller: a stuck isFetching would block onInfiniteScroll
+                infiniteScrollController.isFetching = false
+                document.querySelector('alert-box').loading(false)
+            }
         }
     }
     else if (store.mode === appModes.SEARCH) {

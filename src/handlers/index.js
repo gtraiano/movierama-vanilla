@@ -30,7 +30,7 @@ export const initializeApp = async () => {
     try {
         setAppMainTitle()
         // check if api connection is ok
-        await movieDBAPI.ping()
+        if (!await movieDBAPI.ping()) throw new Error('MovieDB API is not available')
         // load preferences from localStorage
         store.preferences.helpers.loadPreferences()
         // set application theme

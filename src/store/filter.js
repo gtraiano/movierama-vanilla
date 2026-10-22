@@ -150,13 +150,21 @@ export const filterTags = {
 
         onModeUpdate: ({ mode, type, results }) => {
             if(!mode || !results) return
+            const filterTab = document.getElementsByTagName('filter-tab')[0]
             for(const t of filterTags.tags) {
                 t.use = mode !== appModes.SEARCH ? t.inBrowseModes.includes(mode) : t.inSearchTypes.includes(type)
-                document.getElementsByTagName('filter-tab')[0].clearTag(tags.title.name)
-                // init fresh tags
-                document.querySelector('filter-tab').toggleTag(t.name, t.use)
+                // drop state from tags that no longer apply so stale values cannot
+                // leak across modes or block pagination via isActive()
+                if(!t.use) {
+                    if(t.type === TagTypes.TEXT) t.value = ''
+                    else if(t.type === TagTypes.CHECKBOXES) t.boxes.clear()
+                }
+                filterTab.toggleTag(t.name, t.use)
                 t.use && t.type === TagTypes.CHECKBOXES && t.updateLabels(results)
             }
+            // title filter is reset on every mode/search-type change (store + UI)
+            filterTags.helpers.clearTag(tags.title.name)
+            filterTab.clearTag(tags.title.name)
         }
     }
 }

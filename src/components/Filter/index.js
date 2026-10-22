@@ -191,21 +191,26 @@ class Filter extends HTMLElement {
     }
 
     clearTag = tag => {
-        const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag).parentElement
+        const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag)?.parentElement
         if (!target) {
             console.warn(`clearTag: Tag ${tag} does not exist`)
             return
         }
 
         if (target.children[1].classList.contains('checkbox-container')) {
-            //target.children[1].removeChild()
-            target.children[1].childElementCount > 0 && [...target.children[1].children].forEach(c => {
+            // uncheck before removing so the store stays in sync via the change events
+            target.children[1].querySelectorAll('input:checked').forEach(i => {
+                i.checked = false
+                i.dispatchEvent(new Event('change'))
+            })
+            ;[...target.children[1].children].forEach(c => {
                 c.remove()
-                //target.children[1].removeChild(c)
             })
         }
         else if (target.children[1].tagName === 'INPUT') {
             target.children[1].value = ''
+            // notify the store, same pattern as clearFilterTitle
+            target.children[1].dispatchEvent(new Event('input'))
         }
     }
 
