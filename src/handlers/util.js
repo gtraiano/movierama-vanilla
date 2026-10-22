@@ -13,7 +13,9 @@ export const scrolledToBottom = () => {
     } = document.documentElement;
 
     // reached page bottom (scrollTopMax is Firefox-only, so compare the standard scroll metrics)
-    if (scrollTop + clientHeight >= scrollHeight) {
+    // 1px tolerance: Firefox reports fractional scroll offsets while scrollHeight/clientHeight
+    // are integers, so at the bottom scrollTop + clientHeight can be just under scrollHeight
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
         dispatchInfiniteScroll()
     }
 }
