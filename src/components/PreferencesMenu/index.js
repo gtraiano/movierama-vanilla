@@ -63,6 +63,7 @@ class PreferencesMenu extends HTMLElement {
         this.querySelector('#incl_adult').removeEventListener('change', this.#setPreference(PREFERENCES.INCLUDE_ADULT_SEARCH))
         this.querySelector('#prev_adult_poster').removeEventListener('change', this.#setPreference(PREFERENCES.PREVIEW_ADULT_POSTER))
         this.querySelector('#color_code_adult_results').removeEventListener('change', this.#setPreference(PREFERENCES.COLOR_CODE_ADULT_RESULTS))
+        this.querySelector('#content_language').removeEventListener('change', this.#setPreference(PREFERENCES.CONTENT_LANGUAGE))
         this.querySelector('#theme_color').removeEventListener('change', this.#setPreference(PREFERENCES.THEME))
     }
 
@@ -85,10 +86,19 @@ class PreferencesMenu extends HTMLElement {
         }
     }
 
-    #setPreference = name => e => {
-        if(e.target.type === 'checkbox') store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
-        else if(e.target.type === 'number') store.preferences.helpers.setPreference(name, Number(e.target.value))
-        else store.preferences.helpers.setPreference(name, e.target.value)
+    // memoized per preference: removeEventListener needs the exact same
+    // function reference that was added — a fresh closure per call would make
+    // every disconnectedCallback cleanup a no-op
+    #handlers = new Map()
+    #setPreference = name => {
+        if (!this.#handlers.has(name)) {
+            this.#handlers.set(name, e => {
+                if (e.target.type === 'checkbox') store.preferences.helpers.setPreference(name, Boolean(e.target.checked))
+                else if (e.target.type === 'number') store.preferences.helpers.setPreference(name, Number(e.target.value))
+                else store.preferences.helpers.setPreference(name, e.target.value)
+            })
+        }
+        return this.#handlers.get(name)
     }
 
     loadPreferences = pref => {
@@ -96,8 +106,13 @@ class PreferencesMenu extends HTMLElement {
         this.querySelector('#incl_adult').checked = pref.includeAdultSearch
         this.querySelector('#prev_adult_poster').checked = pref.previewAdultPoster
         this.querySelector('#color_code_adult_results').checked = pref.colorCodeAdultResults
-        this.querySelector('#content_language').querySelector(`option[value=${pref.contentLanguage}]`).setAttribute('selected', '')
-        this.querySelector('#theme_color').value = pref.theme ?? 'black'
+        this.querySelector('#content_language').querySelector(`option[value="${pref.contentLanguage}"]`)?.setAttribute('selected', '')
+        // only themes the select offers are valid; anything else (stale or
+        // corrupt stored values) falls back to the system preference, same as
+        // the store default — an unknown value would leave the select blank
+        this.querySelector('#theme_color').value = ['dark', 'light'].includes(pref.theme)
+            ? pref.theme
+            : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
     }
 
     injectContentLanguages = lang => {

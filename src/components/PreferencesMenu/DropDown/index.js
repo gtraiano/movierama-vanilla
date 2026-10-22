@@ -8,7 +8,9 @@ class DropDown extends HTMLElement {
     }
 
     connectedCallback() {
-        this.attachShadow({ mode: "open" })
+        // re-insertion (or a stale enqueued reaction) can run this twice on the
+        // same element — attaching a second shadow root throws NotSupportedError
+        if (!this.shadowRoot) this.attachShadow({ mode: "open" })
         this.shadowRoot.innerHTML = template
     }
 }

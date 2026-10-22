@@ -60,7 +60,7 @@ export const initializeApp = async () => {
 
 export const onInitializedApp = () => {
     // inject supported content languages to menu
-    document.querySelector('preferences-menu').injectContentLanguages(store.configuration.languages.sort((a, b) => a.english_name > b.english_name))
+    document.querySelector('preferences-menu').injectContentLanguages(store.configuration.languages.sort((a, b) => a.english_name.localeCompare(b.english_name)))
     // load preferences to menu
     document.querySelector('preferences-menu').loadPreferences(store.preferences)
     // render now playing first page

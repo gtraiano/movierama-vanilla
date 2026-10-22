@@ -9,7 +9,22 @@ top-bar {
     transition: height .5s ease-in-out;
 }
 
-:root[theme="light"] top-bar {
+/* Light theme inverts the bar's children rather than the whole bar.
+   A filter on top-bar itself made Firefox clip both hit-testing and painting
+   of the preferences menu panel to roughly (bar box + descendant transforms),
+   so clicks on the visible menu fell through to the posters underneath.
+   The filter now stops at preferences-menu, whose panel carries its own
+   invert, and invert is linear over source-over compositing, so the rendered
+   pixels are identical to the old whole-bar filter. */
+:root[theme="light"] top-bar > div > *:not(preferences-menu) {
+    filter: invert(1)
+}
+
+:root[theme="light"] preferences-menu > div > button {
+    filter: invert(1)
+}
+
+:root[theme="light"] drop-down > div {
     filter: invert(1)
 }
 
