@@ -8,11 +8,12 @@ import { dispatchModeUpdate } from "../events/ModeUpdate"
 export const scrolledToBottom = () => {
     const {
         scrollTop,
-        scrollTopMax
+        clientHeight,
+        scrollHeight
     } = document.documentElement;
 
-    // reached page bottom
-    if (scrollTop === scrollTopMax) {
+    // reached page bottom (scrollTopMax is Firefox-only, so compare the standard scroll metrics)
+    if (scrollTop + clientHeight >= scrollHeight) {
         dispatchInfiniteScroll()
     }
 }
