@@ -2,7 +2,8 @@ import { dispatchRequestMovieDetails } from '../../events/RequestMovieDetails'
 import store from '../../store'
 import './style.css'
 import StarRating from '../Rating'
-import { stringTemplateToFragment } from '../util'
+import { stringTemplateToFragment, escapeHTML } from '../util'
+import { determineFontColor } from '../../dark'
 
 class MovieDetails extends HTMLElement {
     constructor() {
@@ -17,6 +18,7 @@ class MovieDetails extends HTMLElement {
         Array.from(this.querySelectorAll('.movies-similar-entry')).forEach((e,i) => {
             e.addEventListener('click', this.requestMovieDetails(similar.results[i].id))
         })
+        determineFontColor(this.children[0]).then(res => console.log("needs color", res));
     }
 
     requestMovieDetails = (id) => (e) => dispatchRequestMovieDetails(id)
@@ -37,7 +39,7 @@ class MovieDetails extends HTMLElement {
             <section>
                 ${
                     trailer
-                    ? `<iframe class="movie-trailer" width="560" height="315" src="https://www.youtube.com/embed/${trailer}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>`
+                    ? `<iframe class="movie-trailer" width="560" height="315" src="https://www.youtube.com/embed/${escapeHTML(trailer)}?html5=1}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allow-full-screen></iframe>`
                     : '<div class="movie-trailer"></div>' // empty div
                 }
                 
@@ -52,17 +54,17 @@ class MovieDetails extends HTMLElement {
             <section class="movie-credits">
                 <div class="row">
                     <div class="column left"><strong>Released</strong></div>
-                    <div class="column left">${movie.release_date}</div>
+                    <div class="column left">${escapeHTML(movie.release_date)}</div>
                 </div>
                 <div class="row">
                     <div class="column left"><strong>Vote Average</strong></div>
-                    <div class="column left"><star-rating rating="${movie.vote_average}" ratings-count="${movie.vote_count ?? ''}"></star-rating></div>
+                    <div class="column left"><star-rating rating="${escapeHTML(movie.vote_average)}" ratings-count="${escapeHTML(movie.vote_count ?? '')}"></star-rating></div>
                 </div>
                 <div class="row">
                     <div class="column left"><strong>Producers</strong></div>
                     <div class="column left">
                         <ul class="horizontal">
-                            ${movie.production_companies.map(c => `<li>${c.name}${c.origin_country ? ' ('+c.origin_country+')' : ''}</li>`).join('\n')}
+                            ${movie.production_companies.map(c => `<li>${escapeHTML(c.name)}${c.origin_country ? ' ('+escapeHTML(c.origin_country)+')' : ''}</li>`).join('\n')}
                         </ul>
                     </div>
                 </div>
@@ -70,14 +72,14 @@ class MovieDetails extends HTMLElement {
                     <div class="column left"><strong>Genres</strong></div>
                         <div class="column left">
                             <ul class="horizontal">
-                                ${movie.genres.map(g => `<li>${g.name}</li>`).join('\n')}
+                                ${movie.genres.map(g => `<li>${escapeHTML(g.name)}</li>`).join('\n')}
                             </ul>
                         </div>
                     </div>
                     <div class="row">
                         <div class="column left"><strong>Director</strong></div>
                         <div class="column left">
-                            ${credits?.crew.find(c => c.job.toLowerCase() === 'director')?.name ?? ''}
+                            ${escapeHTML(credits?.crew.find(c => c.job.toLowerCase() === 'director')?.name ?? '')}
                         </div>
                     </div>
                     <div class="row">
@@ -86,7 +88,7 @@ class MovieDetails extends HTMLElement {
                             <label for="show-more"></label>
                             <input id="show-more" type="checkbox"/>
                             <ul class="horizontal">
-                                ${credits?.cast.map(a => `<li>${a.name}</li>`).join('\n')}
+                                ${credits?.cast.map(a => `<li>${escapeHTML(a.name)}</li>`).join('\n')}
                             </ul>
                         </div>
                     </div>
@@ -106,8 +108,8 @@ class MovieDetails extends HTMLElement {
                                 <span
                                     class="movies-similar-entry"
                                 >
-                                    ${s.title}
-                                </span> ${s.release_date ? `(${s.release_date.slice(0,4)})` : ''}
+                                    ${escapeHTML(s.title)}
+                                </span> ${s.release_date ? `(${escapeHTML(s.release_date.slice(0,4))})` : ''}
                             </li>`
                         )).join('\n')
                     }
@@ -120,13 +122,12 @@ class MovieDetails extends HTMLElement {
         return `
             <section class="movie-overview">
                 <h2>Overview</h2>
-                <div>${movie.overview}</div>
+                <div>${escapeHTML(movie.overview)}</div>
             </section>
         `
     }
 
     generateReviews(reviews) {
-        const sanitize = (input) => document.createTextNode(input).textContent
         return `
             <section class="movie-reviews-container">
                 <h2>Reviews</h2>
@@ -134,9 +135,9 @@ class MovieDetails extends HTMLElement {
                     ?.slice(0, 2)
                     .map((r, i) => (
                         `<blockquote class="movie-review">
-                            ${sanitize(r.content)}
+                            ${escapeHTML(r.content)}
                         </blockquote>
-                        <span>by <em>${r.author}</em></span>`
+                        <span>by <em>${escapeHTML(r.author)}</em></span>`
                     )).join('\n')
                 }
             </section>
@@ -146,7 +147,7 @@ class MovieDetails extends HTMLElement {
     generateTemplate(movie, videos, credits, reviews, similar) {
         return `
         <div class="movie-details">
-            <h1 class="main-title">${movie.title}${movie.original_title !== movie.title ? ` (${movie.original_title})` : ''}</h1>
+            <h1 class="main-title">${escapeHTML(movie.title)}${movie.original_title !== movie.title ? ` (${escapeHTML(movie.original_title)})` : ''}</h1>
             ${this.generateTrailer(videos)}
             ${this.generateCredits(movie, credits)}
             ${this.generateOverview(movie)}
