@@ -14,11 +14,20 @@ class MovieDetails extends HTMLElement {
         //this.innerHTML = this.generateTemplate(details, trailers, credits, reviews, similar)
         this.append(stringTemplateToFragment(this.generateTemplate(details, trailers, credits, reviews, similar)))
         //this.children[0].style.backgroundImage = `url(https://image.tmdb.org/t/p/original/${details.backdrop_path})`
-        this.children[0].style.backgroundImage = `image-set(${store.configuration.helpers.images.generateBackdropUrls(details.backdrop_path ?? details.poster_path).join(',')})`
+        // two scrim layers over the backdrop: a strong directional fade (top, where the
+        // title/trailer sit) and a light flat base; the flat base is pushed harder via
+        // --movie-scrim-flat when the sampled backdrop fights the theme (data-contrast)
+        this.children[0].style.backgroundImage = `linear-gradient(to bottom, var(--movie-scrim-top, rgba(0, 0, 0, 0.7)) 0%, var(--movie-scrim-end, rgba(0, 0, 0, 0)) 65%), linear-gradient(var(--movie-scrim-flat, rgba(0, 0, 0, 0.3)), var(--movie-scrim-flat, rgba(0, 0, 0, 0.3))), image-set(${store.configuration.helpers.images.generateBackdropUrls(details.backdrop_path ?? details.poster_path).join(',')})`
         Array.from(this.querySelectorAll('.movies-similar-entry')).forEach((e,i) => {
             e.addEventListener('click', this.requestMovieDetails(similar.results[i].id))
         })
-        determineFontColor(this.children[0]).then(res => console.log("needs color", res));
+        // tag the backdrop as bright/dark so the stylesheet can react when the
+        // image's average brightness fights the current theme; unknown
+        // (null: no image layer or sampling failed) stays untagged, so the
+        // theme defaults apply instead of forcing a mismatched flat base
+        determineFontColor(this.children[0]).then(res => {
+            if (res) this.children[0].dataset.contrast = res === '#000' ? 'bright' : 'dark'
+        });
     }
 
     requestMovieDetails = (id) => (e) => dispatchRequestMovieDetails(id)

@@ -12,13 +12,82 @@ movie-details {
     background-size: cover;
     overflow: auto;
     scrollbar-width: thin;
+    /* glow behind all text so it stays legible where the backdrop shows through
+       the light scrim; star-rating opts out (its glyph fill is transparent) */
+    text-shadow: 0 1px 2px var(--movie-text-glow), 0 0 var(--movie-glow-blur, 8px) var(--movie-text-glow);
+}
+
+.movie-details star-rating {
+    text-shadow: none;
+}
+
+/* Scrim: the JS-rendered background-image stacks two gradient layers on top of
+   the backdrop image-set — a strong directional fade (top, where the title and
+   trailer sit) and a flat base that stays transparent unless the sampled
+   backdrop fights the theme (data-contrast) — so the movie's colour palette
+   stays visible while text keeps enough contrast. The glow is themed and
+   tightened on dark backdrops. */
+:root {
+    --movie-scrim-top: rgba(0, 0, 0, 0.7);
+    --movie-scrim-end: rgba(0, 0, 0, 0);
+    --movie-scrim-flat: transparent;
+    --movie-text-glow: rgba(0, 0, 0, 0.85);
+    --movie-glow-blur: 8px;
+    --movie-title-glow-blur: 14px;
+}
+:root[theme="light"] {
+    --movie-scrim-top: rgba(255, 255, 255, 0.75);
+    --movie-scrim-end: rgba(255, 255, 255, 0);
+    --movie-scrim-flat: transparent;
+    --movie-text-glow: rgba(255, 255, 255, 0.9);
+}
+
+/* dark theme (light text) over a bright backdrop, or light theme (dark text)
+   over a dark backdrop: the theme's text loses its natural contrast against the
+   image, so raise the flat base there — it carries the contrast while the glow
+   stays tight */
+:root[theme="dark"] .movie-details[data-contrast="bright"] {
+    --movie-scrim-flat: rgba(0, 0, 0, 0.5);
+}
+:root[theme="light"] .movie-details[data-contrast="dark"] {
+    --movie-scrim-flat: rgba(255, 255, 255, 0.55);
+}
+
+/* dark backdrop: tighten the glow. Light text (dark theme) already contrasts
+   against a dark image, and a wide halo around dark text (light theme) reads
+   as a smear — the raised flat base above carries the contrast instead. */
+.movie-details[data-contrast="dark"] {
+    --movie-glow-blur: 3px;
+    --movie-title-glow-blur: 6px;
+}
+
+/* keep text above the image layers (background paints behind all content,
+   so this only matters if any child ever gets its own background) */
+.movie-details > * {
+    position: relative;
+}
+
+/* all text in the details view inherits the theme color, so it stays legible
+   over the scrim regardless of section */
+.movie-details,
+.movie-details h1,
+.movie-details section,
+.movie-details blockquote {
+    color: inherit;
+}
+
+/* the app title (in #app) keeps its theme-aware stroke; the details title sits
+   over a photo, so drop the stroke (which can look muddy over a backdrop) and
+   rely on a heavier themed glow for separation from the image */
+.movie-details h1.main-title {
+    -webkit-text-stroke: 0;
+    text-shadow: 0 1px 3px var(--movie-text-glow), 0 0 var(--movie-title-glow-blur, 14px) var(--movie-text-glow);
 }
 
 .movie-details section {
     width: 50%;
     margin-left: auto;
     margin-right: auto;
-    color: black;
 }
 
 .movie-details section > .movie-trailer {
@@ -50,7 +119,6 @@ movie-details {
 }
 
 .movie-reviews-container {
-    color: black;
     text-align: justify;
     width: 50%;
     margin-left: auto;
@@ -65,7 +133,6 @@ movie-details {
 
 .movie-overview {
     text-align: justify;
-    color: black;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
@@ -79,12 +146,8 @@ movie-details {
 
 .movie-review {
     text-align: justify;
-    background: inherit;
-    background-clip: text;
-    color: black;
     margin-left: auto;
     margin-right: auto;
-    mix-blend-mode: darken;
 }
 
 .movie-review::before {
@@ -99,13 +162,9 @@ movie-details {
 
 .movies-similar {
     text-align: justify;
-    background: inherit;
-    background-clip: text;
-    color: black;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
-    mix-blend-mode: darken;
 }
 
 .movies-similar ul {
