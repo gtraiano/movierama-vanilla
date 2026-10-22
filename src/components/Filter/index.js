@@ -148,15 +148,9 @@ class Filter extends HTMLElement {
     }
 
 
-    insertTags = (tags) => {
-        tags.forEach(tag => {
-            this.insertTag(tag)
-        })
-    }
-
     appendToTag = (tag, label) => {
         if (!tag || !label?.trim().length) return
-        const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag).parentElement
+        const target = [...this.querySelectorAll('.filter-element > label')].find(e => e.textContent === tag)?.parentElement
 
         if (!target) {
             console.warn(`appendToTag: Tag ${tag} does not exist`)
@@ -225,6 +219,10 @@ class Filter extends HTMLElement {
 
     toggleTag = (tag, show) => {
         const target = Array.from(this.querySelectorAll('.filter-element > label')).find(l => l.textContent === tag)
+        if (!target) {
+            console.warn(`toggleTag: Tag ${tag} does not exist`)
+            return
+        }
         if (show) target.parentElement.removeAttribute('hidden')
         else if (show === false) target.parentElement.setAttribute('hidden', '')
         else {

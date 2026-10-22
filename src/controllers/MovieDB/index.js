@@ -18,7 +18,9 @@ const movieDB = {
 }
 
 const generateURL = (config) => {
-    const url  = new URL(movieDB.apiVersion + config?.path ?? '', movieDB.apiBaseURL)
+    // note: + binds tighter than ?? — without the parentheses a missing path
+    // used to produce '/3undefined' instead of '/3'
+    const url  = new URL(movieDB.apiVersion + (config?.path ?? ''), movieDB.apiBaseURL)
 
     // include api key if api read access token is not defined
     !movieDB.auth?.headers && url.searchParams.append('api_key', movieDB.auth.apiKey)
@@ -54,7 +56,8 @@ const fetcher = async (url, signal = undefined) => {
 
 const ping = async () => {
     try {
-        const response = await fetch(generateURL(), {
+        // any authenticated endpoint verifies both reachability and credentials
+        const response = await fetch(generateURL({ path: '/configuration' }), {
             headers: {
                 ...movieDB.auth.headers
             }
@@ -63,9 +66,10 @@ const ping = async () => {
     }
     catch(error) {
         if(error instanceof TypeError) {
-            console.error('Coud not reach MovieDB')
+            console.error('Could not reach MovieDB')
             throw new Error('Could not reach MovieDB')
         }
+        throw error
     }
 }
 
@@ -179,6 +183,28 @@ const fetchMovieCredits = async (config) => {
 const fetchPerson = async(config) => {
     const url = generateURL({
         path: '/search/person',
+        searchParams: {
+            query: config.query,
+            page: config.page ?? 1
+        }
+    })
+    return await fetcher(url, config.signal)
+}
+
+const fetchSeries = async config => {
+    const url = generateURL({
+        path: '/search/tv',
+        searchParams: {
+            query: config.query,
+            page: config.page ?? 1
+        }
+    })
+    return await fetcher(url, config.signal)
+}
+
+const fetchMulti = async config => {
+    const url = generateURL({
+        path: '/search/multi',
         searchParams: {
             query: config.query,
             page: config.page ?? 1
